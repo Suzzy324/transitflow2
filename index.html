@@ -8,480 +8,221 @@
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
 :root {
-  --ink: #0c0e14;
-  --ink2: #13161f;
-  --ink3: #1c2030;
-  --line: #242840;
-  --lime: #c8f135;
-  --lime2: #a8d020;
-  --sky: #38bdf8;
-  --amber: #fbbf24;
-  --rose: #fb7185;
-  --muted: #6b7280;
-  --muted2: #9ca3af;
-  --light: #e5e7eb;
-  --white: #f9fafb;
+  --ink:#0c0e14;--ink2:#13161f;--ink3:#1c2030;--line:#242840;
+  --lime:#c8f135;--lime2:#a8d020;--sky:#38bdf8;--amber:#fbbf24;
+  --rose:#fb7185;--green:#4ade80;--muted:#6b7280;--muted2:#9ca3af;--white:#f9fafb;
 }
 *{margin:0;padding:0;box-sizing:border-box;}
 html{scroll-behavior:smooth;}
-body{
-  font-family:'Outfit',sans-serif;
-  background:var(--ink);
-  color:var(--white);
-  min-height:100vh;
-  overflow-x:hidden;
-}
+body{font-family:'Outfit',sans-serif;background:var(--ink);color:var(--white);min-height:100vh;overflow-x:hidden;}
+::-webkit-scrollbar{width:4px;}::-webkit-scrollbar-track{background:var(--ink);}::-webkit-scrollbar-thumb{background:var(--line);border-radius:2px;}
 
-/* SCROLLBAR */
-::-webkit-scrollbar{width:4px;}
-::-webkit-scrollbar-track{background:var(--ink);}
-::-webkit-scrollbar-thumb{background:var(--line);border-radius:2px;}
-
-/* ── NAV ── */
-nav{
-  position:fixed;top:0;left:0;right:0;z-index:200;
-  height:58px;
-  display:flex;align-items:center;justify-content:space-between;
-  padding:0 1.5rem;
-  background:rgba(12,14,20,0.9);
-  backdrop-filter:blur(20px);
-  border-bottom:1px solid var(--line);
-}
-.logo{
-  font-family:'Bebas Neue',sans-serif;
-  font-size:1.5rem;letter-spacing:2px;
-  color:var(--lime);display:flex;align-items:center;gap:6px;
-}
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:200;height:58px;display:flex;align-items:center;justify-content:space-between;padding:0 1.5rem;background:rgba(12,14,20,0.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--line);}
+.logo{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:2px;color:var(--lime);display:flex;align-items:center;gap:6px;}
 .logo-dot{width:8px;height:8px;border-radius:50%;background:var(--lime);animation:blink 2s infinite;}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
 .nav-links{display:flex;gap:2px;}
-.nav-links a{
-  padding:6px 14px;border-radius:6px;
-  font-size:0.85rem;font-weight:500;
-  color:var(--muted2);cursor:pointer;transition:all 0.15s;
-}
+.nav-links a{padding:6px 14px;border-radius:6px;font-size:0.85rem;font-weight:500;color:var(--muted2);cursor:pointer;transition:all 0.15s;}
 .nav-links a:hover{color:var(--white);background:var(--ink3);}
 .nav-links a.active{color:var(--lime);background:rgba(200,241,53,0.08);}
-.nav-user{display:flex;align-items:center;gap:0.5rem;}
-.user-chip{
-  display:flex;align-items:center;gap:8px;
-  padding:5px 14px 5px 6px;
-  background:var(--ink3);border:1px solid var(--line);border-radius:30px;
-  font-size:0.85rem;font-weight:500;cursor:pointer;transition:all 0.2s;
-}
+.user-chip{display:flex;align-items:center;gap:8px;padding:5px 14px 5px 6px;background:var(--ink3);border:1px solid var(--line);border-radius:30px;font-size:0.85rem;font-weight:500;cursor:pointer;transition:all 0.2s;}
 .user-chip:hover{border-color:var(--muted);}
-.avatar{
-  width:26px;height:26px;border-radius:50%;
-  background:linear-gradient(135deg,#6366f1,var(--lime));
-  display:flex;align-items:center;justify-content:center;
-  font-size:0.7rem;font-weight:700;color:#000;
-}
-.btn-nav{
-  padding:7px 18px;border-radius:8px;
-  background:var(--lime);color:#000;
-  font-weight:700;font-size:0.85rem;
-  border:none;cursor:pointer;transition:all 0.2s;
-  font-family:'Outfit',sans-serif;
-}
-.btn-nav:hover{background:var(--lime2);transform:translateY(-1px);}
+.avatar{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,#6366f1,var(--lime));display:flex;align-items:center;justify-content:center;font-size:0.7rem;font-weight:700;color:#000;}
+.btn-nav{padding:7px 18px;border-radius:8px;background:var(--lime);color:#000;font-weight:700;font-size:0.85rem;border:none;cursor:pointer;transition:all 0.2s;font-family:'Outfit',sans-serif;}
+.btn-nav:hover{background:var(--lime2);}
 
-/* ── SECTIONS ── */
+/* SECTIONS */
 section{display:none;padding-top:58px;min-height:100vh;}
 section.active{display:block;}
 
-/* ── HOME ── */
-.hero{
-  min-height:calc(100vh - 58px);
-  display:grid;grid-template-columns:1fr 1fr;
-  gap:0;align-items:center;
-  padding:4rem 3rem 4rem 4rem;
-  position:relative;overflow:hidden;
-  max-width:1200px;margin:0 auto;
-}
-.hero::before{
-  content:'';
-  position:absolute;right:-200px;top:50%;transform:translateY(-50%);
-  width:600px;height:600px;border-radius:50%;
-  background:radial-gradient(circle,rgba(200,241,53,0.08),transparent 70%);
-  pointer-events:none;
-}
-.hero-tag{
-  display:inline-flex;align-items:center;gap:6px;
-  background:rgba(200,241,53,0.1);border:1px solid rgba(200,241,53,0.25);
-  color:var(--lime);padding:5px 14px;border-radius:4px;
-  font-size:0.78rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
-  margin-bottom:1.5rem;
-}
-.hero h1{
-  font-family:'Bebas Neue',sans-serif;
-  font-size:clamp(4rem,7vw,6.5rem);
-  line-height:0.95;letter-spacing:2px;
-  margin-bottom:1.5rem;
-}
+/* HOME */
+.hero{min-height:calc(100vh - 58px);display:grid;grid-template-columns:1fr 1fr;gap:0;align-items:center;padding:4rem 3rem 4rem 4rem;position:relative;overflow:hidden;max-width:1200px;margin:0 auto;}
+.hero::before{content:'';position:absolute;right:-200px;top:50%;transform:translateY(-50%);width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(200,241,53,0.07),transparent 70%);pointer-events:none;}
+.hero-tag{display:inline-flex;align-items:center;gap:6px;background:rgba(200,241,53,0.1);border:1px solid rgba(200,241,53,0.25);color:var(--lime);padding:5px 14px;border-radius:4px;font-size:0.78rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:1.5rem;}
+.hero h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(3.5rem,6vw,6rem);line-height:0.95;letter-spacing:2px;margin-bottom:1.5rem;}
 .hero h1 .hl{color:var(--lime);}
-.hero-desc{
-  font-size:1rem;color:var(--muted2);
-  line-height:1.7;max-width:440px;margin-bottom:2.5rem;
-}
+.hero-desc{font-size:1rem;color:var(--muted2);line-height:1.7;max-width:440px;margin-bottom:2.5rem;}
 .hero-actions{display:flex;gap:0.75rem;flex-wrap:wrap;}
-.btn-primary{
-  padding:13px 28px;border-radius:8px;
-  background:var(--lime);color:#000;
-  font-weight:700;font-size:0.9rem;
-  border:none;cursor:pointer;transition:all 0.2s;
-  font-family:'Outfit',sans-serif;
-}
+.btn-primary{padding:13px 28px;border-radius:8px;background:var(--lime);color:#000;font-weight:700;font-size:0.9rem;border:none;cursor:pointer;transition:all 0.2s;font-family:'Outfit',sans-serif;}
 .btn-primary:hover{background:var(--lime2);transform:translateY(-2px);box-shadow:0 12px 30px rgba(200,241,53,0.25);}
-.btn-ghost{
-  padding:13px 28px;border-radius:8px;
-  background:transparent;color:var(--white);
-  font-weight:600;font-size:0.9rem;
-  border:1px solid var(--line);cursor:pointer;transition:all 0.2s;
-  font-family:'Outfit',sans-serif;
-}
+.btn-primary:disabled{opacity:0.5;cursor:not-allowed;transform:none;}
+.btn-ghost{padding:13px 28px;border-radius:8px;background:transparent;color:var(--white);font-weight:600;font-size:0.9rem;border:1px solid var(--line);cursor:pointer;transition:all 0.2s;font-family:'Outfit',sans-serif;}
 .btn-ghost:hover{border-color:var(--muted2);}
-.hero-right{
-  display:grid;grid-template-columns:1fr 1fr;gap:1rem;
-  padding-left:2rem;
-}
-.hero-stat{
-  background:var(--ink2);border:1px solid var(--line);
-  border-radius:16px;padding:1.5rem;
-  transition:transform 0.3s;
-}
+.hero-right{display:grid;grid-template-columns:1fr 1fr;gap:1rem;padding-left:2rem;}
+.hero-stat{background:var(--ink2);border:1px solid var(--line);border-radius:16px;padding:1.5rem;transition:transform 0.3s;}
 .hero-stat:hover{transform:translateY(-4px);}
 .hero-stat:nth-child(2){margin-top:2rem;}
 .hero-stat:nth-child(4){margin-top:-2rem;}
-.hs-num{
-  font-family:'Bebas Neue',sans-serif;
-  font-size:2.25rem;letter-spacing:1px;color:var(--lime);
-}
+.hs-num{font-family:'Bebas Neue',sans-serif;font-size:2.25rem;letter-spacing:1px;color:var(--lime);}
 .hs-label{font-size:0.8rem;color:var(--muted);margin-top:2px;}
 .hs-icon{font-size:1.5rem;margin-bottom:0.75rem;}
-
-.feat-strip{
-  display:grid;grid-template-columns:repeat(3,1fr);
-  gap:1px;background:var(--line);
-  border-top:1px solid var(--line);
-  max-width:100%;
-}
-.feat-item{
-  background:var(--ink2);padding:2rem 2.5rem;
-  display:flex;align-items:flex-start;gap:1rem;
-}
-.feat-icon{
-  width:42px;height:42px;border-radius:10px;
-  background:rgba(200,241,53,0.1);border:1px solid rgba(200,241,53,0.2);
-  display:flex;align-items:center;justify-content:center;font-size:1.1rem;
-  flex-shrink:0;
-}
+.feat-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border-top:1px solid var(--line);}
+.feat-item{background:var(--ink2);padding:2rem 2.5rem;display:flex;align-items:flex-start;gap:1rem;}
+.feat-icon{width:42px;height:42px;border-radius:10px;background:rgba(200,241,53,0.1);border:1px solid rgba(200,241,53,0.2);display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;}
 .feat-item h3{font-size:0.95rem;font-weight:700;margin-bottom:4px;}
 .feat-item p{font-size:0.82rem;color:var(--muted2);line-height:1.5;}
 
-/* ── SECTION SHELL ── */
-.section-shell{max-width:1100px;margin:0 auto;padding:3rem 2rem 5rem;}
-.sec-head{margin-bottom:2.5rem;}
-.sec-title{
-  font-family:'Bebas Neue',sans-serif;
-  font-size:2.5rem;letter-spacing:2px;margin-bottom:4px;
-}
-.sec-sub{font-size:0.9rem;color:var(--muted2);}
+/* SECTION SHELL */
+.shell{max-width:1100px;margin:0 auto;padding:3rem 2rem 5rem;}
+.sec-title{font-family:'Bebas Neue',sans-serif;font-size:2.5rem;letter-spacing:2px;margin-bottom:4px;}
+.sec-sub{font-size:0.9rem;color:var(--muted2);margin-bottom:2.5rem;}
 
-/* ── PLANS ── */
+/* PLANS */
 .plans-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;margin-bottom:3rem;}
-.plan-card{
-  background:var(--ink2);border:1px solid var(--line);
-  border-radius:16px;padding:2rem;
-  display:flex;flex-direction:column;
-  position:relative;transition:all 0.3s;
-}
+.plan-card{background:var(--ink2);border:1px solid var(--line);border-radius:16px;padding:2rem;display:flex;flex-direction:column;position:relative;transition:all 0.3s;}
 .plan-card:hover{transform:translateY(-4px);border-color:rgba(200,241,53,0.2);box-shadow:0 20px 60px rgba(0,0,0,0.4);}
-.plan-card.hot{
-  border-color:var(--lime);
-  background:linear-gradient(160deg,#141820,#1a1f2e);
-}
-.hot-badge{
-  position:absolute;top:-12px;left:50%;transform:translateX(-50%);
-  background:var(--lime);color:#000;
-  font-size:0.65rem;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;
-  padding:4px 14px;border-radius:4px;white-space:nowrap;
-}
+.plan-card.hot{border-color:var(--lime);background:linear-gradient(160deg,#141820,#1a1f2e);}
+.hot-badge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--lime);color:#000;font-size:0.65rem;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;padding:4px 14px;border-radius:4px;white-space:nowrap;}
 .plan-emoji{font-size:1.75rem;margin-bottom:1rem;}
 .plan-name{font-weight:700;font-size:1.05rem;margin-bottom:0.25rem;}
-.plan-price{
-  font-family:'JetBrains Mono',monospace;
-  font-size:1.5rem;font-weight:600;color:var(--lime);
-  margin:0.75rem 0;
-}
+.plan-price{font-family:'JetBrains Mono',monospace;font-size:1.5rem;font-weight:600;color:var(--lime);margin:0.75rem 0;}
 .plan-price em{font-style:normal;font-size:0.85rem;color:var(--muted);font-family:'Outfit',sans-serif;font-weight:400;}
 .plan-blurb{font-size:0.83rem;color:var(--muted2);margin-bottom:1.25rem;}
 .plan-feats{list-style:none;margin-bottom:1.75rem;flex:1;}
-.plan-feats li{
-  font-size:0.85rem;color:var(--muted2);
-  padding:7px 0;border-bottom:1px solid var(--line);
-  display:flex;align-items:center;gap:8px;
-}
+.plan-feats li{font-size:0.85rem;color:var(--muted2);padding:7px 0;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:8px;}
 .plan-feats li::before{content:'↳';color:var(--lime);font-weight:700;font-size:0.8rem;}
-.btn-sub{
-  width:100%;padding:12px;border-radius:8px;
-  font-weight:700;font-size:0.9rem;cursor:pointer;
-  transition:all 0.2s;border:1px solid var(--line);
-  background:var(--ink3);color:var(--white);
-  font-family:'Outfit',sans-serif;
-}
+.btn-sub{width:100%;padding:12px;border-radius:8px;font-weight:700;font-size:0.9rem;cursor:pointer;transition:all 0.2s;border:1px solid var(--line);background:var(--ink3);color:var(--white);font-family:'Outfit',sans-serif;}
 .btn-sub:hover{background:var(--lime);color:#000;border-color:var(--lime);}
 .plan-card.hot .btn-sub{background:var(--lime);color:#000;border:none;}
 .plan-card.hot .btn-sub:hover{background:var(--lime2);}
-
-.passes-section-title{
-  font-size:1rem;font-weight:700;margin-bottom:1.25rem;
-  display:flex;align-items:center;gap:8px;
-}
 .passes-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;}
-.pass-card{
-  background:var(--ink2);border:1px solid var(--line);
-  border-radius:12px;padding:1.5rem 1rem;text-align:center;
-  cursor:pointer;transition:all 0.2s;
-}
+.pass-card{background:var(--ink2);border:1px solid var(--line);border-radius:12px;padding:1.5rem 1rem;text-align:center;cursor:pointer;transition:all 0.2s;}
 .pass-card:hover{border-color:var(--amber);transform:translateY(-2px);}
-.pass-n{
-  font-family:'Bebas Neue',sans-serif;font-size:2.5rem;
-  color:var(--amber);letter-spacing:1px;
-}
+.pass-n{font-family:'Bebas Neue',sans-serif;font-size:2.5rem;color:var(--amber);letter-spacing:1px;}
 .pass-unit{font-size:0.75rem;color:var(--muted);margin-bottom:0.75rem;}
 .pass-ksh{font-family:'JetBrains Mono',monospace;font-size:0.9rem;font-weight:600;color:var(--muted2);margin-bottom:1rem;}
-.btn-pass{
-  width:100%;padding:8px;border-radius:7px;
-  font-size:0.82rem;font-weight:700;cursor:pointer;
-  background:transparent;color:var(--amber);
-  border:1px solid var(--amber);transition:all 0.2s;
-  font-family:'Outfit',sans-serif;
-}
+.btn-pass{width:100%;padding:8px;border-radius:7px;font-size:0.82rem;font-weight:700;cursor:pointer;background:transparent;color:var(--amber);border:1px solid var(--amber);transition:all 0.2s;font-family:'Outfit',sans-serif;}
 .btn-pass:hover{background:var(--amber);color:#000;}
 
-/* ── BOOK ── */
+/* BOOK */
 .book-layout{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;}
-.card{
-  background:var(--ink2);border:1px solid var(--line);
-  border-radius:16px;padding:1.75rem;
-}
+.card{background:var(--ink2);border:1px solid var(--line);border-radius:16px;padding:1.75rem;}
 .card-title{font-weight:700;font-size:1rem;margin-bottom:1.5rem;display:flex;align-items:center;gap:8px;}
-.card-title span{font-size:1.1rem;}
 .fgrp{margin-bottom:1.1rem;}
-.fgrp label{
-  display:block;font-size:0.73rem;font-weight:700;
-  color:var(--muted);text-transform:uppercase;letter-spacing:0.8px;
-  margin-bottom:5px;
-}
-.fgrp select,.fgrp input{
-  width:100%;padding:10px 12px;border-radius:8px;
-  background:var(--ink3);border:1px solid var(--line);
-  color:var(--white);font-size:0.9rem;font-family:'Outfit',sans-serif;
-  outline:none;transition:border-color 0.2s;
-}
+.fgrp label{display:block;font-size:0.73rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:5px;}
+.fgrp select,.fgrp input{width:100%;padding:10px 12px;border-radius:8px;background:var(--ink3);border:1px solid var(--line);color:var(--white);font-size:0.9rem;font-family:'Outfit',sans-serif;outline:none;transition:border-color 0.2s;}
 .fgrp select:focus,.fgrp input:focus{border-color:var(--lime);}
 .fgrp select option{background:var(--ink2);}
 .fare-rows{margin-bottom:1.25rem;}
-.fare-r{
-  display:flex;justify-content:space-between;
-  padding:9px 0;border-bottom:1px solid var(--line);
-  font-size:0.875rem;color:var(--muted2);
-}
+.fare-r{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--line);font-size:0.875rem;color:var(--muted2);}
 .fare-r:last-child{border:none;}
-.fare-r.sum{
-  font-family:'JetBrains Mono',monospace;font-size:1.05rem;
-  font-weight:700;color:var(--lime);
-}
+.fare-r.sum{font-family:'JetBrains Mono',monospace;font-size:1.05rem;font-weight:700;color:var(--lime);}
 .fare-r.sum span:first-child{font-family:'Outfit',sans-serif;font-weight:700;color:var(--white);font-size:0.95rem;}
-.map-preview{
-  background:var(--ink3);border:1px solid var(--line);
-  border-radius:10px;height:160px;
-  display:flex;align-items:center;justify-content:center;
-  margin-bottom:1.25rem;position:relative;overflow:hidden;
-}
-.map-preview::after{
-  content:'';position:absolute;inset:0;
-  background:repeating-linear-gradient(0deg,transparent,transparent 24px,rgba(200,241,53,0.03) 24px,rgba(200,241,53,0.03) 25px),
-             repeating-linear-gradient(90deg,transparent,transparent 24px,rgba(200,241,53,0.03) 24px,rgba(200,241,53,0.03) 25px);
-}
-.recent-list{display:flex;flex-direction:column;gap:0;}
-.recent-item{
-  display:grid;grid-template-columns:1fr auto auto auto;
-  gap:0.75rem;align-items:center;
-  padding:11px 0;border-bottom:1px solid var(--line);
-  font-size:0.85rem;
-}
+.map-preview{background:var(--ink3);border:1px solid var(--line);border-radius:10px;height:150px;display:flex;align-items:center;justify-content:center;margin-bottom:1.25rem;position:relative;overflow:hidden;}
+.map-preview::after{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 24px,rgba(200,241,53,0.03) 24px,rgba(200,241,53,0.03) 25px),repeating-linear-gradient(90deg,transparent,transparent 24px,rgba(200,241,53,0.03) 24px,rgba(200,241,53,0.03) 25px);}
+.recent-item{display:grid;grid-template-columns:1fr auto auto auto;gap:0.75rem;align-items:center;padding:11px 0;border-bottom:1px solid var(--line);font-size:0.85rem;}
 .recent-item:last-child{border:none;}
-.ri-route{font-weight:600;}
-.ri-info{font-size:0.75rem;color:var(--muted);}
+.ri-route{font-weight:600;}.ri-info{font-size:0.75rem;color:var(--muted);}
 .badge{padding:3px 9px;border-radius:4px;font-size:0.72rem;font-weight:700;}
 .badge-active{background:rgba(200,241,53,0.12);color:var(--lime);}
 .badge-done{background:rgba(107,114,128,0.15);color:var(--muted);}
 
-/* ── DASHBOARD ── */
+/* DASHBOARD */
 .kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.75rem;}
-.kpi{
-  background:var(--ink2);border:1px solid var(--line);
-  border-radius:14px;padding:1.4rem;
-}
+.kpi{background:var(--ink2);border:1px solid var(--line);border-radius:14px;padding:1.4rem;}
 .kpi-label{font-size:0.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.6px;margin-bottom:0.4rem;}
-.kpi-val{
-  font-family:'JetBrains Mono',monospace;
-  font-size:1.4rem;font-weight:600;color:var(--white);
-}
-.kpi-val.lime{color:var(--lime);}
-.kpi-val.sky{color:var(--sky);}
-.kpi-val.amber{color:var(--amber);}
+.kpi-val{font-family:'JetBrains Mono',monospace;font-size:1.4rem;font-weight:600;}
+.kpi-val.lime{color:var(--lime);}.kpi-val.sky{color:var(--sky);}.kpi-val.amber{color:var(--amber);}
 .dash-grid{display:grid;grid-template-columns:2fr 1fr;gap:1.5rem;}
 .prog-wrap{margin-top:0.75rem;}
 .prog-head{display:flex;justify-content:space-between;font-size:0.82rem;color:var(--muted2);margin-bottom:6px;}
 .prog-track{height:6px;background:var(--line);border-radius:3px;overflow:hidden;}
 .prog-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,#6366f1,var(--lime));transition:width 0.6s ease;}
-.sub-rows{margin-top:1rem;}
 .sub-r{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--line);font-size:0.85rem;}
 .sub-r:last-child{border:none;}
 .sub-r .k{color:var(--muted2);}
 
-/* ── ADMIN ── */
+/* ADMIN */
 .adm-kpi{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:1.75rem;}
-.adm-card{
-  background:var(--ink2);border:1px solid var(--line);
-  border-radius:14px;padding:1.4rem;
-  display:flex;align-items:center;gap:1rem;
-}
-.adm-icon{font-size:1.5rem;}
+.adm-card{background:var(--ink2);border:1px solid var(--line);border-radius:14px;padding:1.4rem;display:flex;align-items:center;gap:1rem;}
 .adm-val{font-family:'JetBrains Mono',monospace;font-size:1.35rem;font-weight:600;}
 .adm-lbl{font-size:0.78rem;color:var(--muted);}
 .adm-grid{display:grid;grid-template-columns:3fr 2fr;gap:1.5rem;}
 table{width:100%;border-collapse:collapse;}
-thead th{
-  font-size:0.72rem;font-weight:700;color:var(--muted);
-  text-transform:uppercase;letter-spacing:0.6px;
-  padding:10px 0;border-bottom:2px solid var(--line);text-align:left;
-}
+thead th{font-size:0.72rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.6px;padding:10px 0;border-bottom:2px solid var(--line);text-align:left;}
 tbody td{font-size:0.85rem;color:var(--muted2);padding:11px 0;border-bottom:1px solid var(--line);}
 tbody tr:last-child td{border:none;}
 
-/* ── GATE ── */
-.gate{
-  display:flex;flex-direction:column;align-items:center;
-  justify-content:center;min-height:55vh;text-align:center;gap:1rem;
-}
-.gate-icon{font-size:3.5rem;filter:grayscale(0.3);}
+/* GATE */
+.gate{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:55vh;text-align:center;gap:1rem;}
+.gate-icon{font-size:3.5rem;}
 .gate h2{font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:1px;}
 .gate p{font-size:0.9rem;color:var(--muted2);max-width:320px;}
 
-/* ── AUTH MODAL ── */
-.overlay{
-  display:none;position:fixed;inset:0;z-index:300;
-  background:rgba(0,0,0,0.75);backdrop-filter:blur(8px);
-  align-items:center;justify-content:center;
-}
+/* MODALS */
+.overlay{display:none;position:fixed;inset:0;z-index:300;background:rgba(0,0,0,0.75);backdrop-filter:blur(8px);align-items:center;justify-content:center;}
 .overlay.open{display:flex;}
-.modal{
-  background:var(--ink2);border:1px solid var(--line);
-  border-radius:20px;padding:2.5rem;
-  width:420px;max-width:95vw;
-  position:relative;animation:popIn 0.25s ease;
-}
+.modal{background:var(--ink2);border:1px solid var(--line);border-radius:20px;padding:2.5rem;width:440px;max-width:95vw;position:relative;animation:popIn 0.25s ease;}
 @keyframes popIn{from{opacity:0;transform:scale(0.96) translateY(12px)}to{opacity:1;transform:none}}
-.modal-x{
-  position:absolute;top:1rem;right:1rem;
-  width:30px;height:30px;border-radius:50%;
-  background:var(--ink3);border:none;color:var(--muted2);
-  cursor:pointer;font-size:0.9rem;display:flex;align-items:center;justify-content:center;
-  transition:all 0.15s;
-}
+.modal-x{position:absolute;top:1rem;right:1rem;width:30px;height:30px;border-radius:50%;background:var(--ink3);border:none;color:var(--muted2);cursor:pointer;font-size:0.9rem;display:flex;align-items:center;justify-content:center;transition:all 0.15s;}
 .modal-x:hover{color:var(--white);background:var(--line);}
-.modal-title{
-  font-family:'Bebas Neue',sans-serif;
-  font-size:1.75rem;letter-spacing:1px;margin-bottom:0.25rem;
-}
+.modal-title{font-family:'Bebas Neue',sans-serif;font-size:1.75rem;letter-spacing:1px;margin-bottom:0.25rem;}
 .modal-sub{font-size:0.85rem;color:var(--muted2);margin-bottom:1.75rem;}
-.tabs{
-  display:flex;background:var(--ink3);border-radius:8px;padding:3px;
-  margin-bottom:1.75rem;gap:3px;
-}
-.tab{
-  flex:1;padding:9px;border-radius:6px;border:none;
-  background:transparent;color:var(--muted2);
-  font-size:0.88rem;font-weight:600;font-family:'Outfit',sans-serif;
-  cursor:pointer;transition:all 0.15s;
-}
+.tabs{display:flex;background:var(--ink3);border-radius:8px;padding:3px;margin-bottom:1.75rem;gap:3px;}
+.tab{flex:1;padding:9px;border-radius:6px;border:none;background:transparent;color:var(--muted2);font-size:0.88rem;font-weight:600;font-family:'Outfit',sans-serif;cursor:pointer;transition:all 0.15s;}
 .tab.on{background:var(--ink2);color:var(--white);border:1px solid var(--line);}
 .aform{display:flex;flex-direction:column;gap:0.9rem;}
-.aform input{
-  padding:11px 14px;border-radius:8px;
-  background:var(--ink3);border:1px solid var(--line);
-  color:var(--white);font-size:0.9rem;font-family:'Outfit',sans-serif;
-  outline:none;transition:border-color 0.2s;
-}
+.aform input{padding:11px 14px;border-radius:8px;background:var(--ink3);border:1px solid var(--line);color:var(--white);font-size:0.9rem;font-family:'Outfit',sans-serif;outline:none;transition:border-color 0.2s;}
 .aform input:focus{border-color:var(--lime);}
-.err{color:var(--rose);font-size:0.82rem;display:none;}
+.err{color:var(--rose);font-size:0.82rem;display:none;margin-top:2px;}
 .demo-hint{font-size:0.78rem;color:var(--muted);text-align:center;margin-top:0.5rem;}
 .demo-hint b{color:var(--lime);cursor:pointer;}
 
-/* ── PAYMENT MODAL ── */
-.pay-modal{max-width:400px;}
-.pay-header{
-  background:var(--ink3);border:1px solid var(--line);
-  border-radius:12px;padding:1.25rem;
-  display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem;
-}
-.pay-logo{
-  width:48px;height:48px;border-radius:12px;
-  background:linear-gradient(135deg,#00a651,#00c853);
-  display:flex;align-items:center;justify-content:center;font-size:1.4rem;
-  flex-shrink:0;
-}
-.pay-plan-name{font-weight:700;font-size:1rem;}
-.pay-plan-amt{
-  font-family:'JetBrains Mono',monospace;
-  font-size:1.5rem;font-weight:700;color:var(--lime);margin-top:2px;
-}
-/* Processing animation */
-.pay-processing{text-align:center;padding:1.5rem 0;}
-.spinner{
-  width:44px;height:44px;border-radius:50%;
-  border:3px solid var(--line);border-top-color:var(--lime);
-  animation:spin 0.7s linear infinite;margin:0 auto 1rem;
-}
-@keyframes spin{to{transform:rotate(360deg)}}
-.pay-status{font-size:0.9rem;color:var(--muted2);}
-/* Success */
-.pay-success{text-align:center;padding:0.5rem 0;}
-.tick{
-  width:64px;height:64px;border-radius:50%;
-  background:rgba(200,241,53,0.12);border:2px solid var(--lime);
-  display:flex;align-items:center;justify-content:center;
-  font-size:2rem;margin:0 auto 1.25rem;
-}
-.txn-chip{
-  font-family:'JetBrains Mono',monospace;
-  background:rgba(200,241,53,0.08);border:1px solid rgba(200,241,53,0.2);
-  color:var(--lime);padding:10px;border-radius:8px;
-  font-size:0.95rem;letter-spacing:2px;text-align:center;margin:1rem 0;
-}
-.pay-meta{
-  display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;
-  background:var(--ink3);border-radius:10px;padding:1rem;margin:1rem 0 1.5rem;
-  text-align:left;
-}
-.pm-item .lbl{font-size:0.72rem;color:var(--muted);margin-bottom:2px;}
-.pm-item .val{font-size:0.88rem;font-weight:600;}
+/* MPESA MODAL */
+.mpesa-modal{max-width:420px;}
 
-/* ── TOAST ── */
+/* Step indicator */
+.steps-bar{display:flex;align-items:center;margin-bottom:1.75rem;}
+.step-item{display:flex;align-items:center;gap:6px;font-size:0.75rem;font-weight:600;}
+.step-dot{width:24px;height:24px;border-radius:50%;border:2px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:0.7rem;font-weight:700;color:var(--muted);transition:all 0.3s;flex-shrink:0;}
+.step-item.done .step-dot{background:var(--lime);border-color:var(--lime);color:#000;}
+.step-item.active .step-dot{border-color:var(--lime);color:var(--lime);animation:stepPulse 1.5s ease-in-out infinite;}
+.step-item.done .step-label,.step-item.active .step-label{color:var(--white);}
+.step-label{color:var(--muted);}
+@keyframes stepPulse{0%,100%{box-shadow:0 0 0 0 rgba(200,241,53,0.4)}50%{box-shadow:0 0 0 6px rgba(200,241,53,0)}}
+.step-line{flex:1;height:1px;background:var(--line);margin:0 6px;transition:background 0.3s;}
+.step-line.done{background:var(--lime);}
+
+/* Amount box */
+.amt-box{background:var(--ink3);border:1px solid var(--line);border-radius:12px;padding:1.25rem;text-align:center;margin-bottom:1.5rem;}
+.amt-label{font-size:0.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:4px;}
+.amt-value{font-family:'JetBrains Mono',monospace;font-size:2rem;font-weight:700;color:var(--green);}
+.amt-for{font-size:0.82rem;color:var(--muted2);margin-top:4px;}
+
+/* Phone step */
+.phone-step{}
+.phone-hint{font-size:0.78rem;color:var(--muted2);margin-top:6px;display:flex;align-items:center;gap:4px;}
+
+/* Waiting step */
+.waiting-step{text-align:center;padding:0.5rem 0;}
+.phone-sent{font-size:0.85rem;color:var(--muted2);margin-bottom:1.5rem;}
+.phone-sent strong{color:var(--white);}
+.spinner{width:48px;height:48px;border-radius:50%;border:3px solid var(--line);border-top-color:var(--lime);animation:spin 0.8s linear infinite;margin:1.5rem auto;}
+@keyframes spin{to{transform:rotate(360deg)}}
+.wait-msg{font-size:0.9rem;color:var(--muted2);}
+.wait-sub{font-size:0.78rem;color:var(--muted);margin-top:6px;}
+.btn-cancel-pay{margin-top:1.25rem;width:100%;padding:10px;border-radius:8px;background:transparent;border:1px solid var(--line);color:var(--muted2);font-family:'Outfit',sans-serif;font-size:0.85rem;cursor:pointer;transition:all 0.2s;}
+.btn-cancel-pay:hover{border-color:var(--rose);color:var(--rose);}
+
+/* Success step */
+.success-step{text-align:center;padding:0.5rem 0;}
+.tick{width:64px;height:64px;border-radius:50%;background:rgba(74,222,128,0.12);border:2px solid var(--green);display:flex;align-items:center;justify-content:center;font-size:2rem;margin:0 auto 1.25rem;animation:tickIn 0.4s ease;}
+@keyframes tickIn{from{transform:scale(0.5);opacity:0}to{transform:scale(1);opacity:1}}
+.txn-chip{font-family:'JetBrains Mono',monospace;background:rgba(200,241,53,0.08);border:1px solid rgba(200,241,53,0.2);color:var(--lime);padding:10px;border-radius:8px;font-size:0.95rem;letter-spacing:2px;text-align:center;margin:1rem 0;}
+.pay-meta{display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;background:var(--ink3);border-radius:10px;padding:1rem;margin:1rem 0 1.5rem;text-align:left;}
+.pm-label{font-size:0.72rem;color:var(--muted);margin-bottom:2px;}
+.pm-val{font-size:0.88rem;font-weight:600;}
+
+/* Failed step */
+.failed-step{text-align:center;padding:0.5rem 0;}
+.fail-icon{font-size:3rem;margin-bottom:1rem;}
+.fail-reason{font-size:0.85rem;color:var(--muted2);margin:0.5rem 0 1.5rem;padding:1rem;background:rgba(251,113,133,0.08);border:1px solid rgba(251,113,133,0.2);border-radius:10px;}
+
+/* TOAST */
 .toasts{position:fixed;bottom:1.5rem;right:1.5rem;z-index:400;display:flex;flex-direction:column;gap:0.5rem;}
-.t{
-  display:flex;align-items:center;gap:10px;
-  background:var(--ink2);border:1px solid var(--line);
-  border-radius:10px;padding:11px 16px;
-  font-size:0.875rem;min-width:260px;
-  box-shadow:0 8px 32px rgba(0,0,0,0.4);
-  animation:tin 0.25s ease;
-}
-.t.ok{border-color:rgba(200,241,53,0.3);}
-.t.info{border-color:rgba(56,189,248,0.3);}
+.t{display:flex;align-items:center;gap:10px;background:var(--ink2);border:1px solid var(--line);border-radius:10px;padding:11px 16px;font-size:0.875rem;min-width:260px;box-shadow:0 8px 32px rgba(0,0,0,0.4);animation:tin 0.25s ease;}
+.t.ok{border-color:rgba(200,241,53,0.3);}.t.info{border-color:rgba(56,189,248,0.3);}.t.err{border-color:rgba(251,113,133,0.3);}
 @keyframes tin{from{opacity:0;transform:translateX(16px)}to{opacity:1;transform:none}}
 
 @media(max-width:900px){
@@ -507,202 +248,98 @@ tbody tr:last-child td{border:none;}
     <a id="n-dashboard" onclick="go('dashboard')">Dashboard</a>
     <a id="n-admin" onclick="go('admin')">Admin</a>
   </div>
-  <div class="nav-user" id="nav-right">
-    <button class="btn-nav" onclick="openAuth()">Sign In</button>
-  </div>
+  <div id="nav-right"><button class="btn-nav" onclick="openAuth()">Sign In</button></div>
 </nav>
 
-<!-- ══ HOME ══ -->
+<!-- HOME -->
 <section id="home" class="active">
   <div class="hero">
-    <div class="hero-left">
+    <div>
       <div class="hero-tag">🚍 Smart City Transport</div>
       <h1>MOVE<br>SMARTER<br><span class="hl">SUBSCRIBE</span><br>BETTER</h1>
-      <p class="hero-desc">TransitFlow handles your bus, metro, and express subscriptions in one intelligent platform. Pay with M-Pesa, track in real-time.</p>
+      <p class="hero-desc">TransitFlow manages your bus, metro, and express subscriptions in one platform. Pay with M-Pesa, track in real-time.</p>
       <div class="hero-actions">
         <button class="btn-primary" onclick="go('plans')">View Plans →</button>
         <button class="btn-ghost" onclick="openAuth()">Get Started Free</button>
       </div>
     </div>
     <div class="hero-right">
-      <div class="hero-stat">
-        <div class="hs-icon">👥</div>
-        <div class="hs-num" id="stat-riders">0</div>
-        <div class="hs-label">Active Riders</div>
-      </div>
-      <div class="hero-stat">
-        <div class="hs-icon">🚌</div>
-        <div class="hs-num">47</div>
-        <div class="hs-label">Vehicles Live</div>
-      </div>
-      <div class="hero-stat">
-        <div class="hs-icon">📍</div>
-        <div class="hs-num">18</div>
-        <div class="hs-label">Routes</div>
-      </div>
-      <div class="hero-stat">
-        <div class="hs-icon">💰</div>
-        <div class="hs-num">40%</div>
-        <div class="hs-label">Avg. Savings</div>
-      </div>
+      <div class="hero-stat"><div class="hs-icon">👥</div><div class="hs-num" id="stat-riders">0</div><div class="hs-label">Active Riders</div></div>
+      <div class="hero-stat"><div class="hs-icon">🚌</div><div class="hs-num">47</div><div class="hs-label">Vehicles Live</div></div>
+      <div class="hero-stat"><div class="hs-icon">📍</div><div class="hs-num">18</div><div class="hs-label">Routes</div></div>
+      <div class="hero-stat"><div class="hs-icon">💰</div><div class="hs-num">40%</div><div class="hs-label">Avg. Savings</div></div>
     </div>
   </div>
   <div class="feat-strip">
-    <div class="feat-item">
-      <div class="feat-icon">📍</div>
-      <div>
-        <h3>Real-Time Tracking</h3>
-        <p>Live GPS every 30 seconds. Never wait blindly again.</p>
-      </div>
-    </div>
-    <div class="feat-item">
-      <div class="feat-icon">🎫</div>
-      <div>
-        <h3>Smart Subscriptions</h3>
-        <p>Save up to 40% vs single tickets. Pause anytime.</p>
-      </div>
-    </div>
-    <div class="feat-item">
-      <div class="feat-icon">📊</div>
-      <div>
-        <h3>Usage Analytics</h3>
-        <p>Detailed reports on your travel patterns and spending.</p>
-      </div>
-    </div>
+    <div class="feat-item"><div class="feat-icon">📍</div><div><h3>Real-Time Tracking</h3><p>Live GPS every 30 seconds. Never wait blindly again.</p></div></div>
+    <div class="feat-item"><div class="feat-icon">🎫</div><div><h3>Smart Subscriptions</h3><p>Save up to 40% vs single tickets. Pause anytime.</p></div></div>
+    <div class="feat-item"><div class="feat-icon">📊</div><div><h3>Usage Analytics</h3><p>Detailed reports on your travel patterns and spending.</p></div></div>
   </div>
 </section>
 
-<!-- ══ PLANS ══ -->
+<!-- PLANS -->
 <section id="plans">
-  <div class="section-shell">
-    <div class="sec-head">
-      <div class="sec-title">CHOOSE YOUR PLAN</div>
-      <div class="sec-sub">Flexible transport subscriptions for every commuter</div>
-    </div>
+  <div class="shell">
+    <div class="sec-title">CHOOSE YOUR PLAN</div>
+    <div class="sec-sub">Flexible transport subscriptions — pay via M-Pesa, activate instantly</div>
     <div class="plans-grid">
       <div class="plan-card">
-        <div class="plan-emoji">🚌</div>
-        <div class="plan-name">Basic</div>
+        <div class="plan-emoji">🚌</div><div class="plan-name">Basic</div>
         <div class="plan-price">KSh 1,200 <em>/month</em></div>
         <div class="plan-blurb">Perfect for occasional riders and students.</div>
-        <ul class="plan-feats">
-          <li>30 trips per month</li>
-          <li>Bus network access</li>
-          <li>3 zones covered</li>
-          <li>Mobile e-ticket</li>
-        </ul>
-        <button class="btn-sub" onclick="subscribe('Basic',1200)">Subscribe Now</button>
+        <ul class="plan-feats"><li>30 trips per month</li><li>Bus network access</li><li>3 zones covered</li><li>Mobile e-ticket</li></ul>
+        <button class="btn-sub" onclick="initiatePayment('subscription','Basic',1200)">Pay with M-Pesa</button>
       </div>
       <div class="plan-card hot">
         <div class="hot-badge">MOST POPULAR</div>
-        <div class="plan-emoji">🚇</div>
-        <div class="plan-name">Pro Commuter</div>
+        <div class="plan-emoji">🚇</div><div class="plan-name">Pro Commuter</div>
         <div class="plan-price">KSh 2,800 <em>/month</em></div>
         <div class="plan-blurb">Ideal for daily commuters. Unlimited travel.</div>
-        <ul class="plan-feats">
-          <li>Unlimited trips</li>
-          <li>Bus + Metro access</li>
-          <li>All zones covered</li>
-          <li>Priority boarding</li>
-          <li>Real-time tracking</li>
-        </ul>
-        <button class="btn-sub" onclick="subscribe('Pro Commuter',2800)">Subscribe Now</button>
+        <ul class="plan-feats"><li>Unlimited trips</li><li>Bus + Metro access</li><li>All zones covered</li><li>Priority boarding</li><li>Real-time tracking</li></ul>
+        <button class="btn-sub" onclick="initiatePayment('subscription','Pro Commuter',2800)">Pay with M-Pesa</button>
       </div>
       <div class="plan-card">
-        <div class="plan-emoji">✈️</div>
-        <div class="plan-name">Enterprise</div>
+        <div class="plan-emoji">✈️</div><div class="plan-name">Enterprise</div>
         <div class="plan-price">KSh 5,500 <em>/month</em></div>
         <div class="plan-blurb">Corporate plans with fleet management.</div>
-        <ul class="plan-feats">
-          <li>Up to 10 employees</li>
-          <li>All transport modes</li>
-          <li>Airport express</li>
-          <li>Dedicated support</li>
-          <li>Invoice billing</li>
-        </ul>
-        <button class="btn-sub" onclick="subscribe('Enterprise',5500)">Subscribe Now</button>
+        <ul class="plan-feats"><li>Up to 10 employees</li><li>All transport modes</li><li>Airport express</li><li>Dedicated support</li><li>Invoice billing</li></ul>
+        <button class="btn-sub" onclick="initiatePayment('subscription','Enterprise',5500)">Pay with M-Pesa</button>
       </div>
     </div>
-
-    <div class="passes-section-title">🎫 Trip Passes <span style="font-size:0.8rem;color:var(--muted);font-weight:400;">— top-up passes for extra trips</span></div>
+    <div style="font-weight:700;font-size:1rem;margin-bottom:1.25rem;">🎫 Trip Passes</div>
     <div class="passes-grid">
-      <div class="pass-card">
-        <div class="pass-n">10</div>
-        <div class="pass-unit">Trips</div>
-        <div class="pass-ksh">KSh 300</div>
-        <button class="btn-pass" onclick="buyPass(10,300)">Buy</button>
-      </div>
-      <div class="pass-card">
-        <div class="pass-n">20</div>
-        <div class="pass-unit">Trips</div>
-        <div class="pass-ksh">KSh 550</div>
-        <button class="btn-pass" onclick="buyPass(20,550)">Buy</button>
-      </div>
-      <div class="pass-card">
-        <div class="pass-n">40</div>
-        <div class="pass-unit">Trips</div>
-        <div class="pass-ksh">KSh 950</div>
-        <button class="btn-pass" onclick="buyPass(40,950)">Buy</button>
-      </div>
-      <div class="pass-card">
-        <div class="pass-n" style="color:var(--lime);">100</div>
-        <div class="pass-unit">Trips</div>
-        <div class="pass-ksh">KSh 1,800</div>
-        <button class="btn-pass" style="color:var(--lime);border-color:var(--lime);" onclick="buyPass(100,1800)">Buy</button>
-      </div>
+      <div class="pass-card"><div class="pass-n">10</div><div class="pass-unit">Trips</div><div class="pass-ksh">KSh 300</div><button class="btn-pass" onclick="initiatePayment('pass','10-Trip Pass',300,10)">Buy</button></div>
+      <div class="pass-card"><div class="pass-n">20</div><div class="pass-unit">Trips</div><div class="pass-ksh">KSh 550</div><button class="btn-pass" onclick="initiatePayment('pass','20-Trip Pass',550,20)">Buy</button></div>
+      <div class="pass-card"><div class="pass-n">40</div><div class="pass-unit">Trips</div><div class="pass-ksh">KSh 950</div><button class="btn-pass" onclick="initiatePayment('pass','40-Trip Pass',950,40)">Buy</button></div>
+      <div class="pass-card"><div class="pass-n" style="color:var(--lime)">100</div><div class="pass-unit">Trips</div><div class="pass-ksh">KSh 1,800</div><button class="btn-pass" style="color:var(--lime);border-color:var(--lime)" onclick="initiatePayment('pass','100-Trip Pass',1800,100)">Buy</button></div>
     </div>
   </div>
 </section>
 
-<!-- ══ BOOK ══ -->
+<!-- BOOK -->
 <section id="book">
-  <div class="section-shell">
-    <div class="sec-head">
-      <div class="sec-title">BOOK A TRIP</div>
-      <div class="sec-sub">Plan your journey with live fare estimates</div>
-    </div>
+  <div class="shell">
+    <div class="sec-title">BOOK A TRIP</div>
+    <div class="sec-sub">Plan your journey with live fare estimates</div>
     <div class="book-layout">
       <div>
         <div class="card" style="margin-bottom:1.25rem;">
           <div class="card-title"><span>🗺️</span>Journey Details</div>
-          <div class="fgrp">
-            <label>Transport Mode</label>
-            <select id="b-mode" onchange="calcFare()">
-              <option value="bus">🚌 Bus</option>
-              <option value="metro">🚇 Metro</option>
-              <option value="express">🚀 Express Bus</option>
-              <option value="brt">🚍 BRT</option>
-            </select>
-          </div>
-          <div class="fgrp">
-            <label>From</label>
-            <select id="b-from" onchange="calcFare()">
-              <option>CBD (City Centre)</option><option>Westlands</option>
-              <option>Ngong Road</option><option>Thika Road</option>
-              <option>Eastlands</option><option>Langata</option>
-              <option>Karen</option><option>JKIA Airport</option>
-            </select>
-          </div>
-          <div class="fgrp">
-            <label>To</label>
-            <select id="b-to" onchange="calcFare()">
-              <option>Westlands</option><option>CBD (City Centre)</option>
-              <option>Ngong Road</option><option>Thika Road</option>
-              <option>Eastlands</option><option>Langata</option>
-              <option>Karen</option><option>JKIA Airport</option>
-            </select>
+          <div class="fgrp"><label>Transport Mode</label>
+            <select id="b-mode" onchange="calcFare()"><option value="bus">🚌 Bus</option><option value="metro">🚇 Metro</option><option value="express">🚀 Express Bus</option><option value="brt">🚍 BRT</option></select>
           </div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;">
-            <div class="fgrp">
-              <label>Date & Time</label>
-              <input type="datetime-local" id="b-dt">
+            <div class="fgrp"><label>From</label>
+              <select id="b-from" onchange="calcFare()"><option>CBD (City Centre)</option><option>Westlands</option><option>Ngong Road</option><option>Thika Road</option><option>Eastlands</option><option>Langata</option><option>Karen</option><option>JKIA Airport</option></select>
             </div>
-            <div class="fgrp">
-              <label>Passengers</label>
-              <select id="b-pax" onchange="calcFare()">
-                <option value="1">1</option><option value="2">2</option>
-                <option value="3">3</option><option value="4">4</option>
-              </select>
+            <div class="fgrp"><label>To</label>
+              <select id="b-to" onchange="calcFare()"><option>Westlands</option><option>CBD (City Centre)</option><option>Ngong Road</option><option>Thika Road</option><option>Eastlands</option><option>Langata</option><option>Karen</option><option>JKIA Airport</option></select>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;">
+            <div class="fgrp"><label>Date & Time</label><input type="datetime-local" id="b-dt"></div>
+            <div class="fgrp"><label>Passengers</label>
+              <select id="b-pax" onchange="calcFare()"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option></select>
             </div>
           </div>
           <button class="btn-primary" style="width:100%;margin-top:0.5rem;" onclick="bookTrip()">Book Now →</button>
@@ -711,7 +348,7 @@ tbody tr:last-child td{border:none;}
       <div>
         <div class="card" style="margin-bottom:1.25rem;">
           <div class="card-title"><span>💰</span>Fare Estimate</div>
-          <div class="map-preview" id="map-prev">
+          <div class="map-preview">
             <div style="position:relative;z-index:1;text-align:center;">
               <div style="font-size:0.8rem;color:var(--lime);" id="map-from">📍 CBD</div>
               <div style="font-size:1.25rem;color:var(--muted);margin:6px 0;">↓</div>
@@ -723,39 +360,33 @@ tbody tr:last-child td{border:none;}
             <div class="fare-r"><span>Base Fare</span><span id="f-base">KSh 50</span></div>
             <div class="fare-r"><span>Distance</span><span id="f-dist">KSh 20</span></div>
             <div class="fare-r"><span>Passengers</span><span id="f-pax">× 1</span></div>
-            <div class="fare-r"><span style="color:var(--lime);">Subscriber Discount</span><span id="f-disc" style="color:var(--lime);">-KSh 0</span></div>
+            <div class="fare-r"><span style="color:var(--lime)">Subscriber Discount</span><span id="f-disc" style="color:var(--lime)">-KSh 0</span></div>
             <div class="fare-r sum"><span>Total</span><span id="f-total">KSh 70</span></div>
           </div>
         </div>
         <div class="card">
           <div class="card-title"><span>🕐</span>Recent Bookings</div>
-          <div id="recent-list">
-            <div style="color:var(--muted);font-size:0.85rem;padding:0.5rem 0;">No bookings yet.</div>
-          </div>
+          <div id="recent-list"><div style="color:var(--muted);font-size:0.85rem;">No bookings yet.</div></div>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ══ DASHBOARD ══ -->
+<!-- DASHBOARD -->
 <section id="dashboard">
-  <div class="section-shell">
+  <div class="shell">
     <div id="d-gate" class="gate" style="display:none;">
-      <div class="gate-icon">📊</div>
-      <h2>SIGN IN TO VIEW YOUR DASHBOARD</h2>
-      <p>Track your trips, subscription status, and savings in real-time.</p>
+      <div class="gate-icon">📊</div><h2>SIGN IN TO VIEW DASHBOARD</h2>
+      <p>Track your trips, subscription and savings.</p>
       <button class="btn-primary" onclick="openAuth()">Sign In</button>
     </div>
     <div id="d-content">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2rem;flex-wrap:wrap;gap:1rem;">
-        <div>
-          <div class="sec-title" id="d-welcome">WELCOME BACK</div>
-          <div class="sec-sub" id="d-plan-lbl">No Plan Active</div>
-        </div>
+        <div><div class="sec-title" id="d-welcome">WELCOME BACK</div><div class="sec-sub" style="margin:0" id="d-plan-lbl">No Plan Active</div></div>
         <div style="display:flex;gap:0.75rem;">
           <button class="btn-primary" onclick="go('plans')">Upgrade Plan</button>
-          <button class="btn-ghost" id="btn-cancel" onclick="cancelSub()" style="color:var(--rose);border-color:rgba(251,113,133,0.3);" disabled>Cancel Sub</button>
+          <button class="btn-ghost" id="btn-cancel" onclick="cancelSub()" style="color:var(--rose);border-color:rgba(251,113,133,0.3)" disabled>Cancel Sub</button>
         </div>
       </div>
       <div class="kpi-grid">
@@ -767,9 +398,7 @@ tbody tr:last-child td{border:none;}
       <div class="dash-grid">
         <div class="card">
           <div class="card-title"><span>🕐</span>Trip History</div>
-          <div id="d-history">
-            <div style="color:var(--muted);font-size:0.85rem;padding:0.5rem 0;">No trips yet. Book your first trip →</div>
-          </div>
+          <div id="d-history"><div style="color:var(--muted);font-size:0.85rem;">No trips yet.</div></div>
         </div>
         <div>
           <div class="card" style="margin-bottom:1.25rem;">
@@ -782,9 +411,7 @@ tbody tr:last-child td{border:none;}
           </div>
           <div class="card">
             <div class="card-title"><span>🎫</span>Subscription</div>
-            <div id="d-sub-info">
-              <div style="color:var(--muted);font-size:0.85rem;">No active subscription.</div>
-            </div>
+            <div id="d-sub-info"><div style="color:var(--muted);font-size:0.85rem;">No active subscription.</div></div>
           </div>
         </div>
       </div>
@@ -792,13 +419,12 @@ tbody tr:last-child td{border:none;}
   </div>
 </section>
 
-<!-- ══ ADMIN ══ -->
+<!-- ADMIN -->
 <section id="admin">
-  <div class="section-shell">
+  <div class="shell">
     <div id="a-gate" class="gate" style="display:none;">
-      <div class="gate-icon">🛡️</div>
-      <h2>ADMIN ACCESS REQUIRED</h2>
-      <p>Sign in with admin credentials to access the control panel.</p>
+      <div class="gate-icon">🛡️</div><h2>ADMIN ACCESS REQUIRED</h2>
+      <p>Sign in with admin credentials.</p>
       <button class="btn-primary" onclick="openAuth()">Sign In</button>
     </div>
     <div id="a-content">
@@ -807,36 +433,32 @@ tbody tr:last-child td{border:none;}
         <span style="background:rgba(99,102,241,0.15);color:#818cf8;padding:4px 12px;border-radius:4px;font-size:0.72rem;font-weight:800;letter-spacing:1px;border:1px solid rgba(99,102,241,0.3);">🛡️ ADMIN</span>
       </div>
       <div class="adm-kpi">
-        <div class="adm-card"><div class="adm-icon">👥</div><div><div class="adm-val" id="a-users">0</div><div class="adm-lbl">Total Users</div></div></div>
-        <div class="adm-card"><div class="adm-icon">🚌</div><div><div class="adm-val">47</div><div class="adm-lbl">Active Vehicles</div></div></div>
-        <div class="adm-card"><div class="adm-icon">💰</div><div><div class="adm-val" id="a-rev">KSh 0</div><div class="adm-lbl">Monthly Revenue</div></div></div>
-        <div class="adm-card"><div class="adm-icon">🎫</div><div><div class="adm-val" id="a-subs">0</div><div class="adm-lbl">Subscriptions</div></div></div>
-        <div class="adm-card"><div class="adm-icon">📍</div><div><div class="adm-val">12</div><div class="adm-lbl">Active Routes</div></div></div>
-        <div class="adm-card"><div class="adm-icon">📊</div><div><div class="adm-val" id="a-trips">0</div><div class="adm-lbl">Total Trips</div></div></div>
+        <div class="adm-card"><span style="font-size:1.5rem">👥</span><div><div class="adm-val" id="a-users">0</div><div class="adm-lbl">Total Users</div></div></div>
+        <div class="adm-card"><span style="font-size:1.5rem">🚌</span><div><div class="adm-val">47</div><div class="adm-lbl">Active Vehicles</div></div></div>
+        <div class="adm-card"><span style="font-size:1.5rem">💰</span><div><div class="adm-val" id="a-rev">KSh 0</div><div class="adm-lbl">Revenue</div></div></div>
+        <div class="adm-card"><span style="font-size:1.5rem">🎫</span><div><div class="adm-val" id="a-subs">0</div><div class="adm-lbl">Subscriptions</div></div></div>
+        <div class="adm-card"><span style="font-size:1.5rem">📍</span><div><div class="adm-val">12</div><div class="adm-lbl">Active Routes</div></div></div>
+        <div class="adm-card"><span style="font-size:1.5rem">📊</span><div><div class="adm-val" id="a-trips">0</div><div class="adm-lbl">Total Trips</div></div></div>
       </div>
       <div class="adm-grid">
         <div class="card">
-          <div class="card-title"><span>👥</span>Registered Users</div>
-          <table style="margin-top:0.75rem;">
-            <thead><tr><th>Name</th><th>Email</th><th>Plan</th><th>Status</th></tr></thead>
-            <tbody id="a-users-table"><tr><td colspan="4" style="color:var(--muted)">No users yet</td></tr></tbody>
-          </table>
+          <div class="card-title"><span>👥</span>Users</div>
+          <table style="margin-top:0.75rem;"><thead><tr><th>Name</th><th>Email</th><th>Plan</th><th>Status</th></tr></thead>
+          <tbody id="a-users-table"><tr><td colspan="4" style="color:var(--muted)">No users yet</td></tr></tbody></table>
         </div>
         <div>
           <div class="card" style="margin-bottom:1.25rem;">
-            <div class="card-title"><span>🚌</span>Fleet Status</div>
-            <table style="margin-top:0.75rem;">
-              <thead><tr><th>Vehicle</th><th>Route</th><th>Status</th></tr></thead>
-              <tbody>
-                <tr><td>BUS-001</td><td>CBD → Westlands</td><td><span class="badge badge-active">Active</span></td></tr>
-                <tr><td>BUS-002</td><td>Thika Rd → CBD</td><td><span class="badge badge-active">Active</span></td></tr>
-                <tr><td>MTR-01</td><td>CBD ↔ Airport</td><td><span class="badge badge-active">Active</span></td></tr>
-                <tr><td>BUS-009</td><td>Ngong → CBD</td><td><span class="badge badge-done">Offline</span></td></tr>
-              </tbody>
-            </table>
+            <div class="card-title"><span>🚌</span>Fleet</div>
+            <table style="margin-top:0.75rem;"><thead><tr><th>Vehicle</th><th>Route</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td>BUS-001</td><td>CBD → Westlands</td><td><span class="badge badge-active">Active</span></td></tr>
+              <tr><td>BUS-002</td><td>Thika → CBD</td><td><span class="badge badge-active">Active</span></td></tr>
+              <tr><td>MTR-01</td><td>CBD ↔ Airport</td><td><span class="badge badge-active">Active</span></td></tr>
+              <tr><td>BUS-009</td><td>Ngong → CBD</td><td><span class="badge badge-done">Offline</span></td></tr>
+            </tbody></table>
           </div>
           <div class="card">
-            <div class="card-title"><span>💰</span>Revenue Breakdown</div>
+            <div class="card-title"><span>💰</span>Revenue</div>
             <div style="margin-top:0.75rem;">
               <div class="fare-r"><span>Basic Plans</span><span id="a-r-basic">KSh 0</span></div>
               <div class="fare-r"><span>Pro Plans</span><span id="a-r-pro">KSh 0</span></div>
@@ -855,28 +477,26 @@ tbody tr:last-child td{border:none;}
   <div class="modal">
     <button class="modal-x" onclick="closeOv('auth-ov')">✕</button>
     <div class="modal-title">WELCOME BACK</div>
-    <div class="modal-sub">Sign in or create an account to get started</div>
+    <div class="modal-sub">Sign in or create an account</div>
     <div class="tabs">
       <button class="tab on" id="t-in" onclick="switchTab('in')">Sign In</button>
       <button class="tab" id="t-reg" onclick="switchTab('reg')">Register</button>
     </div>
-    <!-- sign in -->
     <div id="f-in">
       <div class="aform">
-        <input type="email" id="si-e" placeholder="Email address" autocomplete="email">
-        <input type="password" id="si-p" placeholder="Password" autocomplete="current-password">
+        <input type="email" id="si-e" placeholder="Email address">
+        <input type="password" id="si-p" placeholder="Password">
         <div class="err" id="si-err">Incorrect email or password.</div>
         <button class="btn-primary" onclick="signIn()">Sign In →</button>
       </div>
       <div class="demo-hint">Demo admin: <b onclick="fillDemo()">admin@transitflow.com / admin123</b></div>
     </div>
-    <!-- register -->
     <div id="f-reg" style="display:none;">
       <div class="aform">
         <input type="text" id="rg-n" placeholder="Full name">
-        <input type="email" id="rg-e" placeholder="Email address" autocomplete="email">
-        <input type="tel" id="rg-ph" placeholder="Phone number (e.g. 0712345678)">
-        <input type="password" id="rg-p" placeholder="Password (min 6 characters)" autocomplete="new-password">
+        <input type="email" id="rg-e" placeholder="Email address">
+        <input type="tel" id="rg-ph" placeholder="M-Pesa phone (e.g. 0712345678)">
+        <input type="password" id="rg-p" placeholder="Password (min 6 characters)">
         <div class="err" id="rg-err">Please fill all fields correctly.</div>
         <button class="btn-primary" onclick="register()">Create Account →</button>
       </div>
@@ -884,111 +504,135 @@ tbody tr:last-child td{border:none;}
   </div>
 </div>
 
-<!-- PAYMENT MODAL -->
-<div class="overlay" id="pay-ov">
-  <div class="modal pay-modal">
-    <button class="modal-x" onclick="closeOv('pay-ov')">✕</button>
-    <!-- idle -->
-    <div id="pay-idle">
-      <div class="modal-title">CONFIRM PAYMENT</div>
-      <div class="modal-sub">Review your order before confirming</div>
-      <div class="pay-header">
-        <div class="pay-logo">💳</div>
-        <div>
-          <div class="pay-plan-name" id="py-name">—</div>
-          <div class="pay-plan-amt" id="py-amt">KSh 0</div>
-        </div>
-      </div>
-      <div style="background:var(--ink3);border-radius:10px;padding:1rem;margin-bottom:1.5rem;">
-        <div style="font-size:0.78rem;color:var(--muted);margin-bottom:4px;">Billing account</div>
-        <div style="font-weight:600;" id="py-user">—</div>
-        <div style="font-size:0.82rem;color:var(--muted2);" id="py-phone">—</div>
-      </div>
-      <button class="btn-primary" style="width:100%;padding:14px;font-size:1rem;" onclick="processPayment()">✓ Confirm & Pay</button>
-      <button class="btn-ghost" style="width:100%;margin-top:0.75rem;padding:12px;" onclick="closeOv('pay-ov')">Cancel</button>
+<!-- MPESA PAYMENT MODAL -->
+<div class="overlay" id="mpesa-ov">
+  <div class="modal mpesa-modal">
+    <button class="modal-x" onclick="cancelPayment()">✕</button>
+
+    <!-- Step bar -->
+    <div class="steps-bar">
+      <div class="step-item" id="s-phone"><div class="step-dot" id="sd-phone">1</div><span class="step-label">Phone</span></div>
+      <div class="step-line" id="sl-1"></div>
+      <div class="step-item" id="s-wait"><div class="step-dot" id="sd-wait">2</div><span class="step-label">Waiting</span></div>
+      <div class="step-line" id="sl-2"></div>
+      <div class="step-item" id="s-done"><div class="step-dot" id="sd-done">3</div><span class="step-label">Done</span></div>
     </div>
-    <!-- processing -->
-    <div id="pay-proc" style="display:none;">
-      <div class="pay-processing">
-        <div class="spinner"></div>
-        <div style="font-weight:700;margin-bottom:0.5rem;" id="pay-proc-title">Processing Payment</div>
-        <div class="pay-status" id="pay-proc-msg">Connecting to payment gateway...</div>
-      </div>
+
+    <!-- Amount display (always visible) -->
+    <div class="amt-box">
+      <div class="amt-label">Amount Due</div>
+      <div class="amt-value" id="m-amount">KSh 0</div>
+      <div class="amt-for" id="m-for">—</div>
     </div>
-    <!-- success -->
-    <div id="pay-ok" style="display:none;">
-      <div class="pay-success">
-        <div class="tick">✅</div>
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:1px;color:var(--lime);">PAYMENT CONFIRMED!</div>
-        <div style="font-size:0.85rem;color:var(--muted2);margin-top:4px;">Transaction successful</div>
-        <div class="txn-chip" id="ok-txn">QKJ7X4NB2</div>
-        <div class="pay-meta">
-          <div class="pm-item"><div class="lbl">Amount</div><div class="val" id="ok-amt">KSh 0</div></div>
-          <div class="pm-item"><div class="lbl">For</div><div class="val" id="ok-for">—</div></div>
-          <div class="pm-item"><div class="lbl">Date</div><div class="val" id="ok-date">—</div></div>
-          <div class="pm-item"><div class="lbl">Account</div><div class="val" id="ok-user">—</div></div>
-        </div>
-        <button class="btn-primary" style="width:100%;padding:13px;" onclick="afterPay()">Go to Dashboard →</button>
+
+    <!-- STEP 1: Phone input -->
+    <div id="mp-phone">
+      <div class="fgrp">
+        <label>M-Pesa Phone Number</label>
+        <input type="tel" id="m-phone" placeholder="e.g. 0712 345 678" maxlength="13"
+               style="font-size:1.1rem;padding:14px;letter-spacing:1px;">
+        <div class="phone-hint">📱 We'll send an STK push to this Safaricom number</div>
       </div>
+      <div class="err" id="m-err" style="margin-bottom:0.75rem;">Please enter a valid Safaricom number (07XX or 01XX)</div>
+      <button class="btn-primary" style="width:100%;padding:14px;font-size:1rem;" onclick="sendSTK()" id="btn-stk">
+        Send M-Pesa Request →
+      </button>
+      <div style="text-align:center;font-size:0.75rem;color:var(--muted);margin-top:0.75rem;">🔒 Powered by Safaricom Daraja API</div>
     </div>
+
+    <!-- STEP 2: Waiting for PIN -->
+    <div id="mp-wait" style="display:none;" class="waiting-step">
+      <div class="phone-sent">STK push sent to <strong id="m-phone-display">07XX</strong></div>
+      <div class="spinner"></div>
+      <div class="wait-msg" id="m-wait-msg">Waiting for PIN entry on your phone...</div>
+      <div class="wait-sub">Enter your M-Pesa PIN on your phone to complete payment</div>
+      <button class="btn-cancel-pay" onclick="cancelPayment()">Cancel Payment</button>
+    </div>
+
+    <!-- STEP 3a: Success -->
+    <div id="mp-success" style="display:none;" class="success-step">
+      <div class="tick">✅</div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:1px;color:var(--green);">PAYMENT CONFIRMED!</div>
+      <div style="font-size:0.85rem;color:var(--muted2);margin-top:4px;">M-Pesa transaction successful</div>
+      <div class="txn-chip" id="m-txn-code">—</div>
+      <div class="pay-meta">
+        <div><div class="pm-label">Amount Paid</div><div class="pm-val" id="m-paid-amt">KSh 0</div></div>
+        <div><div class="pm-label">For</div><div class="pm-val" id="m-paid-for">—</div></div>
+        <div><div class="pm-label">Date</div><div class="pm-val" id="m-paid-date">—</div></div>
+        <div><div class="pm-label">Phone</div><div class="pm-val" id="m-paid-phone">—</div></div>
+      </div>
+      <button class="btn-primary" style="width:100%;padding:13px;" onclick="afterPay()">Go to Dashboard →</button>
+    </div>
+
+    <!-- STEP 3b: Failed -->
+    <div id="mp-failed" style="display:none;" class="failed-step">
+      <div class="fail-icon">❌</div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:1px;color:var(--rose);">PAYMENT FAILED</div>
+      <div class="fail-reason" id="m-fail-reason">The transaction was cancelled or timed out.</div>
+      <button class="btn-primary" style="width:100%;margin-bottom:0.75rem;" onclick="retryPayment()">Try Again</button>
+      <button class="btn-ghost" style="width:100%;" onclick="cancelPayment()">Cancel</button>
+    </div>
+
   </div>
 </div>
 
-<!-- TOASTS -->
 <div class="toasts" id="toasts"></div>
 
 <script>
-// ══════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════════
+//  CONFIG — update this to point to your backend
+// ══════════════════════════════════════════════════════════════
+const API = window.location.origin; // same origin when served by server.js
+
+// ══════════════════════════════════════════════════════════════
 //  STATE
-// ══════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════════
 const DB = {
-  get users(){ return JSON.parse(localStorage.getItem('tf2_users')||'[]'); },
-  set users(v){ localStorage.setItem('tf2_users', JSON.stringify(v)); },
-  get bookings(){ return JSON.parse(localStorage.getItem('tf2_bookings')||'[]'); },
-  set bookings(v){ localStorage.setItem('tf2_bookings', JSON.stringify(v)); },
+  get users(){ return JSON.parse(localStorage.getItem('tf_users')||'[]'); },
+  set users(v){ localStorage.setItem('tf_users',JSON.stringify(v)); },
+  get bookings(){ return JSON.parse(localStorage.getItem('tf_bookings')||'[]'); },
+  set bookings(v){ localStorage.setItem('tf_bookings',JSON.stringify(v)); },
 };
 
 // Seed admin
 (()=>{
-  let u = DB.users;
-  if (!u.find(x=>x.email==='admin@transitflow.com')) {
+  let u=DB.users;
+  if(!u.find(x=>x.email==='admin@transitflow.com')){
     u.push({name:'Admin User',email:'admin@transitflow.com',phone:'0700000000',password:'admin123',role:'admin',plan:null,trips:0,spent:0,extra:0});
     DB.users=u;
   }
 })();
 
-let ME = JSON.parse(sessionStorage.getItem('tf2_me')||'null');
-let pending = null;
+let ME = JSON.parse(sessionStorage.getItem('tf_me')||'null');
+let pending = null;     // current payment intent
+let pollTimer = null;   // polling interval ID
+let checkoutId = null;  // Daraja CheckoutRequestID
 
-// ══════════════════════════════════════════════════════
-//  NAV
-// ══════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════════
+//  NAVIGATION
+// ══════════════════════════════════════════════════════════════
 function go(id){
   document.querySelectorAll('section').forEach(s=>s.classList.remove('active'));
   document.querySelectorAll('.nav-links a').forEach(a=>a.classList.remove('active'));
   document.getElementById(id).classList.add('active');
-  const nav = document.getElementById('n-'+id);
-  if(nav) nav.classList.add('active');
+  document.getElementById('n-'+id)?.classList.add('active');
   if(id==='book') initBook();
   if(id==='dashboard') renderDash();
   if(id==='admin') renderAdmin();
 }
 
-// ══════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════════
 //  AUTH
-// ══════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════════
 function openAuth(){ if(ME){signOut();return;} document.getElementById('auth-ov').classList.add('open'); }
 function closeOv(id){ document.getElementById(id).classList.remove('open'); }
 function switchTab(t){
-  document.getElementById('f-in').style.display = t==='in'?'block':'none';
-  document.getElementById('f-reg').style.display = t==='reg'?'block':'none';
+  document.getElementById('f-in').style.display=t==='in'?'block':'none';
+  document.getElementById('f-reg').style.display=t==='reg'?'block':'none';
   document.getElementById('t-in').classList.toggle('on',t==='in');
   document.getElementById('t-reg').classList.toggle('on',t==='reg');
 }
-function fillDemo(){
-  document.getElementById('si-e').value='admin@transitflow.com';
-  document.getElementById('si-p').value='admin123';
-}
+function fillDemo(){ document.getElementById('si-e').value='admin@transitflow.com'; document.getElementById('si-p').value='admin123'; }
 function signIn(){
   const e=document.getElementById('si-e').value.trim();
   const p=document.getElementById('si-p').value;
@@ -1008,21 +652,17 @@ function register(){
   if(u.find(x=>x.email===e)){ err.textContent='Email already in use.'; err.style.display='block'; return; }
   err.style.display='none';
   const nu={name:n,email:e,phone:ph,password:p,role:'user',plan:null,trips:0,spent:0,extra:0};
-  u.push(nu); DB.users=u;
-  login(nu);
+  u.push(nu); DB.users=u; login(nu);
   toast('🎉 Account created! Welcome aboard.','ok');
 }
 function login(u){
-  ME=u; sessionStorage.setItem('tf2_me',JSON.stringify(u));
-  closeOv('auth-ov');
-  renderNav();
-  updateHomeStats();
+  ME=u; sessionStorage.setItem('tf_me',JSON.stringify(u));
+  closeOv('auth-ov'); renderNav(); updateHomeStats();
   toast(`👋 Welcome, ${u.name.split(' ')[0]}!`,'ok');
 }
 function signOut(){
-  ME=null; sessionStorage.removeItem('tf2_me');
-  renderNav(); go('home');
-  toast('Signed out.','info');
+  ME=null; sessionStorage.removeItem('tf_me');
+  renderNav(); go('home'); toast('Signed out.','info');
 }
 function renderNav(){
   const el=document.getElementById('nav-right');
@@ -1034,108 +674,183 @@ function renderNav(){
   }
 }
 
-// ══════════════════════════════════════════════════════
-//  SUBSCRIBE / BUY → PAYMENT MODAL (no OTP)
-// ══════════════════════════════════════════════════════
-function subscribe(plan,amt){
+// ══════════════════════════════════════════════════════════════
+//  PAYMENT FLOW — Real M-Pesa STK Push
+// ══════════════════════════════════════════════════════════════
+
+function initiatePayment(type, name, amount, trips=0){
   if(!ME){ openAuth(); return; }
-  pending={type:'subscription',plan,amount:amt,label:`${plan} Plan — Monthly`};
-  showPayModal();
-}
-function buyPass(trips,amt){
-  if(!ME){ openAuth(); return; }
-  pending={type:'pass',trips,amount:amt,label:`${trips}-Trip Pass`};
-  showPayModal();
-}
-function showPayModal(){
-  document.getElementById('py-name').textContent=pending.label;
-  document.getElementById('py-amt').textContent=`KSh ${pending.amount.toLocaleString()}`;
-  document.getElementById('py-user').textContent=ME.name;
-  document.getElementById('py-phone').textContent=ME.phone||ME.email;
-  document.getElementById('pay-idle').style.display='block';
-  document.getElementById('pay-proc').style.display='none';
-  document.getElementById('pay-ok').style.display='none';
-  document.getElementById('pay-ov').classList.add('open');
+  pending = { type, name, amount, trips, label: type==='subscription' ? `${name} Plan` : name };
+  // Pre-fill phone from user's registered phone
+  document.getElementById('m-phone').value = ME.phone || '';
+  // Reset modal to step 1
+  showMpesaStep('phone');
+  document.getElementById('m-amount').textContent = `KSh ${amount.toLocaleString()}`;
+  document.getElementById('m-for').textContent = pending.label;
+  document.getElementById('m-err').style.display='none';
+  document.getElementById('mpesa-ov').classList.add('open');
 }
 
-function processPayment(){
-  document.getElementById('pay-idle').style.display='none';
-  document.getElementById('pay-proc').style.display='block';
+function showMpesaStep(step){
+  document.getElementById('mp-phone').style.display   = step==='phone'   ? 'block' : 'none';
+  document.getElementById('mp-wait').style.display    = step==='wait'    ? 'block' : 'none';
+  document.getElementById('mp-success').style.display = step==='success' ? 'block' : 'none';
+  document.getElementById('mp-failed').style.display  = step==='failed'  ? 'block' : 'none';
 
-  const steps=[
-    {t:600,msg:'Connecting to payment gateway...'},
-    {t:1100,msg:'Authorising payment...'},
-    {t:1700,msg:'Confirming transaction...'},
-  ];
-  steps.forEach(s=>{
-    setTimeout(()=>{
-      document.getElementById('pay-proc-msg').textContent=s.msg;
-    },s.t);
+  // Update step indicators
+  const steps = ['phone','wait','done'];
+  const stepIdx = {phone:0, wait:1, success:2, failed:2}[step];
+  ['phone','wait','done'].forEach((s,i)=>{
+    const item = document.getElementById('s-'+s);
+    const dot  = document.getElementById('sd-'+s);
+    item.classList.remove('active','done');
+    if(i < stepIdx){ item.classList.add('done'); dot.textContent='✓'; }
+    else if(i===stepIdx){ item.classList.add('active'); dot.textContent=i+1; }
+    else { dot.textContent=i+1; }
   });
-
-  setTimeout(()=>{
-    const txn=genTxn();
-    applyPayment(txn);
-    showSuccess(txn);
-  },2300);
+  document.getElementById('sl-1').classList.toggle('done', stepIdx>0);
+  document.getElementById('sl-2').classList.toggle('done', stepIdx>1);
 }
 
-function applyPayment(txn){
+async function sendSTK(){
+  const rawPhone = document.getElementById('m-phone').value.trim().replace(/\s/g,'');
+  const errEl = document.getElementById('m-err');
+  
+  // Validate Safaricom number
+  if(!/^(07|01)\d{8}$/.test(rawPhone)){
+    errEl.style.display='block'; return;
+  }
+  errEl.style.display='none';
+
+  const btn = document.getElementById('btn-stk');
+  btn.disabled=true; btn.textContent='Sending request...';
+
+  try {
+    const res = await fetch(`${API}/api/stk-push`, {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        phone: rawPhone,
+        amount: pending.amount,
+        accountRef: 'TransitFlow',
+        description: pending.label,
+      })
+    });
+    const data = await res.json();
+
+    if(!data.success){
+      throw new Error(data.error || 'Failed to send STK push');
+    }
+
+    checkoutId = data.checkoutId;
+    const maskedPhone = rawPhone.slice(0,4)+'XXXX'+rawPhone.slice(-2);
+    document.getElementById('m-phone-display').textContent = maskedPhone;
+    document.getElementById('m-paid-phone').textContent = maskedPhone;
+
+    showMpesaStep('wait');
+    startPolling();
+
+  } catch(err){
+    btn.disabled=false; btn.textContent='Send M-Pesa Request →';
+    toast(`❌ ${err.message}`,'err');
+  }
+}
+
+function startPolling(){
+  let attempts=0;
+  const MAX_ATTEMPTS=40; // 40 × 3s = 2 minutes timeout
+
+  pollTimer = setInterval(async ()=>{
+    attempts++;
+    try {
+      const res  = await fetch(`${API}/api/payment-status/${checkoutId}`);
+      const data = await res.json();
+
+      if(data.status==='confirmed'){
+        clearInterval(pollTimer);
+        onPaymentConfirmed(data);
+      } else if(data.status==='failed'){
+        clearInterval(pollTimer);
+        onPaymentFailed(data.failReason || 'Transaction was cancelled or timed out.');
+      } else if(attempts >= MAX_ATTEMPTS){
+        clearInterval(pollTimer);
+        onPaymentFailed('Payment timed out. Please try again.');
+      } else {
+        // Update waiting message
+        const msgs=['Waiting for PIN entry...','Please enter your PIN on your phone...','Verifying with M-Pesa...','Almost there...'];
+        document.getElementById('m-wait-msg').textContent = msgs[attempts % msgs.length];
+      }
+    } catch(e){
+      // Network hiccup — keep polling
+    }
+  }, 3000);
+}
+
+function onPaymentConfirmed(data){
+  // Update UI
+  document.getElementById('m-txn-code').textContent   = data.mpesaCode || 'CONFIRMED';
+  document.getElementById('m-paid-amt').textContent   = `KSh ${(data.amount||pending.amount).toLocaleString()}`;
+  document.getElementById('m-paid-for').textContent   = pending.label;
+  document.getElementById('m-paid-date').textContent  = new Date(data.paidAt||Date.now()).toLocaleDateString('en-KE');
+  showMpesaStep('success');
+
+  // Apply to user account
+  applyPayment(data.mpesaCode||'MPX'+Date.now());
+  toast(`✅ Payment confirmed! ${pending.label} activated.`,'ok');
+}
+
+function onPaymentFailed(reason){
+  document.getElementById('m-fail-reason').textContent = reason;
+  showMpesaStep('failed');
+  toast('❌ Payment failed. Please try again.','err');
+}
+
+function applyPayment(txnCode){
   let users=DB.users;
   const idx=users.findIndex(u=>u.email===ME.email);
   if(idx===-1) return;
   const u=users[idx];
   if(pending.type==='subscription'){
-    u.plan=pending.plan;
-    u.planAmt=pending.amount;
-    u.planDate=new Date().toISOString();
-    u.planTxn=txn;
-    u.trips=0;
+    u.plan=pending.name; u.planAmt=pending.amount;
+    u.planDate=new Date().toISOString(); u.planTxn=txnCode; u.trips=0;
   } else {
     u.extra=(u.extra||0)+pending.trips;
   }
   u.spent=(u.spent||0)+pending.amount;
-  users[idx]=u;
-  DB.users=users;
-  ME=u;
-  sessionStorage.setItem('tf2_me',JSON.stringify(u));
+  users[idx]=u; DB.users=users;
+  ME=u; sessionStorage.setItem('tf_me',JSON.stringify(u));
   updateHomeStats();
 }
 
-function showSuccess(txn){
-  document.getElementById('pay-proc').style.display='none';
-  document.getElementById('pay-ok').style.display='block';
-  document.getElementById('ok-txn').textContent=txn;
-  document.getElementById('ok-amt').textContent=`KSh ${pending.amount.toLocaleString()}`;
-  document.getElementById('ok-for').textContent=pending.label;
-  document.getElementById('ok-date').textContent=new Date().toLocaleDateString('en-KE');
-  document.getElementById('ok-user').textContent=ME.name;
-  toast(`✅ ${pending.label} activated!`,'ok');
+function retryPayment(){
+  clearInterval(pollTimer);
+  showMpesaStep('phone');
+  const btn=document.getElementById('btn-stk');
+  btn.disabled=false; btn.textContent='Send M-Pesa Request →';
 }
 
-function afterPay(){
-  closeOv('pay-ov');
-  go('dashboard');
+function cancelPayment(){
+  clearInterval(pollTimer);
+  closeOv('mpesa-ov');
 }
 
-// ══════════════════════════════════════════════════════
-//  BOOK
-// ══════════════════════════════════════════════════════
+function afterPay(){ cancelPayment(); go('dashboard'); }
+
+// ══════════════════════════════════════════════════════════════
+//  BOOK TRIP
+// ══════════════════════════════════════════════════════════════
 const BASES={bus:50,metro:80,express:120,brt:60};
 const DISTS={bus:20,metro:35,express:50,brt:25};
 
 function initBook(){
   const dt=document.getElementById('b-dt');
   if(!dt.value){ const n=new Date(); n.setMinutes(n.getMinutes()+30); dt.value=n.toISOString().slice(0,16); }
-  calcFare();
-  renderRecent();
+  calcFare(); renderRecent();
 }
-
 function calcFare(){
   const mode=document.getElementById('b-mode')?.value||'bus';
   const pax=parseInt(document.getElementById('b-pax')?.value||1);
-  const base=BASES[mode]||50;
-  const dist=DISTS[mode]||20;
+  const base=BASES[mode]; const dist=DISTS[mode];
   const disc=ME?.plan?Math.floor((base+dist)*pax*0.2):0;
   const total=(base+dist)*pax-disc;
   document.getElementById('f-base').textContent=`KSh ${base}`;
@@ -1146,51 +861,43 @@ function calcFare(){
   const from=document.getElementById('b-from')?.value||'CBD';
   const to=document.getElementById('b-to')?.value||'Westlands';
   const km=Math.floor(Math.random()*12+4);
-  const min=Math.floor(km*2+Math.random()*8);
   document.getElementById('map-from').textContent=`📍 ${from}`;
   document.getElementById('map-to').textContent=`📍 ${to}`;
-  document.getElementById('map-meta').textContent=`~${km} km · ~${min} min`;
+  document.getElementById('map-meta').textContent=`~${km} km · ~${km*2+Math.floor(Math.random()*8)} min`;
   return total;
 }
-
 function bookTrip(){
   if(!ME){ openAuth(); return; }
   const mode=document.getElementById('b-mode').value;
   const from=document.getElementById('b-from').value;
   const to=document.getElementById('b-to').value;
   const pax=parseInt(document.getElementById('b-pax').value);
-  const dt=document.getElementById('b-dt').value;
   const fare=calcFare();
-  const bk={id:Date.now(),user:ME.email,mode,from,to,pax,dt,fare,status:'active',date:new Date().toISOString()};
+  const bk={id:Date.now(),user:ME.email,mode,from,to,pax,fare,status:'active',date:new Date().toISOString()};
   let bks=DB.bookings; bks.unshift(bk); DB.bookings=bks;
-  let users=DB.users;
-  const idx=users.findIndex(u=>u.email===ME.email);
-  if(idx>-1){ users[idx].trips=(users[idx].trips||0)+pax; DB.users=users; ME=users[idx]; sessionStorage.setItem('tf2_me',JSON.stringify(ME)); }
-  renderRecent();
-  updateHomeStats();
+  let users=DB.users; const idx=users.findIndex(u=>u.email===ME.email);
+  if(idx>-1){ users[idx].trips=(users[idx].trips||0)+pax; DB.users=users; ME=users[idx]; sessionStorage.setItem('tf_me',JSON.stringify(ME)); }
+  renderRecent(); updateHomeStats();
   toast(`🚌 Booked! ${from} → ${to} · KSh ${fare}`,'ok');
 }
-
 function renderRecent(){
-  const mine=DB.bookings.filter(b=>b.user===ME?.email).slice(0,6);
+  const mine=DB.bookings.filter(b=>b.user===ME?.email).slice(0,5);
   const el=document.getElementById('recent-list');
-  if(!mine.length){ el.innerHTML='<div style="color:var(--muted);font-size:0.85rem;padding:0.5rem 0;">No bookings yet.</div>'; return; }
-  el.innerHTML=`<div class="recent-list">${mine.map(b=>`
-    <div class="recent-item">
-      <div><div class="ri-route">${b.from} → ${b.to}</div><div class="ri-info">${mi(b.mode)} ${b.mode} · ${b.pax} pax</div></div>
-      <div style="font-size:0.78rem;color:var(--muted);">${new Date(b.date).toLocaleDateString('en-KE')}</div>
-      <div style="font-family:'JetBrains Mono',monospace;font-size:0.85rem;">KSh ${b.fare}</div>
-      <span class="badge badge-${b.status==='active'?'active':'done'}">${b.status}</span>
-    </div>`).join('')}</div>`;
+  if(!mine.length){ el.innerHTML='<div style="color:var(--muted);font-size:0.85rem;">No bookings yet.</div>'; return; }
+  el.innerHTML=mine.map(b=>`<div class="recent-item">
+    <div><div class="ri-route">${b.from} → ${b.to}</div><div class="ri-info">${mi(b.mode)} ${b.mode} · ${b.pax} pax</div></div>
+    <div style="font-size:0.78rem;color:var(--muted)">${new Date(b.date).toLocaleDateString('en-KE')}</div>
+    <div style="font-family:'JetBrains Mono',monospace;font-size:0.82rem">KSh ${b.fare}</div>
+    <span class="badge badge-${b.status==='active'?'active':'done'}">${b.status}</span>
+  </div>`).join('');
 }
 function mi(m){return{bus:'🚌',metro:'🚇',express:'🚀',brt:'🚍'}[m]||'🚌';}
 
-// ══════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════════
 //  DASHBOARD
-// ══════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════════
 function renderDash(){
-  const gate=document.getElementById('d-gate');
-  const cont=document.getElementById('d-content');
+  const gate=document.getElementById('d-gate'), cont=document.getElementById('d-content');
   if(!ME){ gate.style.display='flex'; cont.style.display='none'; return; }
   gate.style.display='none'; cont.style.display='block';
   const u=ME;
@@ -1201,17 +908,16 @@ function renderDash(){
   document.getElementById('d-left').textContent=u.plan?(lim===999?'∞':Math.max(0,lim-(u.trips||0))):(u.extra||0);
   document.getElementById('d-spent').textContent=`KSh ${(u.spent||0).toLocaleString()}`;
   document.getElementById('d-saved').textContent=`KSh ${Math.floor((u.spent||0)*0.2).toLocaleString()}`;
-  const used=u.trips||0, total=lim||30;
-  const pct=total===999?0:Math.min(100,Math.round(used/total*100));
+  const used=u.trips||0, total=lim||30, pct=total===999?0:Math.min(100,Math.round(used/total*100));
   document.getElementById('d-prog').style.width=pct+'%';
   document.getElementById('d-prog-lbl').textContent=total===999?`${used} / ∞`:`${used} / ${total}`;
   const si=document.getElementById('d-sub-info');
   if(u.plan){
-    si.innerHTML=`<div class="sub-rows">
+    si.innerHTML=`<div>
       <div class="sub-r"><span class="k">Plan</span><span>${u.plan}</span></div>
-      <div class="sub-r"><span class="k">Monthly Cost</span><span>KSh ${(u.planAmt||0).toLocaleString()}</span></div>
+      <div class="sub-r"><span class="k">Amount</span><span>KSh ${(u.planAmt||0).toLocaleString()}/mo</span></div>
       <div class="sub-r"><span class="k">Since</span><span>${new Date(u.planDate||Date.now()).toLocaleDateString('en-KE')}</span></div>
-      <div class="sub-r"><span class="k">Transaction</span><span style="font-family:'JetBrains Mono',monospace;font-size:0.78rem;">${u.planTxn||'—'}</span></div>
+      <div class="sub-r"><span class="k">M-Pesa Ref</span><span style="font-family:'JetBrains Mono',monospace;font-size:0.78rem">${u.planTxn||'—'}</span></div>
     </div>`;
     document.getElementById('btn-cancel').disabled=false;
   } else {
@@ -1220,79 +926,61 @@ function renderDash(){
   }
   const mine=DB.bookings.filter(b=>b.user===u.email).slice(0,10);
   const hist=document.getElementById('d-history');
-  if(!mine.length){hist.innerHTML='<div style="color:var(--muted);font-size:0.85rem;padding:0.5rem 0;">No trips yet.</div>'; return;}
-  hist.innerHTML=`<div class="recent-list">${mine.map(b=>`
-    <div class="recent-item">
-      <div><div class="ri-route">${b.from} → ${b.to}</div><div class="ri-info">${mi(b.mode)} ${b.mode}</div></div>
-      <div style="font-size:0.78rem;color:var(--muted);">${new Date(b.date).toLocaleDateString('en-KE')}</div>
-      <div style="font-family:'JetBrains Mono',monospace;font-size:0.85rem;">KSh ${b.fare}</div>
-      <span class="badge badge-${b.status==='active'?'active':'done'}">${b.status}</span>
-    </div>`).join('')}</div>`;
+  hist.innerHTML=mine.length ? mine.map(b=>`<div class="recent-item">
+    <div><div class="ri-route">${b.from} → ${b.to}</div><div class="ri-info">${mi(b.mode)} ${b.mode}</div></div>
+    <div style="font-size:0.78rem;color:var(--muted)">${new Date(b.date).toLocaleDateString('en-KE')}</div>
+    <div style="font-family:'JetBrains Mono',monospace;font-size:0.82rem">KSh ${b.fare}</div>
+    <span class="badge badge-${b.status==='active'?'active':'done'}">${b.status}</span>
+  </div>`).join('') : '<div style="color:var(--muted);font-size:0.85rem;">No trips yet.</div>';
 }
-
 function cancelSub(){
   if(!ME||!ME.plan) return;
-  let u=DB.users; const i=u.findIndex(x=>x.email===ME.email);
-  if(i>-1){u[i].plan=null;u[i].planAmt=0;DB.users=u;ME=u[i];sessionStorage.setItem('tf2_me',JSON.stringify(ME));}
+  let u=DB.users, i=u.findIndex(x=>x.email===ME.email);
+  if(i>-1){ u[i].plan=null; u[i].planAmt=0; DB.users=u; ME=u[i]; sessionStorage.setItem('tf_me',JSON.stringify(ME)); }
   renderDash(); toast('Subscription cancelled.','info');
 }
 
-// ══════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════════
 //  ADMIN
-// ══════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════════
 function renderAdmin(){
-  const gate=document.getElementById('a-gate');
-  const cont=document.getElementById('a-content');
+  const gate=document.getElementById('a-gate'), cont=document.getElementById('a-content');
   if(!ME||ME.role!=='admin'){ gate.style.display='flex'; cont.style.display='none'; return; }
   gate.style.display='none'; cont.style.display='block';
-  const users=DB.users.filter(u=>u.role!=='admin');
+  const nonAdmin=DB.users.filter(u=>u.role!=='admin');
   const subs=DB.users.filter(u=>u.plan);
   const rev=DB.users.reduce((s,u)=>s+(u.spent||0),0);
-  document.getElementById('a-users').textContent=users.length;
+  document.getElementById('a-users').textContent=nonAdmin.length;
   document.getElementById('a-subs').textContent=subs.length;
   document.getElementById('a-trips').textContent=DB.bookings.length;
   document.getElementById('a-rev').textContent=`KSh ${rev.toLocaleString()}`;
-  const rBasic=DB.users.filter(u=>u.plan==='Basic').length*1200;
-  const rPro=DB.users.filter(u=>u.plan==='Pro Commuter').length*2800;
-  const rEnt=DB.users.filter(u=>u.plan==='Enterprise').length*5500;
-  document.getElementById('a-r-basic').textContent=`KSh ${rBasic.toLocaleString()}`;
-  document.getElementById('a-r-pro').textContent=`KSh ${rPro.toLocaleString()}`;
-  document.getElementById('a-r-ent').textContent=`KSh ${rEnt.toLocaleString()}`;
-  document.getElementById('a-r-total').textContent=`KSh ${(rBasic+rPro+rEnt).toLocaleString()}`;
+  const rB=DB.users.filter(u=>u.plan==='Basic').length*1200;
+  const rP=DB.users.filter(u=>u.plan==='Pro Commuter').length*2800;
+  const rE=DB.users.filter(u=>u.plan==='Enterprise').length*5500;
+  document.getElementById('a-r-basic').textContent=`KSh ${rB.toLocaleString()}`;
+  document.getElementById('a-r-pro').textContent=`KSh ${rP.toLocaleString()}`;
+  document.getElementById('a-r-ent').textContent=`KSh ${rE.toLocaleString()}`;
+  document.getElementById('a-r-total').textContent=`KSh ${(rB+rP+rE).toLocaleString()}`;
   const tbody=document.getElementById('a-users-table');
-  if(!users.length){ tbody.innerHTML='<tr><td colspan="4" style="color:var(--muted)">No users yet</td></tr>'; return; }
-  tbody.innerHTML=users.map(u=>`<tr>
-    <td>${u.name}</td>
-    <td style="color:var(--muted2);font-size:0.8rem;">${u.email}</td>
+  tbody.innerHTML=nonAdmin.length ? nonAdmin.map(u=>`<tr>
+    <td>${u.name}</td><td style="color:var(--muted2);font-size:0.8rem">${u.email}</td>
     <td>${u.plan||'<span style="color:var(--muted)">None</span>'}</td>
     <td><span class="badge ${u.plan?'badge-active':'badge-done'}">${u.plan?'Active':'Free'}</span></td>
-  </tr>`).join('');
+  </tr>`).join('') : '<tr><td colspan="4" style="color:var(--muted)">No users yet</td></tr>';
 }
 
-// ══════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════════
 //  UTILS
-// ══════════════════════════════════════════════════════
-function genTxn(){ return (Math.random()*1e15).toString(36).toUpperCase().replace('.','').slice(0,10); }
-
+// ══════════════════════════════════════════════════════════════
+function updateHomeStats(){ document.getElementById('stat-riders').textContent=DB.users.filter(u=>u.role!=='admin').length; }
 function toast(msg,type=''){
-  const c=document.getElementById('toasts');
-  const el=document.createElement('div');
-  el.className=`t ${type}`; el.textContent=msg;
-  c.appendChild(el);
-  setTimeout(()=>{ el.style.opacity='0'; el.style.transition='opacity 0.3s'; setTimeout(()=>el.remove(),300); },3200);
+  const c=document.getElementById('toasts'), el=document.createElement('div');
+  el.className=`t ${type}`; el.textContent=msg; c.appendChild(el);
+  setTimeout(()=>{ el.style.opacity='0'; el.style.transition='opacity 0.3s'; setTimeout(()=>el.remove(),300); },3500);
 }
 
-function updateHomeStats(){
-  const r=DB.users.filter(u=>u.role!=='admin').length;
-  document.getElementById('stat-riders').textContent=r;
-}
-
-// ══════════════════════════════════════════════════════
-//  INIT
-// ══════════════════════════════════════════════════════
-renderNav();
-updateHomeStats();
-initBook();
+// INIT
+renderNav(); updateHomeStats(); initBook();
 </script>
 </body>
 </html>

@@ -3,669 +3,1388 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TransitFlow — Smart Transport Subscription System</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&family=Fraunces:ital,wght@0,300;0,600;1,300&display=swap" rel="stylesheet">
+<title>TransitFlow — Smart Transport Subscriptions</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#0a0e1a;--surface:#111827;--surface2:#1a2236;--accent:#00e5a0;--accent2:#ff6b35;--accent3:#7b5ea7;--text:#e8edf5;--muted:#6b7a99;--border:rgba(255,255,255,0.07);--gold:#f5c542;--danger:#ff4d6d;}
-*{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:'DM Mono',monospace;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;}
-body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 80% 50% at 20% -10%,rgba(0,229,160,0.08),transparent 60%),radial-gradient(ellipse 60% 40% at 80% 110%,rgba(123,94,167,0.1),transparent 60%);pointer-events:none;z-index:0;}
-nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:16px 24px;background:rgba(10,14,26,0.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);}
-.logo{font-family:'Syne',sans-serif;font-weight:800;font-size:1.3rem;color:var(--accent);}
-.logo span{color:var(--text);}
-.nav-links{display:flex;gap:4px;}
-.nav-btn{background:none;border:none;color:var(--muted);font-family:'DM Mono',monospace;font-size:0.8rem;cursor:pointer;padding:8px 14px;border-radius:8px;transition:all 0.2s;}
-.nav-btn:hover,.nav-btn.active{color:var(--accent);background:rgba(0,229,160,0.08);}
-.nav-right{display:flex;align-items:center;gap:10px;}
-.avatar{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent3));display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;color:#000;cursor:pointer;}
-.btn{display:inline-flex;align-items:center;gap:8px;padding:12px 24px;border-radius:12px;font-family:'Syne',sans-serif;font-weight:600;font-size:0.88rem;cursor:pointer;border:none;transition:all 0.25s;}
-.btn-primary{background:var(--accent);color:#000;}
-.btn-primary:hover{background:#00ffb3;}
-.btn-outline{background:transparent;color:var(--text);border:1px solid var(--border);}
-.btn-outline:hover{border-color:var(--accent);color:var(--accent);}
-.btn-sm{padding:8px 16px;font-size:0.78rem;}
-.hamburger{display:none;flex-direction:column;justify-content:center;align-items:center;gap:5px;cursor:pointer;padding:8px;background:none;border:1px solid var(--border);border-radius:8px;width:40px;height:40px;}
-.hamburger span{display:block;width:18px;height:2px;background:var(--text);border-radius:2px;}
-.mobile-menu{display:none;position:fixed;top:61px;left:0;right:0;bottom:0;background:rgba(10,14,26,0.99);z-index:99;padding:20px;flex-direction:column;gap:8px;overflow-y:auto;}
-.mobile-menu.open{display:flex;}
-.mob-btn{background:var(--surface);border:1px solid var(--border);color:var(--text);font-family:'DM Mono',monospace;font-size:1rem;cursor:pointer;padding:18px 20px;border-radius:14px;text-align:left;width:100%;}
-.mob-btn:active{background:rgba(0,229,160,0.1);color:var(--accent);}
-.page{display:none;min-height:calc(100vh - 61px);padding:32px 24px;position:relative;z-index:1;}
-.page.active{display:block;animation:fadeUp 0.3s ease;}
-@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-.hero{text-align:center;padding:60px 16px 40px;}
-.hero-tag{display:inline-block;background:rgba(0,229,160,0.1);border:1px solid rgba(0,229,160,0.2);color:var(--accent);font-size:0.7rem;padding:6px 16px;border-radius:100px;margin-bottom:24px;letter-spacing:2px;text-transform:uppercase;}
-.hero h1{font-family:'Fraunces',serif;font-size:clamp(2.2rem,6vw,4.5rem);font-weight:600;line-height:1.1;margin-bottom:20px;}
-.hero h1 em{font-style:italic;color:var(--accent);}
-.hero p{color:var(--muted);font-size:0.95rem;max-width:500px;margin:0 auto 32px;line-height:1.8;}
-.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin:40px 0;}
-.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:24px;text-align:center;}
-.stat-num{font-family:'Fraunces',serif;font-size:2.2rem;font-weight:600;color:var(--accent);}
-.stat-label{color:var(--muted);font-size:0.72rem;margin-top:4px;letter-spacing:1px;text-transform:uppercase;}
-.card{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:24px;}
-.card h3{font-family:'Syne',sans-serif;font-weight:700;margin-bottom:18px;font-size:0.95rem;}
-.section-title{font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:700;margin-bottom:6px;}
-.section-sub{color:var(--muted);font-size:0.82rem;margin-bottom:28px;}
-.plans-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
-.plan-card{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:28px;position:relative;}
-.plan-card.featured{border-color:var(--accent);}
-.plan-badge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--accent);color:#000;font-size:0.65rem;font-family:'Syne',sans-serif;font-weight:700;padding:4px 14px;border-radius:100px;white-space:nowrap;}
-.plan-name{font-family:'Syne',sans-serif;font-weight:700;font-size:1rem;margin-bottom:6px;}
-.plan-price{font-family:'Fraunces',serif;font-size:2.2rem;font-weight:600;margin-bottom:4px;}
-.plan-price span{font-size:0.9rem;color:var(--muted);font-family:'DM Mono',monospace;}
-.plan-desc{color:var(--muted);font-size:0.76rem;margin-bottom:20px;line-height:1.7;}
-.plan-features{list-style:none;margin-bottom:24px;}
-.plan-features li{padding:7px 0;border-bottom:1px solid var(--border);font-size:0.78rem;color:var(--muted);display:flex;align-items:center;gap:8px;}
-.plan-features li::before{content:'✓';color:var(--accent);font-weight:700;}
-.passes-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
-.dash-grid{display:grid;grid-template-columns:2fr 1fr;gap:20px;}
-.trip-item{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--border);}
-.trip-item:last-child{border-bottom:none;}
-.progress-bar{background:var(--surface2);border-radius:100px;height:8px;margin:10px 0;}
-.progress-fill{height:100%;border-radius:100px;background:linear-gradient(90deg,var(--accent),var(--accent3));transition:width 0.8s ease;}
-.badge{display:inline-block;padding:3px 10px;border-radius:100px;font-size:0.65rem;font-weight:500;}
-.badge-green{background:rgba(0,229,160,0.1);color:var(--accent);}
-.badge-orange{background:rgba(255,107,53,0.1);color:var(--accent2);}
-.badge-purple{background:rgba(123,94,167,0.1);color:var(--accent3);}
-.booking-grid{display:grid;grid-template-columns:1fr 1fr;gap:28px;}
-.form-group{margin-bottom:18px;}
-.form-label{font-size:0.72rem;color:var(--muted);letter-spacing:1px;text-transform:uppercase;display:block;margin-bottom:7px;}
-.form-input{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 14px;color:var(--text);font-family:'DM Mono',monospace;font-size:0.83rem;outline:none;}
-.form-input:focus{border-color:var(--accent);}
-select.form-input option{background:var(--surface);}
-.fare-summary{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:20px;margin-top:20px;}
-.fare-row{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--border);font-size:0.8rem;}
-.fare-row:last-child{border-bottom:none;font-weight:700;}
-.fare-amt{color:var(--accent);font-family:'Fraunces',serif;}
-.admin-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:28px;}
-.admin-stat{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:20px;}
-.admin-stat .icon{font-size:1.6rem;margin-bottom:10px;}
-.admin-stat .val{font-family:'Fraunces',serif;font-size:1.8rem;font-weight:600;}
-.admin-stat .lbl{color:var(--muted);font-size:0.72rem;margin-top:4px;}
-table{width:100%;border-collapse:collapse;}
-th{text-align:left;padding:10px 14px;font-size:0.7rem;color:var(--muted);letter-spacing:1px;text-transform:uppercase;border-bottom:1px solid var(--border);}
-td{padding:12px 14px;font-size:0.8rem;border-bottom:1px solid var(--border);}
-tr:last-child td{border-bottom:none;}
-.status-dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:5px;}
-.dot-green{background:var(--accent);}
-.dot-orange{background:var(--accent2);}
-.auth-wrap{max-width:420px;margin:40px auto;}
-.auth-card{background:var(--surface);border:1px solid var(--border);border-radius:24px;padding:36px;}
-.auth-title{font-family:'Fraunces',serif;font-size:1.8rem;font-weight:600;margin-bottom:6px;}
-.auth-sub{color:var(--muted);font-size:0.8rem;margin-bottom:28px;}
-.tabs{display:flex;background:var(--surface2);border-radius:10px;padding:4px;margin-bottom:24px;}
-.tab{flex:1;padding:9px;text-align:center;border-radius:8px;cursor:pointer;font-size:0.78rem;color:var(--muted);transition:all 0.2s;border:none;background:none;font-family:'DM Mono',monospace;}
-.tab.active{background:var(--accent);color:#000;font-weight:700;}
-.map-box{background:var(--surface2);border-radius:12px;height:180px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;margin-top:12px;}
-.map-grid-bg{position:absolute;inset:0;background-image:linear-gradient(rgba(0,229,160,0.05) 1px,transparent 1px),linear-gradient(90deg,rgba(0,229,160,0.05) 1px,transparent 1px);background-size:28px 28px;}
-.map-dot{position:absolute;width:10px;height:10px;border-radius:50%;background:var(--accent);box-shadow:0 0 12px var(--accent);animation:pulse 2s infinite;}
-.map-dot2{position:absolute;width:10px;height:10px;border-radius:50%;background:var(--accent2);box-shadow:0 0 12px var(--accent2);animation:pulse 2s infinite 0.5s;}
-@keyframes pulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.4);opacity:0.7}}
-.notif{position:fixed;top:70px;right:16px;background:var(--surface);border:1px solid var(--accent);border-radius:12px;padding:14px 18px;font-size:0.8rem;z-index:9999;animation:slideIn 0.3s ease;max-width:300px;box-shadow:0 8px 32px rgba(0,0,0,0.4);}
-.notif.error{border-color:var(--danger);}
-@keyframes slideIn{from{transform:translateX(120%);opacity:0}to{transform:translateX(0);opacity:1}}
-.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.8);backdrop-filter:blur(6px);z-index:9998;align-items:center;justify-content:center;padding:16px;}
-.modal-overlay.open{display:flex;}
-.modal{background:var(--surface);border:1px solid var(--border);border-radius:24px;padding:32px;max-width:400px;width:100%;position:relative;max-height:90vh;overflow-y:auto;}
-.modal-close{position:absolute;top:14px;right:14px;background:var(--surface2);border:none;color:var(--muted);width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:0.9rem;display:flex;align-items:center;justify-content:center;}
-.mpesa-header{display:flex;align-items:center;gap:10px;margin-bottom:20px;}
-.mpesa-icon{width:42px;height:42px;background:linear-gradient(135deg,#00a651,#007a3d);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;}
-.mpesa-title{font-family:'Syne',sans-serif;font-weight:700;font-size:0.95rem;}
-.mpesa-sub{font-size:0.7rem;color:var(--muted);}
-.pay-amount-box{background:var(--surface2);border-radius:14px;padding:18px;text-align:center;margin-bottom:20px;}
-.pay-amount-box .lbl{font-size:0.7rem;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;}
-.pay-amount-box .amt{font-family:'Fraunces',serif;font-size:2rem;color:var(--accent);}
-.pay-amount-box .desc{font-size:0.75rem;color:var(--muted);margin-top:4px;}
-.step-row{display:flex;align-items:center;gap:12px;padding:12px;border-radius:10px;margin-bottom:8px;background:var(--surface2);font-size:0.8rem;}
-.step-icon{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.75rem;flex-shrink:0;}
-.s-pending{background:rgba(107,122,153,0.2);color:var(--muted);}
-.s-active{background:rgba(245,197,66,0.15);color:var(--gold);animation:stepPulse 1s infinite;}
-.s-done{background:rgba(0,229,160,0.15);color:var(--accent);}
-@keyframes stepPulse{0%,100%{opacity:1}50%{opacity:0.4}}
-.pin-row{display:flex;gap:10px;justify-content:center;margin:16px 0;}
-.pin-dot{width:12px;height:12px;border-radius:50%;background:var(--surface2);border:2px solid var(--border);transition:all 0.2s;}
-.pin-dot.filled{background:var(--accent);border-color:var(--accent);}
-.receipt-box{background:var(--surface2);border-radius:12px;padding:14px;}
-.receipt-row{display:flex;justify-content:space-between;font-size:0.78rem;padding:7px 0;border-bottom:1px solid var(--border);}
-.receipt-row:last-child{border-bottom:none;font-weight:700;}
-.tx-code{font-family:'Syne',sans-serif;font-size:1rem;color:var(--accent);text-align:center;margin:14px 0 6px;letter-spacing:2px;}
-.check-circle{width:68px;height:68px;border-radius:50%;background:rgba(0,229,160,0.1);border:3px solid var(--accent);display:flex;align-items:center;justify-content:center;font-size:1.8rem;margin:0 auto 14px;animation:popIn 0.4s ease;}
-@keyframes popIn{0%{transform:scale(0)}70%{transform:scale(1.1)}100%{transform:scale(1)}}
-@media(max-width:768px){
-  .page{padding:20px 16px;}
-  .plans-grid,.booking-grid,.admin-grid{grid-template-columns:1fr;}
-  .dash-grid{grid-template-columns:1fr;}
-  .stats-row{grid-template-columns:repeat(2,1fr);}
-  .passes-grid{grid-template-columns:repeat(2,1fr);}
-  .nav-links{display:none;}
-  .hamburger{display:flex;}
-  .hero{padding:40px 8px 28px;}
-}
+  :root {
+    --bg: #0a0b0f;
+    --surface: #111318;
+    --surface2: #181b22;
+    --border: #1f2330;
+    --accent: #00e5a0;
+    --accent2: #7b61ff;
+    --accent3: #ff6b35;
+    --text: #e8eaf0;
+    --muted: #5a6070;
+    --danger: #ff4757;
+    --warn: #ffa502;
+    --success: #00e5a0;
+  }
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── ANIMATED BG GRID ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size: 48px 48px;
+    opacity: 0.4;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  body::after {
+    content: '';
+    position: fixed;
+    top: -40%;
+    left: -10%;
+    width: 60vw;
+    height: 60vw;
+    background: radial-gradient(circle, rgba(0,229,160,0.06) 0%, transparent 60%);
+    z-index: 0;
+    pointer-events: none;
+    animation: orb-drift 20s ease-in-out infinite alternate;
+  }
+
+  @keyframes orb-drift {
+    0%   { transform: translate(0, 0); }
+    100% { transform: translate(8vw, 6vh); }
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 40px;
+    background: rgba(10,11,15,0.85);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+  }
+  .nav-logo-icon {
+    width: 34px; height: 34px;
+    background: var(--accent);
+    border-radius: 9px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+  }
+  .nav-logo-text {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 18px;
+    color: var(--accent);
+    letter-spacing: -0.5px;
+  }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    list-style: none;
+  }
+  .nav-links a {
+    padding: 7px 14px;
+    border-radius: 7px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--muted);
+    text-decoration: none;
+    transition: all 0.15s;
+  }
+  .nav-links a:hover { color: var(--text); background: var(--surface2); }
+
+  .nav-cta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  /* ── BUTTONS ── */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 20px;
+    border-radius: 9px;
+    border: none;
+    cursor: pointer;
+    font-size: 13px;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.18s;
+    letter-spacing: 0.2px;
+    position: relative;
+    overflow: hidden;
+  }
+  .btn-primary {
+    background: var(--accent);
+    color: #000;
+  }
+  .btn-primary:hover {
+    background: #00c48a;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 24px rgba(0,229,160,0.3);
+  }
+  .btn-ghost {
+    background: transparent;
+    color: var(--muted);
+    border: 1px solid var(--border);
+  }
+  .btn-ghost:hover { color: var(--text); border-color: var(--muted); }
+  .btn-outline {
+    background: transparent;
+    color: var(--accent);
+    border: 1px solid var(--accent);
+  }
+  .btn-outline:hover {
+    background: rgba(0,229,160,0.08);
+    transform: translateY(-1px);
+  }
+  .btn-lg { padding: 14px 28px; font-size: 15px; border-radius: 10px; }
+
+  /* ── HERO ── */
+  .hero {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 100px 40px 80px;
+    text-align: center;
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 14px;
+    border-radius: 100px;
+    background: rgba(0,229,160,0.08);
+    border: 1px solid rgba(0,229,160,0.2);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 0.5px;
+    margin-bottom: 28px;
+    animation: fade-up 0.6s ease both;
+  }
+  .hero-badge-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--accent);
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.8); }
+  }
+
+  .hero-heading {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(42px, 7vw, 80px);
+    line-height: 1.05;
+    letter-spacing: -2px;
+    max-width: 820px;
+    margin-bottom: 20px;
+    animation: fade-up 0.6s 0.1s ease both;
+  }
+  .hero-heading .highlight {
+    color: var(--accent);
+    position: relative;
+  }
+  .hero-heading .highlight::after {
+    content: '';
+    position: absolute;
+    bottom: -4px; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), transparent);
+    border-radius: 2px;
+  }
+
+  .hero-desc {
+    font-size: 17px;
+    color: var(--muted);
+    max-width: 540px;
+    line-height: 1.65;
+    margin-bottom: 36px;
+    font-weight: 400;
+    animation: fade-up 0.6s 0.2s ease both;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 60px;
+    animation: fade-up 0.6s 0.3s ease both;
+  }
+
+  .hero-stats {
+    display: flex;
+    gap: 0;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    background: var(--surface);
+    animation: fade-up 0.6s 0.4s ease both;
+  }
+  .hero-stat {
+    padding: 18px 32px;
+    text-align: center;
+    border-right: 1px solid var(--border);
+  }
+  .hero-stat:last-child { border-right: none; }
+  .hero-stat-value {
+    font-family: 'DM Mono', monospace;
+    font-size: 24px;
+    font-weight: 500;
+    color: var(--text);
+  }
+  .hero-stat-label {
+    font-size: 11px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-top: 4px;
+  }
+
+  @keyframes fade-up {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── SECTION BASE ── */
+  section {
+    position: relative;
+    z-index: 1;
+    padding: 80px 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .section-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--accent);
+    margin-bottom: 12px;
+  }
+  .section-tag::before {
+    content: '';
+    width: 18px; height: 2px;
+    background: var(--accent);
+    border-radius: 1px;
+  }
+
+  .section-heading {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(28px, 4vw, 44px);
+    letter-spacing: -1px;
+    line-height: 1.1;
+    margin-bottom: 14px;
+  }
+  .section-sub {
+    font-size: 15px;
+    color: var(--muted);
+    max-width: 500px;
+    line-height: 1.6;
+    margin-bottom: 48px;
+  }
+
+  /* ── FEATURES ── */
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+
+  .feature-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 24px;
+    transition: all 0.2s;
+    cursor: default;
+  }
+  .feature-card:hover {
+    border-color: rgba(0,229,160,0.25);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+  }
+  .feature-icon {
+    width: 44px; height: 44px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+    margin-bottom: 14px;
+  }
+  .feature-icon.green { background: rgba(0,229,160,0.1); }
+  .feature-icon.purple { background: rgba(123,97,255,0.1); }
+  .feature-icon.orange { background: rgba(255,107,53,0.1); }
+  .feature-icon.yellow { background: rgba(255,165,2,0.1); }
+  .feature-icon.red { background: rgba(255,71,87,0.1); }
+  .feature-icon.blue { background: rgba(0,180,255,0.1); }
+
+  .feature-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    margin-bottom: 8px;
+  }
+  .feature-desc {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  /* ── PRICING ── */
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    align-items: start;
+  }
+
+  .pricing-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px;
+    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+  .pricing-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 48px rgba(0,0,0,0.5);
+  }
+  .pricing-card.popular {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 1px var(--accent), 0 12px 40px rgba(0,229,160,0.12);
+  }
+  .pricing-card.popular::before {
+    content: '⭐ MOST POPULAR';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    text-align: center;
+    background: var(--accent);
+    color: #000;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    padding: 5px;
+  }
+  .pricing-card.popular { padding-top: 42px; }
+
+  .pricing-name {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    margin-bottom: 6px;
+  }
+  .pricing-desc {
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 20px;
+  }
+  .pricing-price {
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+    margin-bottom: 24px;
+  }
+  .pricing-currency {
+    font-family: 'DM Mono', monospace;
+    font-size: 14px;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+  .pricing-amount {
+    font-family: 'DM Mono', monospace;
+    font-size: 40px;
+    font-weight: 500;
+    line-height: 1;
+  }
+  .pricing-period {
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .pricing-features {
+    list-style: none;
+    margin-bottom: 24px;
+  }
+  .pricing-features li {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 13px;
+    padding: 7px 0;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+  }
+  .pricing-features li:last-child { border-bottom: none; }
+  .pricing-features li .check { color: var(--accent); flex-shrink: 0; margin-top: 1px; }
+  .pricing-features li .cross { color: var(--muted); flex-shrink: 0; margin-top: 1px; }
+
+  /* ── TRIP PASSES ── */
+  .passes-row {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+    margin-top: 16px;
+  }
+  .pass-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px 24px;
+    text-align: center;
+    flex: 1;
+    min-width: 130px;
+    cursor: pointer;
+    transition: all 0.18s;
+    position: relative;
+  }
+  .pass-card:hover {
+    border-color: var(--accent2);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 28px rgba(123,97,255,0.15);
+  }
+  .pass-trips {
+    font-family: 'DM Mono', monospace;
+    font-size: 32px;
+    font-weight: 500;
+    color: var(--accent2);
+    line-height: 1;
+  }
+  .pass-trips-label {
+    font-size: 11px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin: 4px 0 10px;
+  }
+  .pass-price {
+    font-family: 'DM Mono', monospace;
+    font-size: 18px;
+    color: var(--text);
+    font-weight: 500;
+  }
+  .pass-price-label {
+    font-size: 10px;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+
+  /* ── HOW IT WORKS ── */
+  .steps-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    position: relative;
+  }
+  .steps-row::before {
+    content: '';
+    position: absolute;
+    top: 22px; left: 10%; right: 10%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border), var(--border), transparent);
+  }
+  .step {
+    text-align: center;
+    padding: 0 16px;
+    position: relative;
+    z-index: 1;
+  }
+  .step-num {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    background: var(--surface);
+    border: 2px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'DM Mono', monospace;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--accent);
+    margin: 0 auto 16px;
+    transition: all 0.2s;
+  }
+  .step:hover .step-num {
+    background: rgba(0,229,160,0.1);
+    border-color: var(--accent);
+  }
+  .step-icon { font-size: 28px; margin-bottom: 12px; }
+  .step-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    margin-bottom: 8px;
+  }
+  .step-desc { font-size: 12px; color: var(--muted); line-height: 1.6; }
+
+  /* ── ROUTES TICKER ── */
+  .routes-ticker-wrap {
+    overflow: hidden;
+    mask-image: linear-gradient(90deg, transparent, black 10%, black 90%, transparent);
+    -webkit-mask-image: linear-gradient(90deg, transparent, black 10%, black 90%, transparent);
+  }
+  .routes-ticker {
+    display: flex;
+    gap: 12px;
+    width: max-content;
+    animation: ticker 30s linear infinite;
+  }
+  @keyframes ticker {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+  .route-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 16px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    font-size: 13px;
+    font-weight: 500;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .route-status {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .route-status.active { background: var(--success); }
+  .route-status.idle   { background: var(--warn); }
+
+  /* ── TESTIMONIALS ── */
+  .testimonials-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+  .testimonial-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 22px;
+  }
+  .testimonial-stars { color: var(--warn); font-size: 13px; margin-bottom: 10px; }
+  .testimonial-text { font-size: 13px; color: var(--muted); line-height: 1.65; margin-bottom: 16px; font-style: italic; }
+  .testimonial-author { display: flex; align-items: center; gap: 10px; }
+  .testimonial-avatar {
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 15px;
+    flex-shrink: 0;
+  }
+  .testimonial-name { font-size: 13px; font-weight: 600; }
+  .testimonial-role { font-size: 11px; color: var(--muted); }
+
+  /* ── CTA BANNER ── */
+  .cta-banner {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 56px 48px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    margin: 0 40px 80px;
+  }
+  .cta-banner::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 0%, rgba(0,229,160,0.08), transparent 60%);
+    pointer-events: none;
+  }
+  .cta-banner h2 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(28px, 4vw, 48px);
+    letter-spacing: -1px;
+    margin-bottom: 14px;
+  }
+  .cta-banner p {
+    font-size: 15px;
+    color: var(--muted);
+    margin-bottom: 32px;
+  }
+  .cta-actions { display: flex; gap: 12px; align-items: center; justify-content: center; }
+
+  /* ── FOOTER ── */
+  footer {
+    position: relative;
+    z-index: 1;
+    border-top: 1px solid var(--border);
+    padding: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .footer-brand {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 16px;
+    color: var(--accent);
+  }
+  .footer-links {
+    display: flex;
+    gap: 20px;
+    list-style: none;
+  }
+  .footer-links a {
+    font-size: 13px;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.15s;
+  }
+  .footer-links a:hover { color: var(--text); }
+  .footer-copy { font-size: 12px; color: var(--muted); }
+
+  /* ── DIVIDER ── */
+  .section-divider {
+    width: 100%;
+    height: 1px;
+    background: var(--border);
+    margin: 0;
+  }
+
+  /* ── BADGE ── */
+  .badge {
+    display: inline-block;
+    padding: 2px 9px;
+    border-radius: 100px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+  .badge-green { background: rgba(0,229,160,0.12); color: var(--success); }
+  .badge-purple { background: rgba(123,97,255,0.12); color: var(--accent2); }
+  .badge-orange { background: rgba(255,107,53,0.12); color: var(--accent3); }
+
+  /* ── MODAL ── */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    backdrop-filter: blur(8px);
+    z-index: 200;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 36px;
+    width: 100%;
+    max-width: 460px;
+    position: relative;
+    animation: modal-in 0.25s ease;
+  }
+  @keyframes modal-in {
+    from { opacity: 0; transform: scale(0.95) translateY(10px); }
+    to   { opacity: 1; transform: scale(1) translateY(0); }
+  }
+  .modal-close {
+    position: absolute;
+    top: 16px; right: 16px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    width: 30px; height: 30px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    color: var(--muted);
+    font-size: 16px;
+    transition: all 0.15s;
+  }
+  .modal-close:hover { color: var(--text); }
+  .modal-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 22px;
+    margin-bottom: 6px;
+  }
+  .modal-sub { font-size: 13px; color: var(--muted); margin-bottom: 28px; }
+
+  .form-group { margin-bottom: 16px; }
+  .form-label {
+    display: block;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--muted);
+    margin-bottom: 6px;
+    font-weight: 600;
+  }
+  .form-control {
+    width: 100%;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 12px;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    transition: border-color 0.15s;
+    outline: none;
+  }
+  .form-control:focus { border-color: var(--accent); }
+  .form-control option { background: var(--surface2); }
+
+  .tabs {
+    display: flex;
+    gap: 4px;
+    background: var(--surface2);
+    border-radius: 8px;
+    padding: 3px;
+    margin-bottom: 22px;
+  }
+  .tab {
+    flex: 1;
+    padding: 8px;
+    text-align: center;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    color: var(--muted);
+    transition: all 0.15s;
+  }
+  .tab.active { background: var(--surface); color: var(--text); }
+
+  /* ── TOAST ── */
+  .toast-container {
+    position: fixed;
+    bottom: 24px; right: 24px;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .toast {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-size: 13px;
+    font-weight: 500;
+    animation: toast-in 0.3s ease;
+    max-width: 320px;
+  }
+  @keyframes toast-in {
+    from { opacity: 0; transform: translateX(20px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+
+  /* ── MOBILE NAV TOGGLE ── */
+  .nav-hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+    padding: 4px;
+  }
+  .nav-hamburger span {
+    width: 22px; height: 2px;
+    background: var(--text);
+    border-radius: 2px;
+    transition: all 0.2s;
+  }
+
+  /* ── SCROLL REVEAL ── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    .features-grid, .pricing-grid, .testimonials-grid { grid-template-columns: 1fr 1fr; }
+    .steps-row { grid-template-columns: 1fr 1fr; }
+    .steps-row::before { display: none; }
+    nav { padding: 0 20px; }
+    .nav-links { display: none; }
+    .nav-hamburger { display: flex; }
+    section { padding: 60px 20px; }
+    .cta-banner { margin: 0 20px 60px; padding: 36px 24px; }
+    footer { flex-direction: column; text-align: center; padding: 28px 20px; }
+    .hero { padding: 100px 20px 60px; }
+    .hero-stats { flex-direction: column; }
+    .hero-stat { border-right: none; border-bottom: 1px solid var(--border); }
+    .hero-stat:last-child { border-bottom: none; }
+  }
+  @media (max-width: 600px) {
+    .features-grid, .pricing-grid, .testimonials-grid, .steps-row { grid-template-columns: 1fr; }
+    .passes-row { flex-direction: column; }
+    .cta-actions { flex-direction: column; width: 100%; }
+    .cta-actions .btn { width: 100%; justify-content: center; }
+  }
 </style>
 </head>
 <body>
 
+<!-- ══════ NAV ══════ -->
 <nav>
-  <div class="logo">Transit<span>Flow</span></div>
-  <div class="nav-links">
-    <button class="nav-btn active" onclick="showPage('home')">Home</button>
-    <button class="nav-btn" onclick="showPage('plans')">Plans</button>
-    <button class="nav-btn" onclick="showPage('book')">Book Trip</button>
-    <button class="nav-btn" onclick="goDash()">Dashboard</button>
-    <button class="nav-btn" onclick="goAdmin()">Admin</button>
-  </div>
-  <div class="nav-right">
-    <div id="navUser"><button class="btn btn-outline btn-sm" onclick="showPage('auth')">Sign In</button></div>
-    <button class="hamburger" id="hamBtn" onclick="toggleMenu()">
+  <a href="#" class="nav-logo">
+    <div class="nav-logo-icon">🚍</div>
+    <span class="nav-logo-text">TransitFlow</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#features">Features</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#how-it-works">How It Works</a></li>
+    <li><a href="#routes">Routes</a></li>
+  </ul>
+  <div class="nav-cta">
+    <button class="btn btn-ghost" onclick="openModal('login')">Sign In</button>
+    <button class="btn btn-primary" onclick="openModal('register')">Get Started →</button>
+    <div class="nav-hamburger" onclick="toggleMobileMenu()">
       <span></span><span></span><span></span>
-    </button>
+    </div>
   </div>
 </nav>
 
-<div class="mobile-menu" id="mobileMenu">
-  <button class="mob-btn" onclick="mobGo('home')">🏠 &nbsp; Home</button>
-  <button class="mob-btn" onclick="mobGo('plans')">🎫 &nbsp; Plans &amp; Subscriptions</button>
-  <button class="mob-btn" onclick="mobGo('book')">🚌 &nbsp; Book a Trip</button>
-  <button class="mob-btn" onclick="mobGo('dashboard')">📊 &nbsp; My Dashboard</button>
-  <button class="mob-btn" onclick="mobGo('admin')">🛡️ &nbsp; Admin Panel</button>
-  <div style="margin-top:auto;padding-top:20px;border-top:1px solid var(--border)" id="mobUserSection">
-    <button class="btn btn-primary" style="width:100%;justify-content:center" onclick="mobGo('auth')">Sign In</button>
+<!-- ══════ HERO ══════ -->
+<div class="hero">
+  <div class="hero-badge">
+    <div class="hero-badge-dot"></div>
+    🚍 Smart City Transport — Nairobi
+  </div>
+  <h1 class="hero-heading">
+    Move smarter,<br><span class="highlight">subscribe better</span>
+  </h1>
+  <p class="hero-desc">
+    TransitFlow manages your bus, metro, and express subscriptions in one intelligent platform. Save money, skip queues, ride freely.
+  </p>
+  <div class="hero-actions">
+    <button class="btn btn-primary btn-lg" onclick="openModal('register')">View Plans → </button>
+    <button class="btn btn-ghost btn-lg" onclick="document.getElementById('how-it-works').scrollIntoView({behavior:'smooth'})">See How It Works</button>
+  </div>
+  <div class="hero-stats">
+    <div class="hero-stat">
+      <div class="hero-stat-value" id="stat-riders">0</div>
+      <div class="hero-stat-label">Active Riders</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-value" id="stat-routes">0</div>
+      <div class="hero-stat-label">Routes</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-value" id="stat-vehicles">0</div>
+      <div class="hero-stat-label">Vehicles Live</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-value" id="stat-savings">0%</div>
+      <div class="hero-stat-label">Avg. Savings</div>
+    </div>
   </div>
 </div>
 
-<div class="modal-overlay" id="payModal">
+<div class="section-divider"></div>
+
+<!-- ══════ FEATURES ══════ -->
+<section id="features">
+  <div class="section-tag">Features</div>
+  <h2 class="section-heading">Everything you need<br>to ride smarter</h2>
+  <p class="section-sub">One subscription unlocks all transit modes, real-time tracking, and smart fare management across the city.</p>
+  <div class="features-grid">
+    <div class="feature-card reveal">
+      <div class="feature-icon green">🗺️</div>
+      <div class="feature-title">Live Route Tracking</div>
+      <div class="feature-desc">Track your bus or matatu in real-time on a live map. Know exactly when your ride arrives — no more waiting blind.</div>
+    </div>
+    <div class="feature-card reveal">
+      <div class="feature-icon purple">🎫</div>
+      <div class="feature-title">Smart Subscriptions</div>
+      <div class="feature-desc">Choose daily, weekly, or monthly plans. Unlimited trips, pre-loaded passes, or route-specific packages — all in one app.</div>
+    </div>
+    <div class="feature-card reveal">
+      <div class="feature-icon orange">⚡</div>
+      <div class="feature-title">Tap-to-Ride</div>
+      <div class="feature-desc">QR code boarding means zero cash, zero queues. Tap your digital pass and board instantly at any TransitFlow stop.</div>
+    </div>
+    <div class="feature-card reveal">
+      <div class="feature-icon yellow">💰</div>
+      <div class="feature-title">M-Pesa & Card Payments</div>
+      <div class="feature-desc">Pay via M-Pesa, debit card, or SACCO wallet. Auto-renew subscriptions and get notified before your plan expires.</div>
+    </div>
+    <div class="feature-card reveal">
+      <div class="feature-icon blue">📊</div>
+      <div class="feature-title">Trip Analytics</div>
+      <div class="feature-desc">View your monthly commute summary, spending trends, and most-used routes. Know where your money goes.</div>
+    </div>
+    <div class="feature-card reveal">
+      <div class="feature-icon red">🔔</div>
+      <div class="feature-title">Smart Alerts</div>
+      <div class="feature-desc">Get push notifications for route delays, service changes, subscription renewals, and special fare promotions.</div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ══════ ROUTES TICKER ══════ -->
+<section id="routes" style="padding: 48px 0; max-width:100%">
+  <div style="padding: 0 40px; margin-bottom: 24px">
+    <div class="section-tag">Active Routes</div>
+    <h2 class="section-heading" style="margin-bottom:6px">Live fleet, city-wide</h2>
+    <p class="section-sub" style="margin-bottom:0">All routes currently running across the TransitFlow network.</p>
+  </div>
+  <div class="routes-ticker-wrap">
+    <div class="routes-ticker" id="routes-ticker">
+      <div class="route-chip"><div class="route-status active"></div>🚌 CBD → Westlands Express</div>
+      <div class="route-chip"><div class="route-status active"></div>🚌 Ngong Road → Junction Mall</div>
+      <div class="route-chip"><div class="route-status active"></div>🚇 Thika Superhighway Metro</div>
+      <div class="route-chip"><div class="route-status idle"></div>🚌 Lang'ata → Wilson Airport</div>
+      <div class="route-chip"><div class="route-status active"></div>🚌 Mombasa Road → JKIA</div>
+      <div class="route-chip"><div class="route-status active"></div>🚌 Kiambu Road → Two Rivers</div>
+      <div class="route-chip"><div class="route-status active"></div>🚇 Karen Shuttle → CBD</div>
+      <div class="route-chip"><div class="route-status idle"></div>🚌 Eastleigh Express</div>
+      <div class="route-chip"><div class="route-status active"></div>🚌 Limuru Road → Gigiri</div>
+      <div class="route-chip"><div class="route-status active"></div>🚌 South B → City Square</div>
+      <!-- Duplicate for seamless loop -->
+      <div class="route-chip"><div class="route-status active"></div>🚌 CBD → Westlands Express</div>
+      <div class="route-chip"><div class="route-status active"></div>🚌 Ngong Road → Junction Mall</div>
+      <div class="route-chip"><div class="route-status active"></div>🚇 Thika Superhighway Metro</div>
+      <div class="route-chip"><div class="route-status idle"></div>🚌 Lang'ata → Wilson Airport</div>
+      <div class="route-chip"><div class="route-status active"></div>🚌 Mombasa Road → JKIA</div>
+      <div class="route-chip"><div class="route-status active"></div>🚌 Kiambu Road → Two Rivers</div>
+      <div class="route-chip"><div class="route-status active"></div>🚇 Karen Shuttle → CBD</div>
+      <div class="route-chip"><div class="route-status idle"></div>🚌 Eastleigh Express</div>
+      <div class="route-chip"><div class="route-status active"></div>🚌 Limuru Road → Gigiri</div>
+      <div class="route-chip"><div class="route-status active"></div>🚌 South B → City Square</div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ══════ HOW IT WORKS ══════ -->
+<section id="how-it-works">
+  <div class="section-tag">How It Works</div>
+  <h2 class="section-heading">Onboard in minutes</h2>
+  <p class="section-sub">Four simple steps from signup to your first fare-free ride.</p>
+  <div class="steps-row">
+    <div class="step reveal">
+      <div class="step-num">01</div>
+      <div class="step-icon">📱</div>
+      <div class="step-title">Create Account</div>
+      <div class="step-desc">Register with your phone number and verify via OTP. Takes under 60 seconds.</div>
+    </div>
+    <div class="step reveal">
+      <div class="step-num">02</div>
+      <div class="step-icon">🎫</div>
+      <div class="step-title">Pick Your Plan</div>
+      <div class="step-desc">Choose a monthly subscription or top up with trip passes for flexible travel.</div>
+    </div>
+    <div class="step reveal">
+      <div class="step-num">03</div>
+      <div class="step-icon">💳</div>
+      <div class="step-title">Pay via M-Pesa</div>
+      <div class="step-desc">Instant M-Pesa STK push. No app downloads needed. Pay once, ride all month.</div>
+    </div>
+    <div class="step reveal">
+      <div class="step-num">04</div>
+      <div class="step-icon">🚌</div>
+      <div class="step-title">Tap &amp; Board</div>
+      <div class="step-desc">Show your QR code at the gate or bus reader. Your balance updates automatically.</div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ══════ PRICING ══════ -->
+<section id="pricing">
+  <div class="section-tag">Pricing</div>
+  <h2 class="section-heading">Plans that fit your commute</h2>
+  <p class="section-sub">All plans include unlimited route access within your tier. No hidden charges, cancel anytime.</p>
+  <div class="pricing-grid reveal">
+
+    <div class="pricing-card">
+      <div class="pricing-name">🚌 Basic Rider</div>
+      <div class="pricing-desc">For occasional commuters and students</div>
+      <div class="pricing-price">
+        <span class="pricing-currency">KSh</span>
+        <span class="pricing-amount" style="color:var(--accent2)">1,200</span>
+        <span class="pricing-period">/month</span>
+      </div>
+      <ul class="pricing-features">
+        <li><span class="check">✓</span> 2 routes included</li>
+        <li><span class="check">✓</span> 40 trips per month</li>
+        <li><span class="check">✓</span> QR boarding pass</li>
+        <li><span class="check">✓</span> M-Pesa payments</li>
+        <li><span class="cross">—</span> <span style="color:var(--muted)">Express routes</span></li>
+        <li><span class="cross">—</span> <span style="color:var(--muted)">Priority boarding</span></li>
+      </ul>
+      <button class="btn btn-outline" style="width:100%" onclick="openModal('register')">Choose Basic</button>
+    </div>
+
+    <div class="pricing-card popular">
+      <div class="pricing-name">⚡ Pro Commuter</div>
+      <div class="pricing-desc">For daily commuters — the best value</div>
+      <div class="pricing-price">
+        <span class="pricing-currency">KSh</span>
+        <span class="pricing-amount" style="color:var(--accent)">2,800</span>
+        <span class="pricing-period">/month</span>
+      </div>
+      <ul class="pricing-features">
+        <li><span class="check">✓</span> Unlimited routes</li>
+        <li><span class="check">✓</span> Unlimited trips</li>
+        <li><span class="check">✓</span> Express &amp; Metro routes</li>
+        <li><span class="check">✓</span> Priority boarding</li>
+        <li><span class="check">✓</span> Live tracking</li>
+        <li><span class="check">✓</span> Trip analytics dashboard</li>
+      </ul>
+      <button class="btn btn-primary" style="width:100%" onclick="openModal('register')">Choose Pro →</button>
+    </div>
+
+    <div class="pricing-card">
+      <div class="pricing-name">🏢 Enterprise Fleet</div>
+      <div class="pricing-desc">For companies, schools & SACCOs</div>
+      <div class="pricing-price">
+        <span class="pricing-currency">KSh</span>
+        <span class="pricing-amount" style="color:var(--accent3)">5,500</span>
+        <span class="pricing-period">/month</span>
+      </div>
+      <ul class="pricing-features">
+        <li><span class="check">✓</span> Up to 50 staff accounts</li>
+        <li><span class="check">✓</span> All Pro features</li>
+        <li><span class="check">✓</span> Admin billing dashboard</li>
+        <li><span class="check">✓</span> Dedicated support</li>
+        <li><span class="check">✓</span> Custom route scheduling</li>
+        <li><span class="check">✓</span> Invoice &amp; receipt export</li>
+      </ul>
+      <button class="btn btn-ghost" style="width:100%;border-color:var(--accent3);color:var(--accent3)" onclick="openModal('register')">Contact Sales</button>
+    </div>
+  </div>
+
+  <!-- Trip Passes -->
+  <div style="margin-top: 48px">
+    <div class="section-tag" style="margin-bottom:10px">Trip Passes</div>
+    <h3 style="font-family:'Syne',sans-serif;font-weight:700;font-size:20px;margin-bottom:6px">Need something flexible?</h3>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:0">Buy trip bundles — no monthly commitment. Great for occasional riders.</p>
+    <div class="passes-row reveal">
+      <div class="pass-card" onclick="openModal('register')">
+        <div class="pass-trips">5</div>
+        <div class="pass-trips-label">Trips</div>
+        <div class="pass-price">KSh 150</div>
+        <div class="pass-price-label">KSh 30 / trip</div>
+      </div>
+      <div class="pass-card" onclick="openModal('register')">
+        <div class="pass-trips">10</div>
+        <div class="pass-trips-label">Trips</div>
+        <div class="pass-price">KSh 270</div>
+        <div class="pass-price-label">KSh 27 / trip</div>
+      </div>
+      <div class="pass-card" onclick="openModal('register')">
+        <div class="pass-trips">20</div>
+        <div class="pass-trips-label">Trips</div>
+        <div class="pass-price">KSh 500</div>
+        <div class="pass-price-label">KSh 25 / trip</div>
+      </div>
+      <div class="pass-card" onclick="openModal('register')" style="border-color:var(--accent2)">
+        <div class="pass-trips" style="color:var(--accent)">50</div>
+        <div class="pass-trips-label">Trips</div>
+        <div class="pass-price">KSh 1,100</div>
+        <div class="pass-price-label">KSh 22 / trip — Best</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ══════ TESTIMONIALS ══════ -->
+<section>
+  <div class="section-tag">Testimonials</div>
+  <h2 class="section-heading">Nairobi riders love it</h2>
+  <p class="section-sub">Real feedback from commuters saving time and money every day.</p>
+  <div class="testimonials-grid">
+    <div class="testimonial-card reveal">
+      <div class="testimonial-stars">★★★★★</div>
+      <div class="testimonial-text">"I used to spend nearly KSh 4,000 a month on matatus. The Pro plan saves me over 30%. The QR boarding is seamless — no more fumbling for change."</div>
+      <div class="testimonial-author">
+        <div class="testimonial-avatar" style="background:rgba(0,229,160,0.1)">👨🏾</div>
+        <div>
+          <div class="testimonial-name">Brian Otieno</div>
+          <div class="testimonial-role">Software Engineer, Westlands</div>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial-card reveal">
+      <div class="testimonial-stars">★★★★★</div>
+      <div class="testimonial-text">"As a student commuting from Kahawa to CBD daily, the Basic plan is a lifesaver. Knowing exactly when the bus arrives changed my mornings completely."</div>
+      <div class="testimonial-author">
+        <div class="testimonial-avatar" style="background:rgba(123,97,255,0.1)">👩🏾</div>
+        <div>
+          <div class="testimonial-name">Faith Wambui</div>
+          <div class="testimonial-role">Student, University of Nairobi</div>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial-card reveal">
+      <div class="testimonial-stars">★★★★☆</div>
+      <div class="testimonial-text">"We enrolled our entire office of 30 staff on the Enterprise plan. The billing dashboard saves our HR team hours every month. Highly recommended."</div>
+      <div class="testimonial-author">
+        <div class="testimonial-avatar" style="background:rgba(255,107,53,0.1)">👨🏾‍💼</div>
+        <div>
+          <div class="testimonial-name">James Kariuki</div>
+          <div class="testimonial-role">Operations Manager, Upperhill</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════ CTA BANNER ══════ -->
+<div class="cta-banner reveal">
+  <div class="hero-badge" style="margin-bottom:20px">🎉 First month 20% off — Limited offer</div>
+  <h2>Ready to ride smarter?</h2>
+  <p>Join 12,000+ Nairobi commuters already saving with TransitFlow. Setup takes under 2 minutes.</p>
+  <div class="cta-actions">
+    <button class="btn btn-primary btn-lg" onclick="openModal('register')">Create Free Account →</button>
+    <button class="btn btn-ghost btn-lg" onclick="openModal('login')">I already have an account</button>
+  </div>
+</div>
+
+<!-- ══════ FOOTER ══════ -->
+<footer>
+  <div class="footer-brand">TransitFlow</div>
+  <ul class="footer-links">
+    <li><a href="#">About</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#routes">Routes</a></li>
+    <li><a href="#">Privacy</a></li>
+    <li><a href="#">Terms</a></li>
+    <li><a href="#">Contact</a></li>
+  </ul>
+  <div class="footer-copy">© 2025 TransitFlow. Built for Nairobi.</div>
+</footer>
+
+<!-- ══════ AUTH MODAL ══════ -->
+<div class="modal-overlay" id="auth-modal" onclick="closeModalOutside(event)">
   <div class="modal">
-    <button class="modal-close" onclick="closePayment()">✕</button>
-    <div id="payS1">
-      <div class="mpesa-header"><div class="mpesa-icon">📱</div><div><div class="mpesa-title">M-Pesa Payment</div><div class="mpesa-sub">Safaricom M-Pesa STK Push</div></div></div>
-      <div class="pay-amount-box"><div class="lbl">Amount Due</div><div class="amt" id="payAmt">KSh 0</div><div class="desc" id="payDesc">—</div></div>
+    <div class="modal-close" onclick="closeModal()">✕</div>
+    <div class="modal-title" id="modal-title">Welcome back</div>
+    <div class="modal-sub" id="modal-sub">Sign in to your TransitFlow account</div>
+
+    <div class="tabs" id="auth-tabs">
+      <div class="tab active" onclick="switchTab('login')">Sign In</div>
+      <div class="tab" onclick="switchTab('register')">Register</div>
+    </div>
+
+    <!-- Login form -->
+    <div id="form-login">
       <div class="form-group">
-        <label class="form-label">M-Pesa Phone Number</label>
-        <input type="tel" class="form-input" id="mpesaPhone" placeholder="07XX XXX XXX" maxlength="10">
-        <div style="font-size:0.7rem;color:var(--muted);margin-top:5px">Safaricom number e.g. 0712345678</div>
+        <label class="form-label">Phone Number</label>
+        <input class="form-control" type="tel" placeholder="0712 345 678" id="login-phone">
       </div>
-      <button class="btn btn-primary" style="width:100%;justify-content:center" onclick="sendSTK()">Send Payment Request →</button>
-      <div style="text-align:center;margin-top:12px;font-size:0.7rem;color:var(--muted)">🔒 Secured by Safaricom M-Pesa</div>
-    </div>
-    <div id="payS2" style="display:none">
-      <div class="mpesa-header"><div class="mpesa-icon">📱</div><div><div class="mpesa-title">Check Your Phone</div><div class="mpesa-sub" id="payPhone2">Sent to 07XX</div></div></div>
-      <div class="step-row"><div class="step-icon s-done">✓</div><div><div>Request Sent</div><div style="font-size:0.7rem;color:var(--muted)">STK push sent</div></div></div>
-      <div class="step-row"><div class="step-icon s-active" id="si2">⟳</div><div><div>Waiting for PIN</div><div style="font-size:0.7rem;color:var(--muted)">Enter M-Pesa PIN on phone</div></div></div>
-      <div class="step-row"><div class="step-icon s-pending" id="si3">○</div><div><div>Confirming</div><div style="font-size:0.7rem;color:var(--muted)">Verifying with M-Pesa</div></div></div>
-      <div style="text-align:center;margin-top:16px">
-        <div style="font-size:0.75rem;color:var(--muted);margin-bottom:12px">Simulating PIN entry...</div>
-        <div class="pin-row"><div class="pin-dot" id="p1"></div><div class="pin-dot" id="p2"></div><div class="pin-dot" id="p3"></div><div class="pin-dot" id="p4"></div></div>
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <input class="form-control" type="password" placeholder="••••••••" id="login-pass">
+      </div>
+      <button class="btn btn-primary" style="width:100%;justify-content:center;margin-top:4px" onclick="handleLogin()">Sign In →</button>
+      <div style="text-align:center;margin-top:14px;font-size:12px;color:var(--muted)">
+        Forgot password? <a href="#" style="color:var(--accent);text-decoration:none">Reset via M-Pesa</a>
       </div>
     </div>
-    <div id="payS3" style="display:none">
-      <div style="text-align:center;padding:16px 0">
-        <div class="check-circle">✅</div>
-        <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:1.1rem;margin-bottom:4px">Payment Confirmed!</div>
-        <div style="color:var(--muted);font-size:0.78rem">Transaction successful</div>
-        <div class="tx-code" id="txCode">QKJ7X4NB2</div>
-        <div style="color:var(--muted);font-size:0.7rem;margin-bottom:18px">M-Pesa Transaction Code</div>
+
+    <!-- Register form -->
+    <div id="form-register" style="display:none">
+      <div class="form-group">
+        <label class="form-label">Full Name</label>
+        <input class="form-control" type="text" placeholder="e.g. Jane Muthoni" id="reg-name">
       </div>
-      <div class="receipt-box">
-        <div class="receipt-row"><span style="color:var(--muted)">Amount</span><span id="rc1" style="color:var(--accent)">KSh 0</span></div>
-        <div class="receipt-row"><span style="color:var(--muted)">Phone</span><span id="rc2">07XX</span></div>
-        <div class="receipt-row"><span style="color:var(--muted)">Date</span><span id="rc3"></span></div>
-        <div class="receipt-row"><span style="color:var(--muted)">For</span><span id="rc4">—</span></div>
+      <div class="form-group">
+        <label class="form-label">Phone Number</label>
+        <input class="form-control" type="tel" placeholder="0712 345 678" id="reg-phone">
       </div>
-      <button class="btn btn-primary" style="width:100%;justify-content:center;margin-top:18px" onclick="finishPayment()">Continue to Dashboard →</button>
+      <div class="form-group">
+        <label class="form-label">Select Plan</label>
+        <select class="form-control" id="reg-plan">
+          <option value="">— Choose a plan —</option>
+          <option value="basic">🚌 Basic Rider — KSh 1,200/mo</option>
+          <option value="pro">⚡ Pro Commuter — KSh 2,800/mo</option>
+          <option value="enterprise">🏢 Enterprise Fleet — KSh 5,500/mo</option>
+          <option value="pass">🎟️ Trip Pass only</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <input class="form-control" type="password" placeholder="Create a password" id="reg-pass">
+      </div>
+      <button class="btn btn-primary" style="width:100%;justify-content:center;margin-top:4px" onclick="handleRegister()">Create Account →</button>
     </div>
   </div>
 </div>
 
-<div id="page-home" class="page active">
-  <div class="hero">
-    <div class="hero-tag">🚍 Smart City Transport</div>
-    <h1>Move smarter,<br><em>subscribe better</em></h1>
-    <p>TransitFlow manages your bus, metro, and express subscriptions in one intelligent platform.</p>
-    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
-      <button class="btn btn-primary" onclick="showPage('plans')">View Plans →</button>
-      <button class="btn btn-outline" onclick="showPage('auth')">Get Started Free</button>
-    </div>
-  </div>
-  <div class="stats-row">
-    <div class="stat-card"><div class="stat-num" id="c1">0</div><div class="stat-label">Active Riders</div></div>
-    <div class="stat-card"><div class="stat-num" id="c2">0</div><div class="stat-label">Routes</div></div>
-    <div class="stat-card"><div class="stat-num" id="c3">0</div><div class="stat-label">Vehicles Live</div></div>
-    <div class="stat-card"><div class="stat-num" id="c4">0%</div><div class="stat-label">Avg. Savings</div></div>
-  </div>
-  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px">
-    <div class="card"><div style="font-size:2rem;margin-bottom:12px">📍</div><div class="plan-name">Real-Time Tracking</div><div style="margin-top:8px;font-size:0.78rem;color:var(--muted)">Live GPS every 30 seconds. Never wait blindly again.</div></div>
-    <div class="card"><div style="font-size:2rem;margin-bottom:12px">🎫</div><div class="plan-name">Smart Subscriptions</div><div style="margin-top:8px;font-size:0.78rem;color:var(--muted)">Save up to 40% vs single tickets. Pause anytime.</div></div>
-    <div class="card"><div style="font-size:2rem;margin-bottom:12px">📊</div><div class="plan-name">Usage Analytics</div><div style="margin-top:8px;font-size:0.78rem;color:var(--muted)">Detailed reports on travel patterns and spending.</div></div>
-  </div>
-</div>
-
-<div id="page-plans" class="page">
-  <div class="section-title">Choose Your Plan</div>
-  <div class="section-sub">Flexible transport subscriptions for every commuter</div>
-  <div class="plans-grid">
-    <div class="plan-card">
-      <div class="plan-name">🚌 Basic</div>
-      <div class="plan-price">KSh 1,200<span>/month</span></div>
-      <div class="plan-desc">Perfect for occasional riders and students.</div>
-      <ul class="plan-features"><li>30 trips per month</li><li>Bus network access</li><li>3 zones covered</li><li>Mobile e-ticket</li></ul>
-      <button class="btn btn-outline" style="width:100%" onclick="subscribePlan('Basic',1200)">Subscribe</button>
-    </div>
-    <div class="plan-card featured">
-      <div class="plan-badge">MOST POPULAR</div>
-      <div class="plan-name">🚇 Pro Commuter</div>
-      <div class="plan-price">KSh 2,800<span>/month</span></div>
-      <div class="plan-desc">Ideal for daily commuters. Unlimited travel.</div>
-      <ul class="plan-features"><li>Unlimited trips</li><li>Bus + Metro access</li><li>All zones covered</li><li>Priority boarding</li><li>Real-time tracking</li></ul>
-      <button class="btn btn-primary" style="width:100%" onclick="subscribePlan('Pro Commuter',2800)">Subscribe</button>
-    </div>
-    <div class="plan-card">
-      <div class="plan-name">✈️ Enterprise</div>
-      <div class="plan-price">KSh 5,500<span>/month</span></div>
-      <div class="plan-desc">Corporate plans with fleet management.</div>
-      <ul class="plan-features"><li>Up to 10 employees</li><li>All transport modes</li><li>Airport express</li><li>Dedicated support</li><li>Invoice billing</li></ul>
-      <button class="btn btn-outline" style="width:100%" onclick="subscribePlan('Enterprise',5500)">Subscribe</button>
-    </div>
-  </div>
-  <div style="margin-top:40px">
-    <div class="section-title" style="font-size:1.1rem">Trip Passes</div>
-    <div class="section-sub">Top-up passes for extra trips</div>
-    <div class="passes-grid">
-      <div class="card" style="text-align:center"><div style="font-size:1.4rem">🎫</div><div style="font-family:'Fraunces',serif;font-size:1.3rem;color:var(--accent);margin:8px 0">KSh 300</div><div style="font-size:0.75rem;color:var(--muted)">10 Trips</div><button class="btn btn-outline btn-sm" style="margin-top:10px;width:100%" onclick="buyPass(10,300)">Buy</button></div>
-      <div class="card" style="text-align:center"><div style="font-size:1.4rem">🎫</div><div style="font-family:'Fraunces',serif;font-size:1.3rem;color:var(--accent);margin:8px 0">KSh 550</div><div style="font-size:0.75rem;color:var(--muted)">20 Trips</div><button class="btn btn-outline btn-sm" style="margin-top:10px;width:100%" onclick="buyPass(20,550)">Buy</button></div>
-      <div class="card" style="text-align:center"><div style="font-size:1.4rem">🎫</div><div style="font-family:'Fraunces',serif;font-size:1.3rem;color:var(--accent);margin:8px 0">KSh 950</div><div style="font-size:0.75rem;color:var(--muted)">40 Trips</div><button class="btn btn-outline btn-sm" style="margin-top:10px;width:100%" onclick="buyPass(40,950)">Buy</button></div>
-      <div class="card" style="text-align:center"><div style="font-size:1.4rem">🌟</div><div style="font-family:'Fraunces',serif;font-size:1.3rem;color:var(--gold);margin:8px 0">KSh 1,800</div><div style="font-size:0.75rem;color:var(--muted)">100 Trips</div><button class="btn btn-outline btn-sm" style="margin-top:10px;width:100%;border-color:var(--gold);color:var(--gold)" onclick="buyPass(100,1800)">Buy</button></div>
-    </div>
-  </div>
-</div>
-
-<div id="page-book" class="page">
-  <div class="section-title">Book a Trip</div>
-  <div class="section-sub">Plan your journey with live fare estimates</div>
-  <div class="booking-grid">
-    <div class="card">
-      <h3>Journey Details</h3>
-      <div class="form-group"><label class="form-label">Transport Mode</label><select class="form-input" id="tMode" onchange="calcFare()"><option value="bus">🚌 Bus</option><option value="metro">🚇 Metro</option><option value="express">🚀 Express Bus</option><option value="brt">🚍 BRT</option></select></div>
-      <div class="form-group"><label class="form-label">From</label><select class="form-input" id="tFrom" onchange="calcFare()"><option>CBD (City Centre)</option><option>Westlands</option><option>Ngong Road</option><option>Thika Road</option><option>Eastlands</option><option>Langata</option><option>Karen</option><option>JKIA Airport</option></select></div>
-      <div class="form-group"><label class="form-label">To</label><select class="form-input" id="tTo" onchange="calcFare()"><option>Westlands</option><option>CBD (City Centre)</option><option>Ngong Road</option><option>Thika Road</option><option>Eastlands</option><option>Langata</option><option>Karen</option><option>JKIA Airport</option></select></div>
-      <div class="form-group"><label class="form-label">Date &amp; Time</label><input type="datetime-local" class="form-input" id="tTime"></div>
-      <div class="form-group"><label class="form-label">Passengers</label><select class="form-input" id="tPax" onchange="calcFare()"><option value="1">1 Passenger</option><option value="2">2 Passengers</option><option value="3">3 Passengers</option><option value="4">4 Passengers</option></select></div>
-      <button class="btn btn-primary" style="width:100%" onclick="bookTrip()">Book Now →</button>
-    </div>
-    <div>
-      <div class="card">
-        <h3>Route Preview</h3>
-        <div class="map-box"><div class="map-grid-bg"></div><div class="map-dot" style="top:35%;left:25%"></div><div class="map-dot2" style="top:55%;left:65%"></div><div style="font-size:0.72rem;color:var(--muted);z-index:1">Live Route Map</div></div>
-      </div>
-      <div class="fare-summary">
-        <h3 style="font-family:'Syne',sans-serif;font-weight:700;margin-bottom:14px;font-size:0.95rem">Fare Estimate</h3>
-        <div class="fare-row"><span>Base Fare</span><span class="fare-amt" id="fBase">KSh 50</span></div>
-        <div class="fare-row"><span>Distance</span><span class="fare-amt" id="fDist">KSh 20</span></div>
-        <div class="fare-row"><span>Passengers</span><span class="fare-amt" id="fPax">× 1</span></div>
-        <div class="fare-row"><span>Discount</span><span class="fare-amt" style="color:var(--accent2)" id="fDisc">-KSh 0</span></div>
-        <div class="fare-row"><span>Total</span><span class="fare-amt" id="fTotal">KSh 70</span></div>
-      </div>
-    </div>
-  </div>
-  <div style="margin-top:28px">
-    <div class="section-title" style="font-size:1rem">Recent Bookings</div>
-    <div class="card" style="margin-top:14px;overflow-x:auto"><table><thead><tr><th>Route</th><th>Mode</th><th>Date</th><th>Fare</th><th>Status</th></tr></thead><tbody id="bHistory"></tbody></table></div>
-  </div>
-</div>
-
-<div id="page-dashboard" class="page">
-  <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:24px;flex-wrap:wrap;gap:12px">
-    <div><div class="section-title">My Dashboard</div><div class="section-sub" id="dGreet" style="margin-bottom:0">Welcome back</div></div>
-    <div class="badge badge-green" id="dPlan" style="padding:8px 14px;font-size:0.78rem">No Plan Active</div>
-  </div>
-  <div class="stats-row" style="margin:0 0 20px">
-    <div class="stat-card"><div class="stat-num" id="dT1">0</div><div class="stat-label">Trips This Month</div></div>
-    <div class="stat-card"><div class="stat-num" id="dT2">—</div><div class="stat-label">Trips Left</div></div>
-    <div class="stat-card"><div class="stat-num" id="dT3">KSh 0</div><div class="stat-label">Total Spent</div></div>
-    <div class="stat-card"><div class="stat-num" id="dT4">KSh 0</div><div class="stat-label">Saved</div></div>
-  </div>
-  <div class="dash-grid">
-    <div class="card"><h3>Trip History</h3><div id="dTrips"><div style="color:var(--muted);font-size:0.8rem;text-align:center;padding:32px">No trips yet. <span style="color:var(--accent);cursor:pointer" onclick="showPage('book')">Book your first trip →</span></div></div></div>
-    <div>
-      <div class="card" style="margin-bottom:16px">
-        <h3>Monthly Usage</h3>
-        <div style="display:flex;justify-content:space-between;font-size:0.73rem;color:var(--muted)"><span>Trips Used</span><span id="dUsageTxt">0 / 30</span></div>
-        <div class="progress-bar"><div class="progress-fill" id="dUsageBar" style="width:0%"></div></div>
-        <div style="font-size:0.72rem;color:var(--muted)">Resets 1st of next month</div>
-      </div>
-      <div class="card">
-        <h3>Subscription</h3>
-        <div id="dSubInfo" style="font-size:0.8rem;color:var(--muted)">No active subscription</div>
-        <button class="btn btn-primary btn-sm" style="margin-top:14px;width:100%" onclick="showPage('plans')">Upgrade Plan</button>
-        <button class="btn btn-outline btn-sm" style="margin-top:8px;width:100%;display:none" id="dCancelBtn" onclick="cancelSub()">Cancel Subscription</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div id="page-admin" class="page">
-  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;flex-wrap:wrap;gap:12px">
-    <div><div class="section-title">Admin Panel</div><div class="section-sub" style="margin-bottom:0">System overview</div></div>
-    <div class="badge badge-orange" style="padding:8px 14px;font-size:0.75rem">🛡️ ADMIN</div>
-  </div>
-  <div class="admin-grid">
-    <div class="admin-stat"><div class="icon">👥</div><div class="val" id="aUsers">0</div><div class="lbl">Total Users</div></div>
-    <div class="admin-stat"><div class="icon">🚌</div><div class="val">47</div><div class="lbl">Active Vehicles</div></div>
-    <div class="admin-stat"><div class="icon">💰</div><div class="val" id="aRev">KSh 0</div><div class="lbl">Monthly Revenue</div></div>
-    <div class="admin-stat"><div class="icon">🎫</div><div class="val" id="aSubs">0</div><div class="lbl">Subscriptions</div></div>
-    <div class="admin-stat"><div class="icon">📍</div><div class="val">12</div><div class="lbl">Active Routes</div></div>
-    <div class="admin-stat"><div class="icon">📊</div><div class="val" id="aTrips">0</div><div class="lbl">Total Trips</div></div>
-  </div>
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
-    <div class="card" style="overflow-x:auto"><h3>Users</h3><table><thead><tr><th>Name</th><th>Plan</th><th>Status</th></tr></thead><tbody id="aUserTbl"></tbody></table></div>
-    <div class="card" style="overflow-x:auto"><h3>Fleet Status</h3><table><thead><tr><th>Vehicle</th><th>Route</th><th>Status</th></tr></thead><tbody id="aFleet"></tbody></table></div>
-  </div>
-  <div class="card" style="margin-top:20px">
-    <h3>Revenue Breakdown</h3>
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:14px">
-      <div style="text-align:center;padding:16px;background:var(--surface2);border-radius:10px"><div style="font-family:'Fraunces',serif;font-size:1.6rem;color:var(--accent)" id="aBas">0</div><div style="font-size:0.72rem;color:var(--muted);margin-top:4px">Basic Plan</div><div style="font-size:0.8rem;margin-top:4px" id="aBasR">KSh 0</div></div>
-      <div style="text-align:center;padding:16px;background:var(--surface2);border-radius:10px"><div style="font-family:'Fraunces',serif;font-size:1.6rem;color:var(--accent2)" id="aPro">0</div><div style="font-size:0.72rem;color:var(--muted);margin-top:4px">Pro Plan</div><div style="font-size:0.8rem;margin-top:4px" id="aProR">KSh 0</div></div>
-      <div style="text-align:center;padding:16px;background:var(--surface2);border-radius:10px"><div style="font-family:'Fraunces',serif;font-size:1.6rem;color:var(--accent3)" id="aEnt">0</div><div style="font-size:0.72rem;color:var(--muted);margin-top:4px">Enterprise</div><div style="font-size:0.8rem;margin-top:4px" id="aEntR">KSh 0</div></div>
-    </div>
-  </div>
-</div>
-
-<div id="page-auth" class="page">
-  <div class="auth-wrap">
-    <div class="auth-card">
-      <div class="auth-title">Welcome back</div>
-      <div class="auth-sub">Sign in to access your transport dashboard</div>
-      <div class="tabs">
-        <button class="tab active" id="tabL" onclick="switchTab('login')">Sign In</button>
-        <button class="tab" id="tabR" onclick="switchTab('register')">Register</button>
-      </div>
-      <div id="loginForm">
-        <div class="form-group"><label class="form-label">Email</label><input type="email" class="form-input" id="lEmail" placeholder="your@email.com" value="admin@transitflow.com"></div>
-        <div class="form-group"><label class="form-label">Password</label><input type="password" class="form-input" id="lPass" placeholder="••••••••" value="admin123"></div>
-        <div style="font-size:0.72rem;color:var(--muted);margin-bottom:16px">Demo: admin@transitflow.com / admin123</div>
-        <button class="btn btn-primary" style="width:100%;justify-content:center" onclick="doLogin()">Sign In →</button>
-      </div>
-      <div id="regForm" style="display:none">
-        <div class="form-group"><label class="form-label">Full Name</label><input type="text" class="form-input" id="rName" placeholder="Your full name"></div>
-        <div class="form-group"><label class="form-label">Email</label><input type="email" class="form-input" id="rEmail" placeholder="your@email.com"></div>
-        <div class="form-group"><label class="form-label">Phone</label><input type="tel" class="form-input" id="rPhone" placeholder="+254 700 000000"></div>
-        <div class="form-group"><label class="form-label">Password</label><input type="password" class="form-input" id="rPass" placeholder="Create a strong password"></div>
-        <button class="btn btn-primary" style="width:100%;justify-content:center" onclick="doRegister()">Create Account →</button>
-      </div>
-    </div>
-  </div>
-</div>
+<!-- ══════ TOAST CONTAINER ══════ -->
+<div class="toast-container" id="toast-container"></div>
 
 <script>
-var S={user:null,users:JSON.parse(localStorage.getItem('tf_u')||'[]'),trips:JSON.parse(localStorage.getItem('tf_t')||'[]'),redirect:null,payment:null};
-if(!S.users.find(function(u){return u.email==='admin@transitflow.com';})){S.users.push({id:'u0',name:'Admin User',email:'admin@transitflow.com',phone:'0700000000',password:'admin123',role:'admin',plan:'Pro Commuter',planPrice:2800,tripsUsed:14,tripsLimit:-1,totalSpent:2800,joinDate:'2024-01-15',status:'active'});saveU();}
-function saveU(){localStorage.setItem('tf_u',JSON.stringify(S.users));}
-function saveT(){localStorage.setItem('tf_t',JSON.stringify(S.trips));}
-
-function toggleMenu(){
-  var m=document.getElementById('mobileMenu');
-  if(m.classList.contains('open')){m.classList.remove('open');}
-  else{m.classList.add('open');}
-}
-
-function mobGo(page){
-  document.getElementById('mobileMenu').classList.remove('open');
-  setTimeout(function(){
-    if(page==='dashboard'){goDash();}
-    else if(page==='admin'){goAdmin();}
-    else{showPage(page);}
-    window.scrollTo(0,0);
-  },100);
-}
-
-function showPage(name){
-  var pages=document.querySelectorAll('.page');
-  for(var i=0;i<pages.length;i++){pages[i].classList.remove('active');}
-  var pg=document.getElementById('page-'+name);
-  if(pg){pg.classList.add('active');}
-  if(name==='home'){animateCounters();}
-  if(name==='dashboard'){renderDash();}
-  if(name==='admin'){renderAdmin();}
-  if(name==='book'){initBook();}
-}
-
-function goDash(){if(!S.user){S.redirect='dashboard';showPage('auth');notify('Please sign in first',true);}else{showPage('dashboard');}}
-function goAdmin(){if(!S.user){S.redirect='admin';showPage('auth');notify('Please sign in first',true);}else{showPage('admin');}}
-
-function switchTab(t){
-  document.getElementById('loginForm').style.display=t==='login'?'block':'none';
-  document.getElementById('regForm').style.display=t==='register'?'block':'none';
-  document.getElementById('tabL').className='tab'+(t==='login'?' active':'');
-  document.getElementById('tabR').className='tab'+(t==='register'?' active':'');
-}
-
-function doLogin(){
-  var e=document.getElementById('lEmail').value.trim();
-  var p=document.getElementById('lPass').value;
-  var u=null;
-  for(var i=0;i<S.users.length;i++){if(S.users[i].email===e&&S.users[i].password===p){u=S.users[i];break;}}
-  if(!u){notify('Invalid credentials',true);return;}
-  S.user=u;updateNav();
-  notify('Welcome back, '+u.name.split(' ')[0]+'! 👋');
-  var r=S.redirect;S.redirect=null;
-  showPage(r||'dashboard');
-}
-
-function doRegister(){
-  var n=document.getElementById('rName').value.trim();
-  var e=document.getElementById('rEmail').value.trim();
-  var ph=document.getElementById('rPhone').value.trim();
-  var p=document.getElementById('rPass').value;
-  if(!n||!e||!p){notify('Please fill all required fields',true);return;}
-  for(var i=0;i<S.users.length;i++){if(S.users[i].email===e){notify('Email already registered',true);return;}}
-  var u={id:'u'+Date.now(),name:n,email:e,phone:ph,password:p,role:'user',plan:null,planPrice:0,tripsUsed:0,tripsLimit:0,totalSpent:0,joinDate:new Date().toISOString().split('T')[0],status:'active'};
-  S.users.push(u);saveU();S.user=u;updateNav();
-  notify('Account created! Welcome 🎉');showPage('plans');
-}
-
-function doLogout(){S.user=null;updateNav();showPage('home');notify('Signed out');}
-
-function updateNav(){
-  var el=document.getElementById('navUser');
-  var mob=document.getElementById('mobUserSection');
-  if(S.user){
-    var nm=S.user.name.split(' ');var ini=(nm[0][0]+(nm[1]?nm[1][0]:'')).toUpperCase();
-    el.innerHTML='<span style="font-size:0.8rem;color:var(--muted)">'+nm[0]+'</span><div class="avatar" onclick="doLogout()" title="Sign Out">'+ini+'</div>';
-    mob.innerHTML='<button class="mob-btn" onclick="doLogout()" style="background:rgba(255,77,109,0.1);border-color:var(--danger);color:var(--danger)">🚪 Sign Out</button>';
-  }else{
-    el.innerHTML='<button class="btn btn-outline btn-sm" onclick="showPage(\'auth\')">Sign In</button>';
-    mob.innerHTML='<button class="btn btn-primary" style="width:100%;justify-content:center" onclick="mobGo(\'auth\')">Sign In</button>';
+  // ── COUNTER ANIMATION ──
+  function animateCounter(el, target, suffix = '', duration = 2000) {
+    const isNum = !isNaN(target.replace(/,/g, ''));
+    if (!isNum) return;
+    const end = parseInt(target.replace(/,/g, ''));
+    const step = end / (duration / 16);
+    let current = 0;
+    const timer = setInterval(() => {
+      current += step;
+      if (current >= end) {
+        current = end;
+        clearInterval(timer);
+      }
+      const display = Math.floor(current);
+      el.textContent = display.toLocaleString() + suffix;
+    }, 16);
   }
-}
 
-function openPayment(amount,desc,onSuccess){
-  S.payment={amount:amount,desc:desc,onSuccess:onSuccess};
-  document.getElementById('payAmt').textContent='KSh '+amount.toLocaleString();
-  document.getElementById('payDesc').textContent=desc;
-  var ph=S.user&&S.user.phone?S.user.phone.replace('+254','0').replace(/\s/g,''):'';
-  document.getElementById('mpesaPhone').value=ph;
-  document.getElementById('payS1').style.display='block';
-  document.getElementById('payS2').style.display='none';
-  document.getElementById('payS3').style.display='none';
-  document.getElementById('si2').className='step-icon s-active';document.getElementById('si2').textContent='⟳';
-  document.getElementById('si3').className='step-icon s-pending';document.getElementById('si3').textContent='○';
-  var dots=['p1','p2','p3','p4'];for(var i=0;i<dots.length;i++){document.getElementById(dots[i]).classList.remove('filled');}
-  document.getElementById('payModal').classList.add('open');
-}
-
-function closePayment(){document.getElementById('payModal').classList.remove('open');S.payment=null;}
-
-function sendSTK(){
-  var ph=document.getElementById('mpesaPhone').value.trim();
-  if(!ph||!/^(07|01)\d{8}$/.test(ph)){notify('Enter a valid Safaricom number e.g. 0712345678',true);return;}
-  document.getElementById('payS1').style.display='none';
-  document.getElementById('payS2').style.display='block';
-  document.getElementById('payPhone2').textContent='Sent to '+ph;
-  var filled=0;
-  var pinT=setInterval(function(){if(filled<4){filled++;document.getElementById('p'+filled).classList.add('filled');}else{clearInterval(pinT);}},500);
-  setTimeout(function(){document.getElementById('si2').className='step-icon s-done';document.getElementById('si2').textContent='✓';document.getElementById('si3').className='step-icon s-active';document.getElementById('si3').textContent='⟳';},2800);
-  setTimeout(function(){
-    document.getElementById('si3').className='step-icon s-done';document.getElementById('si3').textContent='✓';
-    var code=Math.random().toString(36).substring(2,11).toUpperCase();
-    document.getElementById('txCode').textContent=code;
-    document.getElementById('rc1').textContent='KSh '+S.payment.amount.toLocaleString();
-    document.getElementById('rc2').textContent=ph;
-    document.getElementById('rc3').textContent=new Date().toLocaleString();
-    document.getElementById('rc4').textContent=S.payment.desc;
-    document.getElementById('payS2').style.display='none';
-    document.getElementById('payS3').style.display='block';
-  },4500);
-}
-
-function finishPayment(){var cb=S.payment&&S.payment.onSuccess;closePayment();if(cb){cb();}}
-
-function subscribePlan(plan,price){
-  if(!S.user){S.redirect='plans';showPage('auth');notify('Please sign in first',true);return;}
-  openPayment(price,plan+' Plan Subscription',function(){
-    var lims={'Basic':30,'Pro Commuter':-1,'Enterprise':-1};
-    S.user.plan=plan;S.user.planPrice=price;S.user.tripsLimit=lims[plan]||30;S.user.tripsUsed=0;S.user.totalSpent=(S.user.totalSpent||0)+price;
-    for(var i=0;i<S.users.length;i++){if(S.users[i].id===S.user.id){S.users[i]=S.user;break;}}
-    saveU();notify('Subscribed to '+plan+'!');showPage('dashboard');
+  // Start counters when hero is visible
+  let countersStarted = false;
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      if (!countersStarted) {
+        countersStarted = true;
+        animateCounter(document.getElementById('stat-riders'), '12000');
+        animateCounter(document.getElementById('stat-routes'), '47');
+        animateCounter(document.getElementById('stat-vehicles'), '120');
+        animateCounter(document.getElementById('stat-savings'), '30', '%');
+      }
+    }, 600);
   });
-}
 
-function buyPass(trips,price){
-  if(!S.user){showPage('auth');return;}
-  openPayment(price,trips+' Trips Pass',function(){
-    S.user.tripsLimit=(S.user.tripsLimit||0)+trips;S.user.totalSpent=(S.user.totalSpent||0)+price;
-    for(var i=0;i<S.users.length;i++){if(S.users[i].id===S.user.id){S.users[i]=S.user;break;}}
-    saveU();notify('Added '+trips+' trips!');
-  });
-}
+  // ── SCROLL REVEAL ──
+  const revealEls = document.querySelectorAll('.reveal');
+  const revealObs = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 80);
+        revealObs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  revealEls.forEach(el => revealObs.observe(el));
 
-function cancelSub(){
-  if(!S.user)return;
-  S.user.plan=null;S.user.planPrice=0;S.user.tripsLimit=0;
-  for(var i=0;i<S.users.length;i++){if(S.users[i].id===S.user.id){S.users[i]=S.user;break;}}
-  saveU();notify('Subscription cancelled');renderDash();
-}
-
-var zones={'CBD (City Centre)':0,'Westlands':1,'Ngong Road':1,'Thika Road':2,'Eastlands':2,'Langata':3,'Karen':3,'JKIA Airport':4};
-var bases={bus:{b:50,z:20},metro:{b:80,z:30},express:{b:120,z:40},brt:{b:70,z:25}};
-
-function initBook(){
-  var now=new Date();now.setMinutes(Math.ceil(now.getMinutes()/5)*5);
-  document.getElementById('tTime').value=now.toISOString().slice(0,16);
-  calcFare();renderBookings();
-}
-
-function calcFare(){
-  var mode=document.getElementById('tMode').value;
-  var from=document.getElementById('tFrom').value;
-  var to=document.getElementById('tTo').value;
-  var pax=parseInt(document.getElementById('tPax').value);
-  if(from===to){document.getElementById('fTotal').textContent='Same stop';return;}
-  var zd=Math.abs((zones[from]||0)-(zones[to]||0))||1;
-  var b=bases[mode];var base=b.b;var dist=zd*b.z;
-  var total=(base+dist)*pax;
-  var disc=S.user&&S.user.plan?Math.floor(total*0.2):0;
-  total-=disc;
-  document.getElementById('fBase').textContent='KSh '+base;
-  document.getElementById('fDist').textContent='KSh '+dist;
-  document.getElementById('fPax').textContent='x '+pax;
-  document.getElementById('fDisc').textContent='-KSh '+disc;
-  document.getElementById('fTotal').textContent='KSh '+total;
-}
-
-function bookTrip(){
-  if(!S.user){showPage('auth');return;}
-  var from=document.getElementById('tFrom').value;
-  var to=document.getElementById('tTo').value;
-  if(from===to){notify('Select different stops',true);return;}
-  var mode=document.getElementById('tMode').value;
-  var pax=parseInt(document.getElementById('tPax').value);
-  var zd=Math.abs((zones[from]||0)-(zones[to]||0))||1;
-  var b=bases[mode];var fare=(b.b+zd*b.z)*pax;
-  if(S.user.plan){fare-=Math.floor(fare*0.2);}
-  openPayment(fare,'Trip: '+from+' to '+to,function(){
-    var trip={id:'T'+Date.now(),uid:S.user.id,from:from,to:to,mode:mode,pax:pax,fare:fare,date:new Date().toLocaleString(),status:'Confirmed'};
-    S.trips.push(trip);saveT();
-    S.user.tripsUsed=(S.user.tripsUsed||0)+1;S.user.totalSpent=(S.user.totalSpent||0)+fare;
-    for(var i=0;i<S.users.length;i++){if(S.users[i].id===S.user.id){S.users[i]=S.user;break;}}
-    saveU();renderBookings();notify('Trip booked! '+from+' to '+to+' | KSh '+fare);
-  });
-}
-
-function renderBookings(){
-  var tb=document.getElementById('bHistory');if(!tb)return;
-  if(!S.user){tb.innerHTML='<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:24px">Sign in to see bookings</td></tr>';return;}
-  var my=[];for(var i=0;i<S.trips.length;i++){if(S.trips[i].uid===S.user.id){my.push(S.trips[i]);}}
-  my=my.slice(-6).reverse();
-  if(my.length===0){tb.innerHTML='<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:24px">No bookings yet</td></tr>';return;}
-  var html='';for(var i=0;i<my.length;i++){var t=my[i];html+='<tr><td><strong>'+t.from+'</strong> to '+t.to+'</td><td><span class="badge badge-purple">'+t.mode+'</span></td><td style="color:var(--muted);font-size:0.73rem">'+t.date+'</td><td style="color:var(--accent);font-family:Fraunces,serif">KSh '+t.fare+'</td><td><span class="status-dot dot-green"></span>Confirmed</td></tr>';}
-  tb.innerHTML=html;
-}
-
-function renderDash(){
-  if(!S.user)return;
-  document.getElementById('dGreet').textContent='Welcome, '+S.user.name;
-  document.getElementById('dPlan').textContent=S.user.plan?'Active: '+S.user.plan:'No Plan Active';
-  var my=[];for(var i=0;i<S.trips.length;i++){if(S.trips[i].uid===S.user.id){my.push(S.trips[i]);}}
-  var mo=[];var now=new Date().getMonth();for(var i=0;i<my.length;i++){if(new Date(my[i].date).getMonth()===now){mo.push(my[i]);}}
-  document.getElementById('dT1').textContent=mo.length;
-  document.getElementById('dT2').textContent=S.user.tripsLimit===-1?'Unlimited':Math.max(0,(S.user.tripsLimit||0)-(S.user.tripsUsed||0));
-  document.getElementById('dT3').textContent='KSh '+(S.user.totalSpent||0).toLocaleString();
-  document.getElementById('dT4').textContent='KSh '+Math.floor((S.user.totalSpent||0)*0.2).toLocaleString();
-  var lim=S.user.tripsLimit===-1?999:(S.user.tripsLimit||30);var used=S.user.tripsUsed||0;
-  document.getElementById('dUsageTxt').textContent=used+' / '+(S.user.tripsLimit===-1?'Unlimited':lim);
-  document.getElementById('dUsageBar').style.width=Math.min(100,(used/lim)*100)+'%';
-  document.getElementById('dSubInfo').innerHTML=S.user.plan?'<strong>'+S.user.plan+'</strong><br><span style="color:var(--muted);font-size:0.73rem">KSh '+(S.user.planPrice||0).toLocaleString()+'/month</span>':'No active subscription';
-  document.getElementById('dCancelBtn').style.display=S.user.plan?'block':'none';
-  var tl=document.getElementById('dTrips');
-  if(my.length===0){tl.innerHTML='<div style="color:var(--muted);font-size:0.8rem;text-align:center;padding:32px">No trips yet. <span style="color:var(--accent);cursor:pointer" onclick="showPage(\'book\')">Book your first →</span></div>';return;}
-  var html='';var show=my.slice(-5).reverse();
-  for(var i=0;i<show.length;i++){var t=show[i];html+='<div class="trip-item"><div><div style="font-size:0.85rem;font-weight:500">'+t.from+' to '+t.to+'</div><div style="font-size:0.72rem;color:var(--muted)">'+t.date+'</div></div><div style="text-align:right"><div style="font-family:Fraunces,serif;color:var(--accent)">KSh '+t.fare+'</div><span class="badge badge-green">Done</span></div></div>';}
-  tl.innerHTML=html;
-}
-
-function renderAdmin(){
-  if(!S.user||S.user.role!=='admin'){notify('Admin access required',true);showPage('dashboard');return;}
-  var subs=[];for(var i=0;i<S.users.length;i++){if(S.users[i].plan){subs.push(S.users[i]);}}
-  var rev=0;for(var i=0;i<subs.length;i++){rev+=(subs[i].planPrice||0);}
-  var bas=[],pro=[],ent=[];
-  for(var i=0;i<S.users.length;i++){if(S.users[i].plan==='Basic'){bas.push(S.users[i]);}else if(S.users[i].plan==='Pro Commuter'){pro.push(S.users[i]);}else if(S.users[i].plan==='Enterprise'){ent.push(S.users[i]);}}
-  document.getElementById('aUsers').textContent=S.users.length;
-  document.getElementById('aRev').textContent='KSh '+rev.toLocaleString();
-  document.getElementById('aSubs').textContent=subs.length;
-  document.getElementById('aTrips').textContent=S.trips.length;
-  document.getElementById('aBas').textContent=bas.length;document.getElementById('aPro').textContent=pro.length;document.getElementById('aEnt').textContent=ent.length;
-  document.getElementById('aBasR').textContent='KSh '+(bas.length*1200).toLocaleString();
-  document.getElementById('aProR').textContent='KSh '+(pro.length*2800).toLocaleString();
-  document.getElementById('aEntR').textContent='KSh '+(ent.length*5500).toLocaleString();
-  var html='';for(var i=0;i<S.users.length;i++){var u=S.users[i];html+='<tr><td><strong>'+u.name+'</strong><br><span style="color:var(--muted);font-size:0.7rem">'+u.email+'</span></td><td><span class="badge badge-green">'+(u.plan||'None')+'</span></td><td><span class="status-dot dot-green"></span>Active</td></tr>';}
-  document.getElementById('aUserTbl').innerHTML=html;
-  var fleet=[{id:'KNB 001A',r:'CBD-Westlands',s:'active'},{id:'KNA 443G',r:'CBD-Thika Rd',s:'active'},{id:'KNC 221B',r:'Ngong-CBD',s:'maintenance'},{id:'KND 887F',r:'CBD-Airport',s:'active'},{id:'KNE 334H',r:'Eastlands-CBD',s:'active'}];
-  var fh='';for(var i=0;i<fleet.length;i++){fh+='<tr><td><strong>'+fleet[i].id+'</strong></td><td style="font-size:0.75rem">'+fleet[i].r+'</td><td><span class="status-dot '+(fleet[i].s==='active'?'dot-green':'dot-orange')+'"></span>'+fleet[i].s+'</td></tr>';}
-  document.getElementById('aFleet').innerHTML=fh;
-}
-
-function animateCounters(){
-  var t={c1:12847,c2:47,c3:183,c4:38};
-  var keys=Object.keys(t);
-  for(var k=0;k<keys.length;k++){
-    (function(id,target){
-      var cur=0;var step=target/60;var el=document.getElementById(id);
-      var timer=setInterval(function(){cur=Math.min(cur+step,target);el.textContent=Math.floor(cur).toLocaleString()+(id==='c4'?'%':'');if(cur>=target){clearInterval(timer);}},20);
-    })(keys[k],t[keys[k]]);
+  // ── MODAL ──
+  function openModal(tab = 'login') {
+    document.getElementById('auth-modal').classList.add('open');
+    switchTab(tab);
   }
-}
+  function closeModal() {
+    document.getElementById('auth-modal').classList.remove('open');
+  }
+  function closeModalOutside(e) {
+    if (e.target === document.getElementById('auth-modal')) closeModal();
+  }
+  function switchTab(tab) {
+    document.querySelectorAll('.tabs .tab').forEach((t, i) => {
+      t.classList.toggle('active', (tab === 'login' && i === 0) || (tab === 'register' && i === 1));
+    });
+    document.getElementById('form-login').style.display = tab === 'login' ? 'block' : 'none';
+    document.getElementById('form-register').style.display = tab === 'register' ? 'block' : 'none';
+    document.getElementById('modal-title').textContent = tab === 'login' ? 'Welcome back' : 'Create your account';
+    document.getElementById('modal-sub').textContent = tab === 'login' ? 'Sign in to your TransitFlow account' : 'Join 12,000+ smart commuters today';
+  }
 
-function notify(msg,err){
-  var old=document.querySelector('.notif');if(old){old.remove();}
-  var n=document.createElement('div');n.className='notif'+(err?' error':'');n.textContent=msg;
-  document.body.appendChild(n);setTimeout(function(){if(n.parentNode){n.remove();}},3500);
-}
+  function handleLogin() {
+    const phone = document.getElementById('login-phone').value.trim();
+    const pass  = document.getElementById('login-pass').value.trim();
+    if (!phone || !pass) { showToast('⚠️ Please fill in all fields', 'warn'); return; }
+    showToast('📱 OTP sent to ' + phone);
+    setTimeout(() => { closeModal(); showToast('✅ Logged in successfully! Welcome back.'); }, 1500);
+  }
 
-window.onload=function(){
-  animateCounters();
-  var saved=localStorage.getItem('tf_session');
-  if(saved){for(var i=0;i<S.users.length;i++){if(S.users[i].email===saved){S.user=S.users[i];updateNav();break;}}}
-};
-window.onbeforeunload=function(){if(S.user){localStorage.setItem('tf_session',S.user.email);}else{localStorage.removeItem('tf_session');}};
+  function handleRegister() {
+    const name  = document.getElementById('reg-name').value.trim();
+    const phone = document.getElementById('reg-phone').value.trim();
+    const plan  = document.getElementById('reg-plan').value;
+    const pass  = document.getElementById('reg-pass').value.trim();
+    if (!name || !phone || !plan || !pass) { showToast('⚠️ Please fill in all fields', 'warn'); return; }
+    showToast('📱 Verification OTP sent to ' + phone);
+    setTimeout(() => { closeModal(); showToast('🎉 Account created! Your plan is now active.'); }, 1500);
+  }
+
+  // ── TOAST ──
+  function showToast(msg, type) {
+    const c = document.getElementById('toast-container');
+    const t = document.createElement('div');
+    t.className = 'toast';
+    if (type === 'warn') t.style.borderLeftColor = 'var(--warn)';
+    t.textContent = msg;
+    c.appendChild(t);
+    setTimeout(() => t.remove(), 3500);
+  }
+
+  // ── KEYBOARD ──
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+  // ── MOBILE MENU ──
+  function toggleMobileMenu() {
+    const links = document.querySelector('.nav-links');
+    if (links.style.display === 'flex') {
+      links.style.display = 'none';
+    } else {
+      links.style.cssText = 'display:flex;flex-direction:column;position:absolute;top:64px;left:0;right:0;background:var(--surface);border-bottom:1px solid var(--border);padding:12px;gap:2px;z-index:99';
+    }
+  }
 </script>
 </body>
 </html>

@@ -1,986 +1,1080 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TransitFlow — Smart Transport Subscription</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>TransitFlow — Smart City Transport</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet"/>
 <style>
-:root {
-  --ink:#0c0e14;--ink2:#13161f;--ink3:#1c2030;--line:#242840;
-  --lime:#c8f135;--lime2:#a8d020;--sky:#38bdf8;--amber:#fbbf24;
-  --rose:#fb7185;--green:#4ade80;--muted:#6b7280;--muted2:#9ca3af;--white:#f9fafb;
-}
-*{margin:0;padding:0;box-sizing:border-box;}
-html{scroll-behavior:smooth;}
-body{font-family:'Outfit',sans-serif;background:var(--ink);color:var(--white);min-height:100vh;overflow-x:hidden;}
-::-webkit-scrollbar{width:4px;}::-webkit-scrollbar-track{background:var(--ink);}::-webkit-scrollbar-thumb{background:var(--line);border-radius:2px;}
+  :root {
+    --bg: #0a0e1a;
+    --surface: #111827;
+    --card: #1a2235;
+    --border: #1e2d45;
+    --accent: #00e5a0;
+    --accent2: #0066ff;
+    --accent3: #ff6b35;
+    --text: #e8edf5;
+    --muted: #6b7fa3;
+    --danger: #ff4757;
+    --gold: #ffd700;
+    --mono: 'Space Mono', monospace;
+    --sans: 'DM Sans', sans-serif;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--text); font-family: var(--sans); min-height: 100vh; overflow-x: hidden; }
 
-/* NAV */
-nav{position:fixed;top:0;left:0;right:0;z-index:200;height:58px;display:flex;align-items:center;justify-content:space-between;padding:0 1.5rem;background:rgba(12,14,20,0.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--line);}
-.logo{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:2px;color:var(--lime);display:flex;align-items:center;gap:6px;}
-.logo-dot{width:8px;height:8px;border-radius:50%;background:var(--lime);animation:blink 2s infinite;}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
-.nav-links{display:flex;gap:2px;}
-.nav-links a{padding:6px 14px;border-radius:6px;font-size:0.85rem;font-weight:500;color:var(--muted2);cursor:pointer;transition:all 0.15s;}
-.nav-links a:hover{color:var(--white);background:var(--ink3);}
-.nav-links a.active{color:var(--lime);background:rgba(200,241,53,0.08);}
-.user-chip{display:flex;align-items:center;gap:8px;padding:5px 14px 5px 6px;background:var(--ink3);border:1px solid var(--line);border-radius:30px;font-size:0.85rem;font-weight:500;cursor:pointer;transition:all 0.2s;}
-.user-chip:hover{border-color:var(--muted);}
-.avatar{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,#6366f1,var(--lime));display:flex;align-items:center;justify-content:center;font-size:0.7rem;font-weight:700;color:#000;}
-.btn-nav{padding:7px 18px;border-radius:8px;background:var(--lime);color:#000;font-weight:700;font-size:0.85rem;border:none;cursor:pointer;transition:all 0.2s;font-family:'Outfit',sans-serif;}
-.btn-nav:hover{background:var(--lime2);}
+  /* ── GRID NOISE BG ── */
+  body::before {
+    content:''; position:fixed; inset:0; pointer-events:none; z-index:0;
+    background-image: radial-gradient(circle at 20% 20%, rgba(0,229,160,.07) 0%, transparent 50%),
+                      radial-gradient(circle at 80% 80%, rgba(0,102,255,.07) 0%, transparent 50%),
+                      linear-gradient(rgba(255,255,255,.02) 1px, transparent 1px),
+                      linear-gradient(90deg, rgba(255,255,255,.02) 1px, transparent 1px);
+    background-size: 100% 100%, 100% 100%, 40px 40px, 40px 40px;
+  }
 
-/* SECTIONS */
-section{display:none;padding-top:58px;min-height:100vh;}
-section.active{display:block;}
+  /* ── NAV ── */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(10,14,26,.85); backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 2rem; height: 64px;
+  }
+  .nav-logo { font-family: var(--mono); font-weight: 700; font-size: 1.1rem; color: var(--accent); letter-spacing: 2px; }
+  .nav-logo span { color: var(--text); }
+  .nav-links { display: flex; gap: 0.25rem; }
+  .nav-links a {
+    color: var(--muted); text-decoration: none; font-size: .85rem; font-weight: 500;
+    padding: .5rem 1rem; border-radius: 6px; transition: all .2s; letter-spacing: .5px;
+  }
+  .nav-links a:hover, .nav-links a.active { color: var(--text); background: rgba(255,255,255,.05); }
+  .nav-links a.active { color: var(--accent); }
+  .nav-right { display: flex; gap: .75rem; align-items: center; }
+  .btn { cursor: pointer; border: none; border-radius: 8px; font-family: var(--sans); font-weight: 600; font-size: .85rem; transition: all .2s; }
+  .btn-ghost { background: transparent; color: var(--muted); padding: .5rem 1rem; border: 1px solid var(--border); }
+  .btn-ghost:hover { color: var(--text); border-color: var(--muted); }
+  .btn-primary { background: var(--accent); color: #0a0e1a; padding: .6rem 1.25rem; }
+  .btn-primary:hover { background: #00c984; transform: translateY(-1px); }
+  .btn-danger { background: var(--danger); color: #fff; padding: .6rem 1.25rem; }
+  .btn-blue { background: var(--accent2); color: #fff; padding: .6rem 1.25rem; }
+  .btn-blue:hover { background: #0055dd; }
+  .btn-lg { padding: .85rem 2rem; font-size: 1rem; border-radius: 10px; }
+  .btn-full { width: 100%; }
 
-/* HOME */
-.hero{min-height:calc(100vh - 58px);display:grid;grid-template-columns:1fr 1fr;gap:0;align-items:center;padding:4rem 3rem 4rem 4rem;position:relative;overflow:hidden;max-width:1200px;margin:0 auto;}
-.hero::before{content:'';position:absolute;right:-200px;top:50%;transform:translateY(-50%);width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(200,241,53,0.07),transparent 70%);pointer-events:none;}
-.hero-tag{display:inline-flex;align-items:center;gap:6px;background:rgba(200,241,53,0.1);border:1px solid rgba(200,241,53,0.25);color:var(--lime);padding:5px 14px;border-radius:4px;font-size:0.78rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:1.5rem;}
-.hero h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(3.5rem,6vw,6rem);line-height:0.95;letter-spacing:2px;margin-bottom:1.5rem;}
-.hero h1 .hl{color:var(--lime);}
-.hero-desc{font-size:1rem;color:var(--muted2);line-height:1.7;max-width:440px;margin-bottom:2.5rem;}
-.hero-actions{display:flex;gap:0.75rem;flex-wrap:wrap;}
-.btn-primary{padding:13px 28px;border-radius:8px;background:var(--lime);color:#000;font-weight:700;font-size:0.9rem;border:none;cursor:pointer;transition:all 0.2s;font-family:'Outfit',sans-serif;}
-.btn-primary:hover{background:var(--lime2);transform:translateY(-2px);box-shadow:0 12px 30px rgba(200,241,53,0.25);}
-.btn-primary:disabled{opacity:0.5;cursor:not-allowed;transform:none;}
-.btn-ghost{padding:13px 28px;border-radius:8px;background:transparent;color:var(--white);font-weight:600;font-size:0.9rem;border:1px solid var(--line);cursor:pointer;transition:all 0.2s;font-family:'Outfit',sans-serif;}
-.btn-ghost:hover{border-color:var(--muted2);}
-.hero-right{display:grid;grid-template-columns:1fr 1fr;gap:1rem;padding-left:2rem;}
-.hero-stat{background:var(--ink2);border:1px solid var(--line);border-radius:16px;padding:1.5rem;transition:transform 0.3s;}
-.hero-stat:hover{transform:translateY(-4px);}
-.hero-stat:nth-child(2){margin-top:2rem;}
-.hero-stat:nth-child(4){margin-top:-2rem;}
-.hs-num{font-family:'Bebas Neue',sans-serif;font-size:2.25rem;letter-spacing:1px;color:var(--lime);}
-.hs-label{font-size:0.8rem;color:var(--muted);margin-top:2px;}
-.hs-icon{font-size:1.5rem;margin-bottom:0.75rem;}
-.feat-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border-top:1px solid var(--line);}
-.feat-item{background:var(--ink2);padding:2rem 2.5rem;display:flex;align-items:flex-start;gap:1rem;}
-.feat-icon{width:42px;height:42px;border-radius:10px;background:rgba(200,241,53,0.1);border:1px solid rgba(200,241,53,0.2);display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;}
-.feat-item h3{font-size:0.95rem;font-weight:700;margin-bottom:4px;}
-.feat-item p{font-size:0.82rem;color:var(--muted2);line-height:1.5;}
+  /* ── SECTIONS ── */
+  section { position: relative; z-index: 1; }
+  .page { display: none; }
+  .page.active { display: block; }
 
-/* SECTION SHELL */
-.shell{max-width:1100px;margin:0 auto;padding:3rem 2rem 5rem;}
-.sec-title{font-family:'Bebas Neue',sans-serif;font-size:2.5rem;letter-spacing:2px;margin-bottom:4px;}
-.sec-sub{font-size:0.9rem;color:var(--muted2);margin-bottom:2.5rem;}
+  /* ── HERO ── */
+  #home {
+    min-height: 90vh; display: flex; align-items: center; justify-content: center;
+    text-align: center; padding: 4rem 2rem;
+  }
+  .hero-tag {
+    display: inline-block; background: rgba(0,229,160,.12); color: var(--accent);
+    font-family: var(--mono); font-size: .75rem; letter-spacing: 3px; padding: .4rem 1rem;
+    border-radius: 20px; border: 1px solid rgba(0,229,160,.3); margin-bottom: 2rem;
+  }
+  .hero h1 {
+    font-size: clamp(2.5rem, 7vw, 5.5rem); font-weight: 700; line-height: 1.05;
+    margin-bottom: 1.5rem; letter-spacing: -2px;
+  }
+  .hero h1 em { font-style: normal; color: var(--accent); }
+  .hero p { color: var(--muted); font-size: 1.15rem; max-width: 520px; margin: 0 auto 2.5rem; line-height: 1.7; }
+  .hero-cta { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+  .stats-row {
+    display: flex; gap: 3rem; justify-content: center; flex-wrap: wrap;
+    margin-top: 5rem; padding-top: 3rem; border-top: 1px solid var(--border);
+  }
+  .stat { text-align: center; }
+  .stat-val { font-family: var(--mono); font-size: 2rem; font-weight: 700; color: var(--accent); }
+  .stat-lbl { font-size: .8rem; color: var(--muted); letter-spacing: 1px; margin-top: .25rem; }
 
-/* PLANS */
-.plans-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;margin-bottom:3rem;}
-.plan-card{background:var(--ink2);border:1px solid var(--line);border-radius:16px;padding:2rem;display:flex;flex-direction:column;position:relative;transition:all 0.3s;}
-.plan-card:hover{transform:translateY(-4px);border-color:rgba(200,241,53,0.2);box-shadow:0 20px 60px rgba(0,0,0,0.4);}
-.plan-card.hot{border-color:var(--lime);background:linear-gradient(160deg,#141820,#1a1f2e);}
-.hot-badge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--lime);color:#000;font-size:0.65rem;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;padding:4px 14px;border-radius:4px;white-space:nowrap;}
-.plan-emoji{font-size:1.75rem;margin-bottom:1rem;}
-.plan-name{font-weight:700;font-size:1.05rem;margin-bottom:0.25rem;}
-.plan-price{font-family:'JetBrains Mono',monospace;font-size:1.5rem;font-weight:600;color:var(--lime);margin:0.75rem 0;}
-.plan-price em{font-style:normal;font-size:0.85rem;color:var(--muted);font-family:'Outfit',sans-serif;font-weight:400;}
-.plan-blurb{font-size:0.83rem;color:var(--muted2);margin-bottom:1.25rem;}
-.plan-feats{list-style:none;margin-bottom:1.75rem;flex:1;}
-.plan-feats li{font-size:0.85rem;color:var(--muted2);padding:7px 0;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:8px;}
-.plan-feats li::before{content:'↳';color:var(--lime);font-weight:700;font-size:0.8rem;}
-.btn-sub{width:100%;padding:12px;border-radius:8px;font-weight:700;font-size:0.9rem;cursor:pointer;transition:all 0.2s;border:1px solid var(--line);background:var(--ink3);color:var(--white);font-family:'Outfit',sans-serif;}
-.btn-sub:hover{background:var(--lime);color:#000;border-color:var(--lime);}
-.plan-card.hot .btn-sub{background:var(--lime);color:#000;border:none;}
-.plan-card.hot .btn-sub:hover{background:var(--lime2);}
-.passes-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;}
-.pass-card{background:var(--ink2);border:1px solid var(--line);border-radius:12px;padding:1.5rem 1rem;text-align:center;cursor:pointer;transition:all 0.2s;}
-.pass-card:hover{border-color:var(--amber);transform:translateY(-2px);}
-.pass-n{font-family:'Bebas Neue',sans-serif;font-size:2.5rem;color:var(--amber);letter-spacing:1px;}
-.pass-unit{font-size:0.75rem;color:var(--muted);margin-bottom:0.75rem;}
-.pass-ksh{font-family:'JetBrains Mono',monospace;font-size:0.9rem;font-weight:600;color:var(--muted2);margin-bottom:1rem;}
-.btn-pass{width:100%;padding:8px;border-radius:7px;font-size:0.82rem;font-weight:700;cursor:pointer;background:transparent;color:var(--amber);border:1px solid var(--amber);transition:all 0.2s;font-family:'Outfit',sans-serif;}
-.btn-pass:hover{background:var(--amber);color:#000;}
+  /* ── SECTION HEADER ── */
+  .section-header { text-align: center; padding: 5rem 2rem 3rem; }
+  .section-tag { display: inline-block; font-family: var(--mono); font-size: .7rem; letter-spacing: 3px; color: var(--accent); margin-bottom: 1rem; }
+  .section-header h2 { font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 700; letter-spacing: -1px; }
+  .section-header p { color: var(--muted); margin-top: .75rem; font-size: 1rem; }
 
-/* BOOK */
-.book-layout{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;}
-.card{background:var(--ink2);border:1px solid var(--line);border-radius:16px;padding:1.75rem;}
-.card-title{font-weight:700;font-size:1rem;margin-bottom:1.5rem;display:flex;align-items:center;gap:8px;}
-.fgrp{margin-bottom:1.1rem;}
-.fgrp label{display:block;font-size:0.73rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:5px;}
-.fgrp select,.fgrp input{width:100%;padding:10px 12px;border-radius:8px;background:var(--ink3);border:1px solid var(--line);color:var(--white);font-size:0.9rem;font-family:'Outfit',sans-serif;outline:none;transition:border-color 0.2s;}
-.fgrp select:focus,.fgrp input:focus{border-color:var(--lime);}
-.fgrp select option{background:var(--ink2);}
-.fare-rows{margin-bottom:1.25rem;}
-.fare-r{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--line);font-size:0.875rem;color:var(--muted2);}
-.fare-r:last-child{border:none;}
-.fare-r.sum{font-family:'JetBrains Mono',monospace;font-size:1.05rem;font-weight:700;color:var(--lime);}
-.fare-r.sum span:first-child{font-family:'Outfit',sans-serif;font-weight:700;color:var(--white);font-size:0.95rem;}
-.map-preview{background:var(--ink3);border:1px solid var(--line);border-radius:10px;height:150px;display:flex;align-items:center;justify-content:center;margin-bottom:1.25rem;position:relative;overflow:hidden;}
-.map-preview::after{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 24px,rgba(200,241,53,0.03) 24px,rgba(200,241,53,0.03) 25px),repeating-linear-gradient(90deg,transparent,transparent 24px,rgba(200,241,53,0.03) 24px,rgba(200,241,53,0.03) 25px);}
-.recent-item{display:grid;grid-template-columns:1fr auto auto auto;gap:0.75rem;align-items:center;padding:11px 0;border-bottom:1px solid var(--line);font-size:0.85rem;}
-.recent-item:last-child{border:none;}
-.ri-route{font-weight:600;}.ri-info{font-size:0.75rem;color:var(--muted);}
-.badge{padding:3px 9px;border-radius:4px;font-size:0.72rem;font-weight:700;}
-.badge-active{background:rgba(200,241,53,0.12);color:var(--lime);}
-.badge-done{background:rgba(107,114,128,0.15);color:var(--muted);}
+  /* ── PLANS ── */
+  .plans-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem; padding: 0 2rem 5rem; max-width: 1100px; margin: 0 auto;
+  }
+  .plan-card {
+    background: var(--card); border: 1px solid var(--border); border-radius: 16px;
+    padding: 2rem; position: relative; transition: transform .2s, border-color .2s;
+  }
+  .plan-card:hover { transform: translateY(-4px); }
+  .plan-card.popular { border-color: var(--accent); }
+  .popular-badge {
+    position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+    background: var(--accent); color: #0a0e1a; font-family: var(--mono);
+    font-size: .65rem; letter-spacing: 2px; padding: .3rem .9rem; border-radius: 20px;
+  }
+  .plan-icon { font-size: 2rem; margin-bottom: 1rem; }
+  .plan-name { font-family: var(--mono); font-size: .9rem; letter-spacing: 2px; color: var(--muted); margin-bottom: .5rem; }
+  .plan-price { font-size: 2.2rem; font-weight: 700; margin-bottom: .25rem; }
+  .plan-price span { font-size: 1rem; color: var(--muted); font-weight: 400; }
+  .plan-desc { color: var(--muted); font-size: .9rem; margin-bottom: 1.5rem; }
+  .plan-features { list-style: none; margin-bottom: 2rem; }
+  .plan-features li { padding: .5rem 0; font-size: .9rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: .6rem; }
+  .plan-features li:last-child { border: none; }
+  .plan-features li::before { content: '✓'; color: var(--accent); font-weight: 700; flex-shrink: 0; }
 
-/* DASHBOARD */
-.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.75rem;}
-.kpi{background:var(--ink2);border:1px solid var(--line);border-radius:14px;padding:1.4rem;}
-.kpi-label{font-size:0.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.6px;margin-bottom:0.4rem;}
-.kpi-val{font-family:'JetBrains Mono',monospace;font-size:1.4rem;font-weight:600;}
-.kpi-val.lime{color:var(--lime);}.kpi-val.sky{color:var(--sky);}.kpi-val.amber{color:var(--amber);}
-.dash-grid{display:grid;grid-template-columns:2fr 1fr;gap:1.5rem;}
-.prog-wrap{margin-top:0.75rem;}
-.prog-head{display:flex;justify-content:space-between;font-size:0.82rem;color:var(--muted2);margin-bottom:6px;}
-.prog-track{height:6px;background:var(--line);border-radius:3px;overflow:hidden;}
-.prog-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,#6366f1,var(--lime));transition:width 0.6s ease;}
-.sub-r{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--line);font-size:0.85rem;}
-.sub-r:last-child{border:none;}
-.sub-r .k{color:var(--muted2);}
+  /* PASSES */
+  .passes-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem; padding: 0 2rem 5rem; max-width: 900px; margin: 0 auto;
+  }
+  .pass-card {
+    background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+    padding: 1.5rem; text-align: center; transition: transform .2s, border-color .2s; cursor: pointer;
+  }
+  .pass-card:hover { transform: translateY(-3px); border-color: var(--accent2); }
+  .pass-trips { font-size: 2.5rem; font-weight: 700; color: var(--accent2); font-family: var(--mono); }
+  .pass-label { font-size: .8rem; color: var(--muted); letter-spacing: 1px; }
+  .pass-price { font-size: 1.4rem; font-weight: 700; margin: .75rem 0; }
 
-/* ADMIN */
-.adm-kpi{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:1.75rem;}
-.adm-card{background:var(--ink2);border:1px solid var(--line);border-radius:14px;padding:1.4rem;display:flex;align-items:center;gap:1rem;}
-.adm-val{font-family:'JetBrains Mono',monospace;font-size:1.35rem;font-weight:600;}
-.adm-lbl{font-size:0.78rem;color:var(--muted);}
-.adm-grid{display:grid;grid-template-columns:3fr 2fr;gap:1.5rem;}
-table{width:100%;border-collapse:collapse;}
-thead th{font-size:0.72rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.6px;padding:10px 0;border-bottom:2px solid var(--line);text-align:left;}
-tbody td{font-size:0.85rem;color:var(--muted2);padding:11px 0;border-bottom:1px solid var(--line);}
-tbody tr:last-child td{border:none;}
+  /* ── ROUTES ── */
+  #routes { padding: 0 2rem 5rem; max-width: 1100px; margin: 0 auto; }
+  .route-filters { display: flex; gap: .5rem; flex-wrap: wrap; margin-bottom: 2rem; }
+  .filter-btn {
+    background: var(--card); border: 1px solid var(--border); color: var(--muted);
+    padding: .45rem 1rem; border-radius: 20px; font-size: .8rem; cursor: pointer;
+    transition: all .2s; font-family: var(--sans);
+  }
+  .filter-btn.active, .filter-btn:hover { background: var(--accent); color: #0a0e1a; border-color: var(--accent); font-weight: 600; }
+  .routes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1rem; }
+  .route-card {
+    background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+    padding: 1.5rem; display: flex; flex-direction: column; gap: 1rem;
+    transition: border-color .2s;
+  }
+  .route-card:hover { border-color: var(--border); }
+  .route-header { display: flex; justify-content: space-between; align-items: flex-start; }
+  .route-id { font-family: var(--mono); font-size: .75rem; color: var(--accent); letter-spacing: 1px; }
+  .route-badge {
+    font-size: .7rem; padding: .2rem .6rem; border-radius: 10px; font-weight: 600;
+  }
+  .badge-bus { background: rgba(0,229,160,.15); color: var(--accent); }
+  .badge-metro { background: rgba(0,102,255,.15); color: var(--accent2); }
+  .badge-express { background: rgba(255,107,53,.15); color: var(--accent3); }
+  .route-path { display: flex; align-items: center; gap: .75rem; }
+  .route-stop { font-weight: 600; font-size: .95rem; }
+  .route-arrow { color: var(--muted); font-size: 1.2rem; }
+  .route-meta { display: flex; gap: 1.5rem; }
+  .route-meta span { font-size: .8rem; color: var(--muted); }
+  .route-meta strong { color: var(--text); }
+  .route-status { display: flex; align-items: center; gap: .4rem; font-size: .8rem; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; }
+  .dot-green { background: var(--accent); box-shadow: 0 0 6px var(--accent); }
+  .dot-red { background: var(--danger); }
+  .dot-yellow { background: var(--gold); }
 
-/* GATE */
-.gate{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:55vh;text-align:center;gap:1rem;}
-.gate-icon{font-size:3.5rem;}
-.gate h2{font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:1px;}
-.gate p{font-size:0.9rem;color:var(--muted2);max-width:320px;}
+  /* ── BOOK TRIP ── */
+  #book { padding: 0 2rem 5rem; max-width: 900px; margin: 0 auto; }
+  .book-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+  @media(max-width:680px) { .book-grid { grid-template-columns: 1fr; } }
+  .form-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 2rem; }
+  .form-card h3 { font-family: var(--mono); font-size: .85rem; letter-spacing: 2px; color: var(--accent); margin-bottom: 1.5rem; }
+  .form-group { margin-bottom: 1.25rem; }
+  .form-group label { display: block; font-size: .8rem; color: var(--muted); margin-bottom: .4rem; letter-spacing: .5px; }
+  .form-group select, .form-group input {
+    width: 100%; background: var(--bg); border: 1px solid var(--border); border-radius: 8px;
+    color: var(--text); padding: .75rem 1rem; font-size: .9rem; font-family: var(--sans);
+    outline: none; transition: border-color .2s;
+  }
+  .form-group select:focus, .form-group input:focus { border-color: var(--accent); }
+  .form-group select option { background: var(--surface); }
+  .fare-row { display: flex; justify-content: space-between; padding: .6rem 0; border-bottom: 1px solid var(--border); font-size: .9rem; }
+  .fare-row:last-child { border: none; }
+  .fare-total { font-size: 1.2rem; font-weight: 700; color: var(--accent); }
+  .fare-route { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; }
+  .fare-route span { font-weight: 600; }
 
-/* MODALS */
-.overlay{display:none;position:fixed;inset:0;z-index:300;background:rgba(0,0,0,0.75);backdrop-filter:blur(8px);align-items:center;justify-content:center;}
-.overlay.open{display:flex;}
-.modal{background:var(--ink2);border:1px solid var(--line);border-radius:20px;padding:2.5rem;width:440px;max-width:95vw;position:relative;animation:popIn 0.25s ease;}
-@keyframes popIn{from{opacity:0;transform:scale(0.96) translateY(12px)}to{opacity:1;transform:none}}
-.modal-x{position:absolute;top:1rem;right:1rem;width:30px;height:30px;border-radius:50%;background:var(--ink3);border:none;color:var(--muted2);cursor:pointer;font-size:0.9rem;display:flex;align-items:center;justify-content:center;transition:all 0.15s;}
-.modal-x:hover{color:var(--white);background:var(--line);}
-.modal-title{font-family:'Bebas Neue',sans-serif;font-size:1.75rem;letter-spacing:1px;margin-bottom:0.25rem;}
-.modal-sub{font-size:0.85rem;color:var(--muted2);margin-bottom:1.75rem;}
-.tabs{display:flex;background:var(--ink3);border-radius:8px;padding:3px;margin-bottom:1.75rem;gap:3px;}
-.tab{flex:1;padding:9px;border-radius:6px;border:none;background:transparent;color:var(--muted2);font-size:0.88rem;font-weight:600;font-family:'Outfit',sans-serif;cursor:pointer;transition:all 0.15s;}
-.tab.on{background:var(--ink2);color:var(--white);border:1px solid var(--line);}
-.aform{display:flex;flex-direction:column;gap:0.9rem;}
-.aform input{padding:11px 14px;border-radius:8px;background:var(--ink3);border:1px solid var(--line);color:var(--white);font-size:0.9rem;font-family:'Outfit',sans-serif;outline:none;transition:border-color 0.2s;}
-.aform input:focus{border-color:var(--lime);}
-.err{color:var(--rose);font-size:0.82rem;display:none;margin-top:2px;}
-.demo-hint{font-size:0.78rem;color:var(--muted);text-align:center;margin-top:0.5rem;}
-.demo-hint b{color:var(--lime);cursor:pointer;}
+  /* ── DASHBOARD ── */
+  #dashboard { padding: 0 2rem 5rem; max-width: 1100px; margin: 0 auto; }
+  .dash-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: gap; gap: 1rem; }
+  .dash-header h2 { font-size: 1.5rem; font-weight: 700; }
+  .dash-user { display: flex; align-items: center; gap: .75rem; }
+  .avatar { width: 42px; height: 42px; border-radius: 50%; background: var(--accent); display: flex; align-items: center; justify-content: center; font-weight: 700; color: #0a0e1a; font-size: 1rem; }
+  .dash-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+  .dash-stat { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; }
+  .dash-stat .label { font-size: .75rem; color: var(--muted); letter-spacing: 1px; margin-bottom: .5rem; font-family: var(--mono); }
+  .dash-stat .value { font-size: 1.8rem; font-weight: 700; }
+  .dash-stat .value.green { color: var(--accent); }
+  .dash-stat .value.blue { color: var(--accent2); }
+  .dash-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem; }
+  @media(max-width:900px) { .dash-grid { grid-template-columns: 1fr; } }
+  .dash-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; }
+  .dash-card h3 { font-family: var(--mono); font-size: .8rem; letter-spacing: 1.5px; color: var(--muted); margin-bottom: 1.5rem; }
+  .trip-item { display: flex; justify-content: space-between; align-items: center; padding: .75rem 0; border-bottom: 1px solid var(--border); }
+  .trip-item:last-child { border: none; }
+  .trip-route { font-size: .9rem; font-weight: 500; }
+  .trip-meta { font-size: .75rem; color: var(--muted); margin-top: .2rem; }
+  .trip-cost { font-family: var(--mono); font-size: .9rem; color: var(--accent); }
+  .progress-bar { height: 8px; background: var(--border); border-radius: 4px; overflow: hidden; margin: .5rem 0 .25rem; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2)); border-radius: 4px; transition: width .5s ease; }
+  .sub-card { background: linear-gradient(135deg, rgba(0,229,160,.1), rgba(0,102,255,.1)); border: 1px solid rgba(0,229,160,.3); }
+  .sub-name { font-size: 1.3rem; font-weight: 700; margin-bottom: .25rem; }
+  .sub-status { display: inline-flex; align-items: center; gap: .4rem; font-size: .75rem; color: var(--accent); margin-bottom: 1rem; }
+  .sub-actions { display: flex; gap: .75rem; margin-top: 1.5rem; }
 
-/* MPESA MODAL */
-.mpesa-modal{max-width:420px;}
+  /* ── AUTH GATE ── */
+  .auth-gate { text-align: center; padding: 4rem 2rem; }
+  .auth-gate .icon { font-size: 4rem; margin-bottom: 1rem; }
+  .auth-gate h3 { font-size: 1.5rem; margin-bottom: .5rem; }
+  .auth-gate p { color: var(--muted); margin-bottom: 2rem; }
 
-/* Step indicator */
-.steps-bar{display:flex;align-items:center;margin-bottom:1.75rem;}
-.step-item{display:flex;align-items:center;gap:6px;font-size:0.75rem;font-weight:600;}
-.step-dot{width:24px;height:24px;border-radius:50%;border:2px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:0.7rem;font-weight:700;color:var(--muted);transition:all 0.3s;flex-shrink:0;}
-.step-item.done .step-dot{background:var(--lime);border-color:var(--lime);color:#000;}
-.step-item.active .step-dot{border-color:var(--lime);color:var(--lime);animation:stepPulse 1.5s ease-in-out infinite;}
-.step-item.done .step-label,.step-item.active .step-label{color:var(--white);}
-.step-label{color:var(--muted);}
-@keyframes stepPulse{0%,100%{box-shadow:0 0 0 0 rgba(200,241,53,0.4)}50%{box-shadow:0 0 0 6px rgba(200,241,53,0)}}
-.step-line{flex:1;height:1px;background:var(--line);margin:0 6px;transition:background 0.3s;}
-.step-line.done{background:var(--lime);}
+  /* ── MODAL ── */
+  .modal-overlay {
+    display: none; position: fixed; inset: 0; z-index: 200;
+    background: rgba(0,0,0,.7); backdrop-filter: blur(8px);
+    align-items: center; justify-content: center; padding: 1rem;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 20px;
+    padding: 2.5rem; width: 100%; max-width: 420px; position: relative;
+  }
+  .modal h2 { font-size: 1.4rem; font-weight: 700; margin-bottom: .25rem; }
+  .modal p { color: var(--muted); font-size: .9rem; margin-bottom: 1.5rem; }
+  .modal-close { position: absolute; top: 1rem; right: 1rem; background: none; border: none; color: var(--muted); font-size: 1.2rem; cursor: pointer; }
+  .tabs { display: flex; gap: 0; border-bottom: 1px solid var(--border); margin-bottom: 1.5rem; }
+  .tab { flex: 1; padding: .75rem; text-align: center; font-size: .85rem; font-weight: 600; cursor: pointer; color: var(--muted); border-bottom: 2px solid transparent; transition: all .2s; background: none; border-left: none; border-right: none; border-top: none; font-family: var(--sans); }
+  .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+  .error-msg { color: var(--danger); font-size: .8rem; margin-top: .5rem; display: none; }
+  .success-box { background: rgba(0,229,160,.1); border: 1px solid rgba(0,229,160,.3); border-radius: 10px; padding: 1rem; text-align: center; margin-top: 1rem; }
+  .success-box .check { font-size: 2rem; margin-bottom: .5rem; }
 
-/* Amount box */
-.amt-box{background:var(--ink3);border:1px solid var(--line);border-radius:12px;padding:1.25rem;text-align:center;margin-bottom:1.5rem;}
-.amt-label{font-size:0.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:4px;}
-.amt-value{font-family:'JetBrains Mono',monospace;font-size:2rem;font-weight:700;color:var(--green);}
-.amt-for{font-size:0.82rem;color:var(--muted2);margin-top:4px;}
+  /* ── MPESA MODAL ── */
+  .mpesa-steps { display: flex; gap: .5rem; margin-bottom: 2rem; }
+  .mpesa-step { flex: 1; height: 4px; border-radius: 2px; background: var(--border); transition: background .3s; }
+  .mpesa-step.done { background: var(--accent); }
+  .mpesa-step.active { background: var(--accent2); }
+  .amount-display { text-align: center; background: var(--bg); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; }
+  .amount-display .label { font-size: .75rem; color: var(--muted); letter-spacing: 1px; }
+  .amount-display .amount { font-size: 2rem; font-weight: 700; color: var(--accent); font-family: var(--mono); }
+  .amount-display .for { font-size: .85rem; color: var(--muted); margin-top: .25rem; }
+  .mpesa-waiting { text-align: center; padding: 1rem 0; }
+  .spinner { width: 48px; height: 48px; border: 3px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 1rem; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .mpesa-success { text-align: center; padding: 1rem 0; }
+  .mpesa-success .check-icon { font-size: 3rem; margin-bottom: 1rem; }
+  .receipt-row { display: flex; justify-content: space-between; padding: .5rem 0; border-bottom: 1px solid var(--border); font-size: .85rem; }
+  .receipt-row:last-child { border: none; }
+  .receipt-row .key { color: var(--muted); }
 
-/* Phone step */
-.phone-step{}
-.phone-hint{font-size:0.78rem;color:var(--muted2);margin-top:6px;display:flex;align-items:center;gap:4px;}
+  /* ── TOASTS ── */
+  #toast-container { position: fixed; bottom: 2rem; right: 2rem; z-index: 999; display: flex; flex-direction: column; gap: .5rem; }
+  .toast {
+    background: var(--card); border: 1px solid var(--border); border-radius: 10px;
+    padding: .85rem 1.25rem; font-size: .85rem; min-width: 260px;
+    animation: slideIn .3s ease; display: flex; align-items: center; gap: .75rem;
+  }
+  .toast.success { border-color: var(--accent); }
+  .toast.error { border-color: var(--danger); }
+  @keyframes slideIn { from { opacity:0; transform: translateX(20px); } to { opacity:1; transform: translateX(0); } }
 
-/* Waiting step */
-.waiting-step{text-align:center;padding:0.5rem 0;}
-.phone-sent{font-size:0.85rem;color:var(--muted2);margin-bottom:1.5rem;}
-.phone-sent strong{color:var(--white);}
-.spinner{width:48px;height:48px;border-radius:50%;border:3px solid var(--line);border-top-color:var(--lime);animation:spin 0.8s linear infinite;margin:1.5rem auto;}
-@keyframes spin{to{transform:rotate(360deg)}}
-.wait-msg{font-size:0.9rem;color:var(--muted2);}
-.wait-sub{font-size:0.78rem;color:var(--muted);margin-top:6px;}
-.btn-cancel-pay{margin-top:1.25rem;width:100%;padding:10px;border-radius:8px;background:transparent;border:1px solid var(--line);color:var(--muted2);font-family:'Outfit',sans-serif;font-size:0.85rem;cursor:pointer;transition:all 0.2s;}
-.btn-cancel-pay:hover{border-color:var(--rose);color:var(--rose);}
-
-/* Success step */
-.success-step{text-align:center;padding:0.5rem 0;}
-.tick{width:64px;height:64px;border-radius:50%;background:rgba(74,222,128,0.12);border:2px solid var(--green);display:flex;align-items:center;justify-content:center;font-size:2rem;margin:0 auto 1.25rem;animation:tickIn 0.4s ease;}
-@keyframes tickIn{from{transform:scale(0.5);opacity:0}to{transform:scale(1);opacity:1}}
-.txn-chip{font-family:'JetBrains Mono',monospace;background:rgba(200,241,53,0.08);border:1px solid rgba(200,241,53,0.2);color:var(--lime);padding:10px;border-radius:8px;font-size:0.95rem;letter-spacing:2px;text-align:center;margin:1rem 0;}
-.pay-meta{display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;background:var(--ink3);border-radius:10px;padding:1rem;margin:1rem 0 1.5rem;text-align:left;}
-.pm-label{font-size:0.72rem;color:var(--muted);margin-bottom:2px;}
-.pm-val{font-size:0.88rem;font-weight:600;}
-
-/* Failed step */
-.failed-step{text-align:center;padding:0.5rem 0;}
-.fail-icon{font-size:3rem;margin-bottom:1rem;}
-.fail-reason{font-size:0.85rem;color:var(--muted2);margin:0.5rem 0 1.5rem;padding:1rem;background:rgba(251,113,133,0.08);border:1px solid rgba(251,113,133,0.2);border-radius:10px;}
-
-/* TOAST */
-.toasts{position:fixed;bottom:1.5rem;right:1.5rem;z-index:400;display:flex;flex-direction:column;gap:0.5rem;}
-.t{display:flex;align-items:center;gap:10px;background:var(--ink2);border:1px solid var(--line);border-radius:10px;padding:11px 16px;font-size:0.875rem;min-width:260px;box-shadow:0 8px 32px rgba(0,0,0,0.4);animation:tin 0.25s ease;}
-.t.ok{border-color:rgba(200,241,53,0.3);}.t.info{border-color:rgba(56,189,248,0.3);}.t.err{border-color:rgba(251,113,133,0.3);}
-@keyframes tin{from{opacity:0;transform:translateX(16px)}to{opacity:1;transform:none}}
-
-@media(max-width:900px){
-  .hero{grid-template-columns:1fr;padding:3rem 2rem;}
-  .hero-right{padding:0;margin-top:2rem;}
-  .plans-grid,.book-layout,.dash-grid,.adm-grid{grid-template-columns:1fr;}
-  .kpi-grid,.adm-kpi{grid-template-columns:repeat(2,1fr);}
-  .passes-grid{grid-template-columns:repeat(2,1fr);}
-  .feat-strip{grid-template-columns:1fr;}
-  .nav-links{display:none;}
-}
+  /* ── RESPONSIVE ── */
+  @media(max-width:600px) {
+    nav { padding: 0 1rem; }
+    .nav-links { display: none; }
+    .plans-grid, .passes-grid { padding: 0 1rem 3rem; }
+    #routes, #book, #dashboard { padding: 0 1rem 3rem; }
+  }
 </style>
 </head>
 <body>
 
 <!-- NAV -->
 <nav>
-  <div class="logo"><div class="logo-dot"></div>TRANSITFLOW</div>
+  <div class="nav-logo">TRANSIT<span>FLOW</span></div>
   <div class="nav-links">
-    <a id="n-home" class="active" onclick="go('home')">Home</a>
-    <a id="n-plans" onclick="go('plans')">Plans</a>
-    <a id="n-book" onclick="go('book')">Book Trip</a>
-    <a id="n-dashboard" onclick="go('dashboard')">Dashboard</a>
-    <a id="n-admin" onclick="go('admin')">Admin</a>
+    <a href="#" class="active" onclick="showPage('home',this)">Home</a>
+    <a href="#" onclick="showPage('plans',this)">Plans</a>
+    <a href="#" onclick="showPage('routes',this)">Routes</a>
+    <a href="#" onclick="showPage('book',this)">Book Trip</a>
+    <a href="#" onclick="showPage('dashboard',this)">Dashboard</a>
   </div>
-  <div id="nav-right"><button class="btn-nav" onclick="openAuth()">Sign In</button></div>
+  <div class="nav-right">
+    <span id="nav-user-name" style="font-size:.85rem;color:var(--muted);display:none"></span>
+    <button class="btn btn-ghost" id="nav-login-btn" onclick="openAuthModal()">Sign In</button>
+    <button class="btn btn-primary" id="nav-logout-btn" style="display:none" onclick="logout()">Log Out</button>
+  </div>
 </nav>
 
-<!-- HOME -->
-<section id="home" class="active">
-  <div class="hero">
-    <div>
-      <div class="hero-tag">🚍 Smart City Transport</div>
-      <h1>MOVE<br>SMARTER<br><span class="hl">SUBSCRIBE</span><br>BETTER</h1>
-      <p class="hero-desc">TransitFlow manages your bus, metro, and express subscriptions in one platform. Pay with M-Pesa, track in real-time.</p>
-      <div class="hero-actions">
-        <button class="btn-primary" onclick="go('plans')">View Plans →</button>
-        <button class="btn-ghost" onclick="openAuth()">Get Started Free</button>
+<!-- ── HOME PAGE ── -->
+<div class="page active" id="page-home">
+  <section id="home">
+    <div class="hero">
+      <div class="hero-tag">🚍 NAIROBI SMART TRANSIT</div>
+      <h1>Move <em>Smarter</em><br/>Subscribe Better</h1>
+      <p>TransitFlow manages your bus, metro, and express subscriptions in one platform. Pay with M-Pesa, track in real-time.</p>
+      <div class="hero-cta">
+        <button class="btn btn-primary btn-lg" onclick="showPage('plans', document.querySelector('.nav-links a:nth-child(2)'))">View Plans →</button>
+        <button class="btn btn-ghost btn-lg" onclick="openAuthModal()">Get Started Free</button>
+      </div>
+      <div class="stats-row">
+        <div class="stat"><div class="stat-val" id="stat-riders">0</div><div class="stat-lbl">ACTIVE RIDERS</div></div>
+        <div class="stat"><div class="stat-val">47</div><div class="stat-lbl">VEHICLES LIVE</div></div>
+        <div class="stat"><div class="stat-val">18</div><div class="stat-lbl">ROUTES</div></div>
+        <div class="stat"><div class="stat-val">40%</div><div class="stat-lbl">AVG SAVINGS</div></div>
       </div>
     </div>
-    <div class="hero-right">
-      <div class="hero-stat"><div class="hs-icon">👥</div><div class="hs-num" id="stat-riders">0</div><div class="hs-label">Active Riders</div></div>
-      <div class="hero-stat"><div class="hs-icon">🚌</div><div class="hs-num">47</div><div class="hs-label">Vehicles Live</div></div>
-      <div class="hero-stat"><div class="hs-icon">📍</div><div class="hs-num">18</div><div class="hs-label">Routes</div></div>
-      <div class="hero-stat"><div class="hs-icon">💰</div><div class="hs-num">40%</div><div class="hs-label">Avg. Savings</div></div>
-    </div>
-  </div>
-  <div class="feat-strip">
-    <div class="feat-item"><div class="feat-icon">📍</div><div><h3>Real-Time Tracking</h3><p>Live GPS every 30 seconds. Never wait blindly again.</p></div></div>
-    <div class="feat-item"><div class="feat-icon">🎫</div><div><h3>Smart Subscriptions</h3><p>Save up to 40% vs single tickets. Pause anytime.</p></div></div>
-    <div class="feat-item"><div class="feat-icon">📊</div><div><h3>Usage Analytics</h3><p>Detailed reports on your travel patterns and spending.</p></div></div>
-  </div>
-</section>
+  </section>
+</div>
 
-<!-- PLANS -->
-<section id="plans">
-  <div class="shell">
-    <div class="sec-title">CHOOSE YOUR PLAN</div>
-    <div class="sec-sub">Flexible transport subscriptions — pay via M-Pesa, activate instantly</div>
-    <div class="plans-grid">
-      <div class="plan-card">
-        <div class="plan-emoji">🚌</div><div class="plan-name">Basic</div>
-        <div class="plan-price">KSh 1,200 <em>/month</em></div>
-        <div class="plan-blurb">Perfect for occasional riders and students.</div>
-        <ul class="plan-feats"><li>30 trips per month</li><li>Bus network access</li><li>3 zones covered</li><li>Mobile e-ticket</li></ul>
-        <button class="btn-sub" onclick="initiatePayment('subscription','Basic',1200)">Pay with M-Pesa</button>
-      </div>
-      <div class="plan-card hot">
-        <div class="hot-badge">MOST POPULAR</div>
-        <div class="plan-emoji">🚇</div><div class="plan-name">Pro Commuter</div>
-        <div class="plan-price">KSh 2,800 <em>/month</em></div>
-        <div class="plan-blurb">Ideal for daily commuters. Unlimited travel.</div>
-        <ul class="plan-feats"><li>Unlimited trips</li><li>Bus + Metro access</li><li>All zones covered</li><li>Priority boarding</li><li>Real-time tracking</li></ul>
-        <button class="btn-sub" onclick="initiatePayment('subscription','Pro Commuter',2800)">Pay with M-Pesa</button>
-      </div>
-      <div class="plan-card">
-        <div class="plan-emoji">✈️</div><div class="plan-name">Enterprise</div>
-        <div class="plan-price">KSh 5,500 <em>/month</em></div>
-        <div class="plan-blurb">Corporate plans with fleet management.</div>
-        <ul class="plan-feats"><li>Up to 10 employees</li><li>All transport modes</li><li>Airport express</li><li>Dedicated support</li><li>Invoice billing</li></ul>
-        <button class="btn-sub" onclick="initiatePayment('subscription','Enterprise',5500)">Pay with M-Pesa</button>
-      </div>
+<!-- ── PLANS PAGE ── -->
+<div class="page" id="page-plans">
+  <div class="section-header">
+    <div class="section-tag">// SUBSCRIPTIONS</div>
+    <h2>Choose Your Plan</h2>
+    <p>Flexible transport subscriptions — activate instantly via M-Pesa</p>
+  </div>
+  <div class="plans-grid">
+    <div class="plan-card">
+      <div class="plan-icon">🚌</div>
+      <div class="plan-name">BASIC</div>
+      <div class="plan-price">KSh 1,200 <span>/month</span></div>
+      <div class="plan-desc">Perfect for occasional riders and students.</div>
+      <ul class="plan-features">
+        <li>30 trips per month</li>
+        <li>Bus network access</li>
+        <li>3 zones covered</li>
+        <li>Mobile e-ticket</li>
+      </ul>
+      <button class="btn btn-ghost btn-full" onclick="initPayment(1200,'Basic Plan Monthly')">Pay with M-Pesa</button>
     </div>
-    <div style="font-weight:700;font-size:1rem;margin-bottom:1.25rem;">🎫 Trip Passes</div>
-    <div class="passes-grid">
-      <div class="pass-card"><div class="pass-n">10</div><div class="pass-unit">Trips</div><div class="pass-ksh">KSh 300</div><button class="btn-pass" onclick="initiatePayment('pass','10-Trip Pass',300,10)">Buy</button></div>
-      <div class="pass-card"><div class="pass-n">20</div><div class="pass-unit">Trips</div><div class="pass-ksh">KSh 550</div><button class="btn-pass" onclick="initiatePayment('pass','20-Trip Pass',550,20)">Buy</button></div>
-      <div class="pass-card"><div class="pass-n">40</div><div class="pass-unit">Trips</div><div class="pass-ksh">KSh 950</div><button class="btn-pass" onclick="initiatePayment('pass','40-Trip Pass',950,40)">Buy</button></div>
-      <div class="pass-card"><div class="pass-n" style="color:var(--lime)">100</div><div class="pass-unit">Trips</div><div class="pass-ksh">KSh 1,800</div><button class="btn-pass" style="color:var(--lime);border-color:var(--lime)" onclick="initiatePayment('pass','100-Trip Pass',1800,100)">Buy</button></div>
+    <div class="plan-card popular">
+      <div class="popular-badge">MOST POPULAR</div>
+      <div class="plan-icon">🚇</div>
+      <div class="plan-name">PRO COMMUTER</div>
+      <div class="plan-price">KSh 2,800 <span>/month</span></div>
+      <div class="plan-desc">Ideal for daily commuters. Unlimited travel.</div>
+      <ul class="plan-features">
+        <li>Unlimited trips</li>
+        <li>Bus + Metro access</li>
+        <li>All zones covered</li>
+        <li>Priority boarding</li>
+        <li>Real-time tracking</li>
+      </ul>
+      <button class="btn btn-primary btn-full" onclick="initPayment(2800,'Pro Commuter Monthly')">Pay with M-Pesa</button>
+    </div>
+    <div class="plan-card">
+      <div class="plan-icon">✈️</div>
+      <div class="plan-name">ENTERPRISE</div>
+      <div class="plan-price">KSh 5,500 <span>/month</span></div>
+      <div class="plan-desc">Corporate plans with fleet management.</div>
+      <ul class="plan-features">
+        <li>Up to 10 employees</li>
+        <li>All transport modes</li>
+        <li>Airport express</li>
+        <li>Dedicated support</li>
+        <li>Invoice billing</li>
+      </ul>
+      <button class="btn btn-ghost btn-full" onclick="initPayment(5500,'Enterprise Monthly')">Pay with M-Pesa</button>
     </div>
   </div>
-</section>
 
-<!-- BOOK -->
-<section id="book">
-  <div class="shell">
-    <div class="sec-title">BOOK A TRIP</div>
-    <div class="sec-sub">Plan your journey with live fare estimates</div>
-    <div class="book-layout">
-      <div>
-        <div class="card" style="margin-bottom:1.25rem;">
-          <div class="card-title"><span>🗺️</span>Journey Details</div>
-          <div class="fgrp"><label>Transport Mode</label>
-            <select id="b-mode" onchange="calcFare()"><option value="bus">🚌 Bus</option><option value="metro">🚇 Metro</option><option value="express">🚀 Express Bus</option><option value="brt">🚍 BRT</option></select>
-          </div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;">
-            <div class="fgrp"><label>From</label>
-              <select id="b-from" onchange="calcFare()"><option>CBD (City Centre)</option><option>Westlands</option><option>Ngong Road</option><option>Thika Road</option><option>Eastlands</option><option>Langata</option><option>Karen</option><option>JKIA Airport</option></select>
-            </div>
-            <div class="fgrp"><label>To</label>
-              <select id="b-to" onchange="calcFare()"><option>Westlands</option><option>CBD (City Centre)</option><option>Ngong Road</option><option>Thika Road</option><option>Eastlands</option><option>Langata</option><option>Karen</option><option>JKIA Airport</option></select>
-            </div>
-          </div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;">
-            <div class="fgrp"><label>Date & Time</label><input type="datetime-local" id="b-dt"></div>
-            <div class="fgrp"><label>Passengers</label>
-              <select id="b-pax" onchange="calcFare()"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option></select>
-            </div>
-          </div>
-          <button class="btn-primary" style="width:100%;margin-top:0.5rem;" onclick="bookTrip()">Book Now →</button>
-        </div>
-      </div>
-      <div>
-        <div class="card" style="margin-bottom:1.25rem;">
-          <div class="card-title"><span>💰</span>Fare Estimate</div>
-          <div class="map-preview">
-            <div style="position:relative;z-index:1;text-align:center;">
-              <div style="font-size:0.8rem;color:var(--lime);" id="map-from">📍 CBD</div>
-              <div style="font-size:1.25rem;color:var(--muted);margin:6px 0;">↓</div>
-              <div style="font-size:0.8rem;color:var(--sky);" id="map-to">📍 Westlands</div>
-              <div style="font-size:0.72rem;color:var(--muted);margin-top:8px;" id="map-meta">~7 km · ~15 min</div>
-            </div>
-          </div>
-          <div class="fare-rows">
-            <div class="fare-r"><span>Base Fare</span><span id="f-base">KSh 50</span></div>
-            <div class="fare-r"><span>Distance</span><span id="f-dist">KSh 20</span></div>
-            <div class="fare-r"><span>Passengers</span><span id="f-pax">× 1</span></div>
-            <div class="fare-r"><span style="color:var(--lime)">Subscriber Discount</span><span id="f-disc" style="color:var(--lime)">-KSh 0</span></div>
-            <div class="fare-r sum"><span>Total</span><span id="f-total">KSh 70</span></div>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-title"><span>🕐</span>Recent Bookings</div>
-          <div id="recent-list"><div style="color:var(--muted);font-size:0.85rem;">No bookings yet.</div></div>
-        </div>
-      </div>
+  <div class="section-header" style="padding-top:2rem">
+    <div class="section-tag">// TRIP PASSES</div>
+    <h2>One-Off Passes</h2>
+    <p>No commitment — buy trips as you need them</p>
+  </div>
+  <div class="passes-grid">
+    <div class="pass-card" onclick="initPayment(300,'10-Trip Pass')">
+      <div class="pass-trips">10</div>
+      <div class="pass-label">TRIPS</div>
+      <div class="pass-price">KSh 300</div>
+      <button class="btn btn-blue btn-full">Buy Now</button>
+    </div>
+    <div class="pass-card" onclick="initPayment(550,'20-Trip Pass')">
+      <div class="pass-trips">20</div>
+      <div class="pass-label">TRIPS</div>
+      <div class="pass-price">KSh 550</div>
+      <button class="btn btn-blue btn-full">Buy Now</button>
+    </div>
+    <div class="pass-card" onclick="initPayment(950,'40-Trip Pass')">
+      <div class="pass-trips">40</div>
+      <div class="pass-label">TRIPS</div>
+      <div class="pass-price">KSh 950</div>
+      <button class="btn btn-blue btn-full">Buy Now</button>
+    </div>
+    <div class="pass-card" onclick="initPayment(1800,'100-Trip Pass')">
+      <div class="pass-trips">100</div>
+      <div class="pass-label">TRIPS</div>
+      <div class="pass-price">KSh 1,800</div>
+      <button class="btn btn-blue btn-full">Buy Now</button>
     </div>
   </div>
-</section>
+</div>
 
-<!-- DASHBOARD -->
-<section id="dashboard">
-  <div class="shell">
-    <div id="d-gate" class="gate" style="display:none;">
-      <div class="gate-icon">📊</div><h2>SIGN IN TO VIEW DASHBOARD</h2>
-      <p>Track your trips, subscription and savings.</p>
-      <button class="btn-primary" onclick="openAuth()">Sign In</button>
+<!-- ── ROUTES PAGE ── -->
+<div class="page" id="page-routes">
+  <div class="section-header">
+    <div class="section-tag">// LIVE NETWORK</div>
+    <h2>Routes & Network</h2>
+    <p>18 active routes across Nairobi — real-time status</p>
+  </div>
+  <section id="routes">
+    <div class="route-filters">
+      <button class="filter-btn active" onclick="filterRoutes('all',this)">All Routes</button>
+      <button class="filter-btn" onclick="filterRoutes('bus',this)">🚌 Bus</button>
+      <button class="filter-btn" onclick="filterRoutes('metro',this)">🚇 Metro</button>
+      <button class="filter-btn" onclick="filterRoutes('express',this)">🚀 Express</button>
     </div>
-    <div id="d-content">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2rem;flex-wrap:wrap;gap:1rem;">
-        <div><div class="sec-title" id="d-welcome">WELCOME BACK</div><div class="sec-sub" style="margin:0" id="d-plan-lbl">No Plan Active</div></div>
-        <div style="display:flex;gap:0.75rem;">
-          <button class="btn-primary" onclick="go('plans')">Upgrade Plan</button>
-          <button class="btn-ghost" id="btn-cancel" onclick="cancelSub()" style="color:var(--rose);border-color:rgba(251,113,133,0.3)" disabled>Cancel Sub</button>
+    <div class="routes-grid" id="routes-grid"></div>
+  </section>
+</div>
+
+<!-- ── BOOK PAGE ── -->
+<div class="page" id="page-book">
+  <div class="section-header">
+    <div class="section-tag">// JOURNEY PLANNER</div>
+    <h2>Book a Trip</h2>
+    <p>Plan your journey with live fare estimates</p>
+  </div>
+  <section id="book">
+    <div class="book-grid">
+      <div class="form-card">
+        <h3>🗺️ JOURNEY DETAILS</h3>
+        <div class="form-group">
+          <label>Transport Mode</label>
+          <select id="book-mode" onchange="calcFare()">
+            <option value="bus">🚌 Bus</option>
+            <option value="metro">🚇 Metro</option>
+            <option value="express">🚀 Express Bus</option>
+            <option value="brt">🚍 BRT</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>From</label>
+          <select id="book-from" onchange="calcFare()">
+            <option>CBD (City Centre)</option>
+            <option>Westlands</option>
+            <option>Ngong Road</option>
+            <option>Thika Road</option>
+            <option>Eastlands</option>
+            <option>Langata</option>
+            <option>Karen</option>
+            <option>JKIA Airport</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>To</label>
+          <select id="book-to" onchange="calcFare()">
+            <option>Westlands</option>
+            <option>CBD (City Centre)</option>
+            <option>Ngong Road</option>
+            <option>Thika Road</option>
+            <option>Eastlands</option>
+            <option>Langata</option>
+            <option>Karen</option>
+            <option>JKIA Airport</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Date & Time</label>
+          <input type="datetime-local" id="book-datetime"/>
+        </div>
+        <div class="form-group">
+          <label>Passengers</label>
+          <select id="book-pax" onchange="calcFare()">
+            <option>1</option><option>2</option><option>3</option><option>4</option>
+          </select>
+        </div>
+        <button class="btn btn-primary btn-full" onclick="bookTrip()">Book Now →</button>
+      </div>
+      <div class="form-card">
+        <h3>💰 FARE ESTIMATE</h3>
+        <div class="fare-route" id="fare-route-display">
+          <span id="fare-from">📍 CBD</span>
+          <span style="color:var(--muted)">→</span>
+          <span id="fare-to">📍 Westlands</span>
+        </div>
+        <div id="fare-meta" style="font-size:.8rem;color:var(--muted);margin-bottom:1.5rem">~7 km · ~15 min</div>
+        <div class="fare-row"><span>Base Fare</span><span id="fare-base">KSh 50</span></div>
+        <div class="fare-row"><span>Distance</span><span id="fare-dist">KSh 20</span></div>
+        <div class="fare-row"><span>Passengers</span><span id="fare-pax-display">× 1</span></div>
+        <div class="fare-row"><span>Subscriber Discount</span><span id="fare-discount" style="color:var(--accent)">-KSh 0</span></div>
+        <div class="fare-row"><span style="font-weight:700">Total</span><span class="fare-total" id="fare-total">KSh 70</span></div>
+
+        <h3 style="margin-top:2rem">🕐 RECENT BOOKINGS</h3>
+        <div id="recent-bookings" style="margin-top:1rem">
+          <div style="color:var(--muted);font-size:.85rem;text-align:center;padding:1rem">No bookings yet.</div>
         </div>
       </div>
-      <div class="kpi-grid">
-        <div class="kpi"><div class="kpi-label">Trips This Month</div><div class="kpi-val lime" id="d-trips">0</div></div>
-        <div class="kpi"><div class="kpi-label">Trips Left</div><div class="kpi-val sky" id="d-left">—</div></div>
-        <div class="kpi"><div class="kpi-label">Total Spent</div><div class="kpi-val" id="d-spent">KSh 0</div></div>
-        <div class="kpi"><div class="kpi-label">Total Saved</div><div class="kpi-val amber" id="d-saved">KSh 0</div></div>
+    </div>
+  </section>
+</div>
+
+<!-- ── DASHBOARD PAGE ── -->
+<div class="page" id="page-dashboard">
+  <div class="section-header" style="padding-bottom:0">
+    <div class="section-tag">// MY ACCOUNT</div>
+  </div>
+  <section id="dashboard">
+    <!-- NOT LOGGED IN -->
+    <div id="dash-gate" class="auth-gate">
+      <div class="icon">📊</div>
+      <h3>Sign In to View Dashboard</h3>
+      <p>Track your trips, subscription status, and savings.</p>
+      <button class="btn btn-primary btn-lg" onclick="openAuthModal()">Sign In →</button>
+    </div>
+    <!-- LOGGED IN -->
+    <div id="dash-content" style="display:none">
+      <div class="dash-header">
+        <h2>Welcome back, <span id="dash-username">Rider</span> 👋</h2>
+        <div class="dash-user">
+          <div class="avatar" id="dash-avatar">R</div>
+        </div>
+      </div>
+      <div class="dash-stats">
+        <div class="dash-stat">
+          <div class="label">TRIPS THIS MONTH</div>
+          <div class="value" id="ds-trips">0</div>
+        </div>
+        <div class="dash-stat">
+          <div class="label">TRIPS REMAINING</div>
+          <div class="value green" id="ds-left">—</div>
+        </div>
+        <div class="dash-stat">
+          <div class="label">TOTAL SPENT</div>
+          <div class="value" id="ds-spent">KSh 0</div>
+        </div>
+        <div class="dash-stat">
+          <div class="label">TOTAL SAVED</div>
+          <div class="value green" id="ds-saved">KSh 0</div>
+        </div>
       </div>
       <div class="dash-grid">
-        <div class="card">
-          <div class="card-title"><span>🕐</span>Trip History</div>
-          <div id="d-history"><div style="color:var(--muted);font-size:0.85rem;">No trips yet.</div></div>
+        <div>
+          <div class="dash-card" style="margin-bottom:1.5rem">
+            <h3>🎫 ACTIVE SUBSCRIPTION</h3>
+            <div id="sub-display">
+              <div style="color:var(--muted);font-size:.9rem">No active subscription. <a href="#" style="color:var(--accent)" onclick="showPage('plans')">Upgrade →</a></div>
+            </div>
+          </div>
+          <div class="dash-card">
+            <h3>🕐 TRIP HISTORY</h3>
+            <div id="dash-trip-history">
+              <div style="color:var(--muted);font-size:.85rem;text-align:center;padding:1rem">No trips yet.</div>
+            </div>
+          </div>
         </div>
         <div>
-          <div class="card" style="margin-bottom:1.25rem;">
-            <div class="card-title"><span>📈</span>Monthly Usage</div>
-            <div class="prog-wrap">
-              <div class="prog-head"><span>Trips Used</span><span id="d-prog-lbl">0 / 30</span></div>
-              <div class="prog-track"><div class="prog-fill" id="d-prog" style="width:0%"></div></div>
+          <div class="dash-card" style="margin-bottom:1.5rem">
+            <h3>📈 MONTHLY USAGE</h3>
+            <div style="margin-bottom:.5rem;font-size:.85rem">Trips Used</div>
+            <div class="progress-bar">
+              <div class="progress-fill" id="usage-bar" style="width:0%"></div>
             </div>
-            <div style="font-size:0.76rem;color:var(--muted);margin-top:8px;">Resets 1st of next month</div>
+            <div style="font-size:.75rem;color:var(--muted)" id="usage-label">0 / 30</div>
+            <div style="font-size:.75rem;color:var(--muted);margin-top:.75rem">Resets 1st of next month</div>
           </div>
-          <div class="card">
-            <div class="card-title"><span>🎫</span>Subscription</div>
-            <div id="d-sub-info"><div style="color:var(--muted);font-size:0.85rem;">No active subscription.</div></div>
+          <div class="dash-card">
+            <h3>⚡ QUICK ACTIONS</h3>
+            <div style="display:flex;flex-direction:column;gap:.75rem;margin-top:1rem">
+              <button class="btn btn-primary btn-full" onclick="showPage('book')">Book a Trip</button>
+              <button class="btn btn-ghost btn-full" onclick="showPage('plans')">Upgrade Plan</button>
+              <button class="btn btn-danger btn-full" id="cancel-sub-btn" style="display:none" onclick="cancelSub()">Cancel Subscription</button>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
+</div>
 
-<!-- ADMIN -->
-<section id="admin">
-  <div class="shell">
-    <div id="a-gate" class="gate" style="display:none;">
-      <div class="gate-icon">🛡️</div><h2>ADMIN ACCESS REQUIRED</h2>
-      <p>Sign in with admin credentials.</p>
-      <button class="btn-primary" onclick="openAuth()">Sign In</button>
-    </div>
-    <div id="a-content">
-      <div style="display:flex;align-items:center;gap:1rem;margin-bottom:2rem;">
-        <div class="sec-title">ADMIN PANEL</div>
-        <span style="background:rgba(99,102,241,0.15);color:#818cf8;padding:4px 12px;border-radius:4px;font-size:0.72rem;font-weight:800;letter-spacing:1px;border:1px solid rgba(99,102,241,0.3);">🛡️ ADMIN</span>
-      </div>
-      <div class="adm-kpi">
-        <div class="adm-card"><span style="font-size:1.5rem">👥</span><div><div class="adm-val" id="a-users">0</div><div class="adm-lbl">Total Users</div></div></div>
-        <div class="adm-card"><span style="font-size:1.5rem">🚌</span><div><div class="adm-val">47</div><div class="adm-lbl">Active Vehicles</div></div></div>
-        <div class="adm-card"><span style="font-size:1.5rem">💰</span><div><div class="adm-val" id="a-rev">KSh 0</div><div class="adm-lbl">Revenue</div></div></div>
-        <div class="adm-card"><span style="font-size:1.5rem">🎫</span><div><div class="adm-val" id="a-subs">0</div><div class="adm-lbl">Subscriptions</div></div></div>
-        <div class="adm-card"><span style="font-size:1.5rem">📍</span><div><div class="adm-val">12</div><div class="adm-lbl">Active Routes</div></div></div>
-        <div class="adm-card"><span style="font-size:1.5rem">📊</span><div><div class="adm-val" id="a-trips">0</div><div class="adm-lbl">Total Trips</div></div></div>
-      </div>
-      <div class="adm-grid">
-        <div class="card">
-          <div class="card-title"><span>👥</span>Users</div>
-          <table style="margin-top:0.75rem;"><thead><tr><th>Name</th><th>Email</th><th>Plan</th><th>Status</th></tr></thead>
-          <tbody id="a-users-table"><tr><td colspan="4" style="color:var(--muted)">No users yet</td></tr></tbody></table>
-        </div>
-        <div>
-          <div class="card" style="margin-bottom:1.25rem;">
-            <div class="card-title"><span>🚌</span>Fleet</div>
-            <table style="margin-top:0.75rem;"><thead><tr><th>Vehicle</th><th>Route</th><th>Status</th></tr></thead>
-            <tbody>
-              <tr><td>BUS-001</td><td>CBD → Westlands</td><td><span class="badge badge-active">Active</span></td></tr>
-              <tr><td>BUS-002</td><td>Thika → CBD</td><td><span class="badge badge-active">Active</span></td></tr>
-              <tr><td>MTR-01</td><td>CBD ↔ Airport</td><td><span class="badge badge-active">Active</span></td></tr>
-              <tr><td>BUS-009</td><td>Ngong → CBD</td><td><span class="badge badge-done">Offline</span></td></tr>
-            </tbody></table>
-          </div>
-          <div class="card">
-            <div class="card-title"><span>💰</span>Revenue</div>
-            <div style="margin-top:0.75rem;">
-              <div class="fare-r"><span>Basic Plans</span><span id="a-r-basic">KSh 0</span></div>
-              <div class="fare-r"><span>Pro Plans</span><span id="a-r-pro">KSh 0</span></div>
-              <div class="fare-r"><span>Enterprise</span><span id="a-r-ent">KSh 0</span></div>
-              <div class="fare-r sum"><span>Total</span><span id="a-r-total">KSh 0</span></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+<!-- ════════════ MODALS ════════════ -->
 
 <!-- AUTH MODAL -->
-<div class="overlay" id="auth-ov">
+<div class="modal-overlay" id="auth-modal">
   <div class="modal">
-    <button class="modal-x" onclick="closeOv('auth-ov')">✕</button>
-    <div class="modal-title">WELCOME BACK</div>
-    <div class="modal-sub">Sign in or create an account</div>
+    <button class="modal-close" onclick="closeModal('auth-modal')">✕</button>
+    <h2>Welcome Back</h2>
+    <p>Sign in or create an account</p>
     <div class="tabs">
-      <button class="tab on" id="t-in" onclick="switchTab('in')">Sign In</button>
-      <button class="tab" id="t-reg" onclick="switchTab('reg')">Register</button>
+      <button class="tab active" onclick="switchTab('signin')">Sign In</button>
+      <button class="tab" onclick="switchTab('register')">Register</button>
     </div>
-    <div id="f-in">
-      <div class="aform">
-        <input type="email" id="si-e" placeholder="Email address">
-        <input type="password" id="si-p" placeholder="Password">
-        <div class="err" id="si-err">Incorrect email or password.</div>
-        <button class="btn-primary" onclick="signIn()">Sign In →</button>
-      </div>
-      <div class="demo-hint">Demo admin: <b onclick="fillDemo()">admin@transitflow.com / admin123</b></div>
+    <!-- SIGN IN -->
+    <div class="tab-content active" id="tab-signin">
+      <div class="form-group"><label>Email</label><input type="email" id="si-email" placeholder="you@example.com"/></div>
+      <div class="form-group"><label>Password</label><input type="password" id="si-pass" placeholder="••••••••"/></div>
+      <div class="error-msg" id="si-error">Incorrect email or password.</div>
+      <button class="btn btn-primary btn-full" style="margin-top:.5rem" onclick="signIn()">Sign In →</button>
+      <div style="text-align:center;margin-top:1rem;font-size:.75rem;color:var(--muted)">Demo: <strong>user@transitflow.com / user123</strong></div>
     </div>
-    <div id="f-reg" style="display:none;">
-      <div class="aform">
-        <input type="text" id="rg-n" placeholder="Full name">
-        <input type="email" id="rg-e" placeholder="Email address">
-        <input type="tel" id="rg-ph" placeholder="M-Pesa phone (e.g. 0712345678)">
-        <input type="password" id="rg-p" placeholder="Password (min 6 characters)">
-        <div class="err" id="rg-err">Please fill all fields correctly.</div>
-        <button class="btn-primary" onclick="register()">Create Account →</button>
-      </div>
+    <!-- REGISTER -->
+    <div class="tab-content" id="tab-register">
+      <div class="form-group"><label>Full Name</label><input type="text" id="reg-name" placeholder="Jane Mwangi"/></div>
+      <div class="form-group"><label>Email</label><input type="email" id="reg-email" placeholder="jane@example.com"/></div>
+      <div class="form-group"><label>Phone</label><input type="tel" id="reg-phone" placeholder="0712345678"/></div>
+      <div class="form-group"><label>Password</label><input type="password" id="reg-pass" placeholder="min 6 characters"/></div>
+      <div class="error-msg" id="reg-error">Please fill all fields correctly.</div>
+      <button class="btn btn-primary btn-full" style="margin-top:.5rem" onclick="register()">Create Account →</button>
     </div>
   </div>
 </div>
 
-<!-- MPESA PAYMENT MODAL -->
-<div class="overlay" id="mpesa-ov">
-  <div class="modal mpesa-modal">
-    <button class="modal-x" onclick="cancelPayment()">✕</button>
+<!-- MPESA MODAL -->
+<div class="modal-overlay" id="mpesa-modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('mpesa-modal')">✕</button>
+    <h2>M-Pesa Payment</h2>
 
-    <!-- Step bar -->
-    <div class="steps-bar">
-      <div class="step-item" id="s-phone"><div class="step-dot" id="sd-phone">1</div><span class="step-label">Phone</span></div>
-      <div class="step-line" id="sl-1"></div>
-      <div class="step-item" id="s-wait"><div class="step-dot" id="sd-wait">2</div><span class="step-label">Waiting</span></div>
-      <div class="step-line" id="sl-2"></div>
-      <div class="step-item" id="s-done"><div class="step-dot" id="sd-done">3</div><span class="step-label">Done</span></div>
-    </div>
-
-    <!-- Amount display (always visible) -->
-    <div class="amt-box">
-      <div class="amt-label">Amount Due</div>
-      <div class="amt-value" id="m-amount">KSh 0</div>
-      <div class="amt-for" id="m-for">—</div>
-    </div>
-
-    <!-- STEP 1: Phone input -->
-    <div id="mp-phone">
-      <div class="fgrp">
+    <!-- STEP 1: ENTER PHONE -->
+    <div id="mpesa-step1">
+      <div class="mpesa-steps">
+        <div class="mpesa-step active"></div>
+        <div class="mpesa-step"></div>
+        <div class="mpesa-step"></div>
+      </div>
+      <div class="amount-display">
+        <div class="label">AMOUNT DUE</div>
+        <div class="amount" id="pay-amount-display">KSh 0</div>
+        <div class="for" id="pay-for-display">—</div>
+      </div>
+      <div class="form-group">
         <label>M-Pesa Phone Number</label>
-        <input type="tel" id="m-phone" placeholder="e.g. 0712 345 678" maxlength="13"
-               style="font-size:1.1rem;padding:14px;letter-spacing:1px;">
-        <div class="phone-hint">📱 We'll send an STK push to this Safaricom number</div>
+        <input type="tel" id="mpesa-phone" placeholder="0712345678"/>
+        <div style="font-size:.75rem;color:var(--muted);margin-top:.4rem">📱 We'll send an STK push to this Safaricom number</div>
       </div>
-      <div class="err" id="m-err" style="margin-bottom:0.75rem;">Please enter a valid Safaricom number (07XX or 01XX)</div>
-      <button class="btn-primary" style="width:100%;padding:14px;font-size:1rem;" onclick="sendSTK()" id="btn-stk">
-        Send M-Pesa Request →
-      </button>
-      <div style="text-align:center;font-size:0.75rem;color:var(--muted);margin-top:0.75rem;">🔒 Powered by Safaricom Daraja API</div>
+      <div class="error-msg" id="mpesa-error">Please enter a valid Safaricom number (07XX or 01XX)</div>
+      <button class="btn btn-primary btn-full" style="margin-top:.75rem" onclick="sendMpesaRequest()">Send M-Pesa Request →</button>
+      <div style="text-align:center;margin-top:1rem;font-size:.75rem;color:var(--muted)">🔒 Powered by Safaricom Daraja API</div>
     </div>
 
-    <!-- STEP 2: Waiting for PIN -->
-    <div id="mp-wait" style="display:none;" class="waiting-step">
-      <div class="phone-sent">STK push sent to <strong id="m-phone-display">07XX</strong></div>
-      <div class="spinner"></div>
-      <div class="wait-msg" id="m-wait-msg">Waiting for PIN entry on your phone...</div>
-      <div class="wait-sub">Enter your M-Pesa PIN on your phone to complete payment</div>
-      <button class="btn-cancel-pay" onclick="cancelPayment()">Cancel Payment</button>
-    </div>
-
-    <!-- STEP 3a: Success -->
-    <div id="mp-success" style="display:none;" class="success-step">
-      <div class="tick">✅</div>
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:1px;color:var(--green);">PAYMENT CONFIRMED!</div>
-      <div style="font-size:0.85rem;color:var(--muted2);margin-top:4px;">M-Pesa transaction successful</div>
-      <div class="txn-chip" id="m-txn-code">—</div>
-      <div class="pay-meta">
-        <div><div class="pm-label">Amount Paid</div><div class="pm-val" id="m-paid-amt">KSh 0</div></div>
-        <div><div class="pm-label">For</div><div class="pm-val" id="m-paid-for">—</div></div>
-        <div><div class="pm-label">Date</div><div class="pm-val" id="m-paid-date">—</div></div>
-        <div><div class="pm-label">Phone</div><div class="pm-val" id="m-paid-phone">—</div></div>
+    <!-- STEP 2: WAITING -->
+    <div id="mpesa-step2" style="display:none">
+      <div class="mpesa-steps">
+        <div class="mpesa-step done"></div>
+        <div class="mpesa-step active"></div>
+        <div class="mpesa-step"></div>
       </div>
-      <button class="btn-primary" style="width:100%;padding:13px;" onclick="afterPay()">Go to Dashboard →</button>
+      <div class="mpesa-waiting">
+        <div class="spinner"></div>
+        <p>STK push sent to <strong id="mpesa-phone-display">07XX</strong></p>
+        <p style="color:var(--muted);font-size:.85rem;margin-top:.5rem">Waiting for PIN entry on your phone...</p>
+        <p style="color:var(--muted);font-size:.8rem;margin-top:.5rem">Enter your M-Pesa PIN on your phone to complete payment</p>
+      </div>
+      <button class="btn btn-ghost btn-full" style="margin-top:1rem" onclick="cancelMpesa()">Cancel Payment</button>
     </div>
 
-    <!-- STEP 3b: Failed -->
-    <div id="mp-failed" style="display:none;" class="failed-step">
-      <div class="fail-icon">❌</div>
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:1px;color:var(--rose);">PAYMENT FAILED</div>
-      <div class="fail-reason" id="m-fail-reason">The transaction was cancelled or timed out.</div>
-      <button class="btn-primary" style="width:100%;margin-bottom:0.75rem;" onclick="retryPayment()">Try Again</button>
-      <button class="btn-ghost" style="width:100%;" onclick="cancelPayment()">Cancel</button>
+    <!-- STEP 3: SUCCESS -->
+    <div id="mpesa-step3" style="display:none">
+      <div class="mpesa-steps">
+        <div class="mpesa-step done"></div>
+        <div class="mpesa-step done"></div>
+        <div class="mpesa-step done"></div>
+      </div>
+      <div class="mpesa-success">
+        <div class="check-icon">✅</div>
+        <h3 style="color:var(--accent)">Payment Confirmed!</h3>
+        <p style="color:var(--muted);margin:.5rem 0 1.5rem">M-Pesa transaction successful</p>
+        <div class="receipt-row"><span class="key">Amount Paid</span><span id="receipt-amount">KSh 0</span></div>
+        <div class="receipt-row"><span class="key">For</span><span id="receipt-for">—</span></div>
+        <div class="receipt-row"><span class="key">Transaction ID</span><span id="receipt-txid" style="font-family:var(--mono);font-size:.8rem">—</span></div>
+        <div class="receipt-row"><span class="key">Date</span><span id="receipt-date">—</span></div>
+        <div class="receipt-row"><span class="key">Phone</span><span id="receipt-phone">—</span></div>
+      </div>
+      <button class="btn btn-primary btn-full" style="margin-top:1.5rem" onclick="postPayment()">Go to Dashboard →</button>
     </div>
-
   </div>
 </div>
 
-<div class="toasts" id="toasts"></div>
+<!-- TOAST CONTAINER -->
+<div id="toast-container"></div>
 
 <script>
-// ══════════════════════════════════════════════════════════════
-//  CONFIG — update this to point to your backend
-// ══════════════════════════════════════════════════════════════
-const API = window.location.origin; // same origin when served by server.js
-
-// ══════════════════════════════════════════════════════════════
-//  STATE
-// ══════════════════════════════════════════════════════════════
-const DB = {
-  get users(){ return JSON.parse(localStorage.getItem('tf_users')||'[]'); },
-  set users(v){ localStorage.setItem('tf_users',JSON.stringify(v)); },
-  get bookings(){ return JSON.parse(localStorage.getItem('tf_bookings')||'[]'); },
-  set bookings(v){ localStorage.setItem('tf_bookings',JSON.stringify(v)); },
+// ══════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════
+const STATE = {
+  user: JSON.parse(localStorage.getItem('tf_user') || 'null'),
+  users: JSON.parse(localStorage.getItem('tf_users') || '[]'),
+  trips: JSON.parse(localStorage.getItem('tf_trips') || '[]'),
+  payments: JSON.parse(localStorage.getItem('tf_payments') || '[]'),
+  currentPay: { amount: 0, for: '' },
+  mpesaTimer: null,
 };
 
-// Seed admin
-(()=>{
-  let u=DB.users;
-  if(!u.find(x=>x.email==='admin@transitflow.com')){
-    u.push({name:'Admin User',email:'admin@transitflow.com',phone:'0700000000',password:'admin123',role:'admin',plan:null,trips:0,spent:0,extra:0});
-    DB.users=u;
-  }
-})();
-
-let ME = JSON.parse(sessionStorage.getItem('tf_me')||'null');
-let pending = null;     // current payment intent
-let pollTimer = null;   // polling interval ID
-let checkoutId = null;  // Daraja CheckoutRequestID
-
-// ══════════════════════════════════════════════════════════════
-//  NAVIGATION
-// ══════════════════════════════════════════════════════════════
-function go(id){
-  document.querySelectorAll('section').forEach(s=>s.classList.remove('active'));
-  document.querySelectorAll('.nav-links a').forEach(a=>a.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  document.getElementById('n-'+id)?.classList.add('active');
-  if(id==='book') initBook();
-  if(id==='dashboard') renderDash();
-  if(id==='admin') renderAdmin();
+// Default demo user
+if (!STATE.users.find(u => u.email === 'user@transitflow.com')) {
+  STATE.users.push({ id:'u1', name:'Jane Mwangi', email:'user@transitflow.com', phone:'0712345678', password:'user123', plan:'Pro Commuter', tripsUsed:12, totalSpent:2800, totalSaved:480 });
+  save();
 }
 
-// ══════════════════════════════════════════════════════════════
-//  AUTH
-// ══════════════════════════════════════════════════════════════
-function openAuth(){ if(ME){signOut();return;} document.getElementById('auth-ov').classList.add('open'); }
-function closeOv(id){ document.getElementById(id).classList.remove('open'); }
-function switchTab(t){
-  document.getElementById('f-in').style.display=t==='in'?'block':'none';
-  document.getElementById('f-reg').style.display=t==='reg'?'block':'none';
-  document.getElementById('t-in').classList.toggle('on',t==='in');
-  document.getElementById('t-reg').classList.toggle('on',t==='reg');
-}
-function fillDemo(){ document.getElementById('si-e').value='admin@transitflow.com'; document.getElementById('si-p').value='admin123'; }
-function signIn(){
-  const e=document.getElementById('si-e').value.trim();
-  const p=document.getElementById('si-p').value;
-  const user=DB.users.find(u=>u.email===e&&u.password===p);
-  if(!user){ document.getElementById('si-err').style.display='block'; return; }
-  document.getElementById('si-err').style.display='none';
-  login(user);
-}
-function register(){
-  const n=document.getElementById('rg-n').value.trim();
-  const e=document.getElementById('rg-e').value.trim();
-  const ph=document.getElementById('rg-ph').value.trim();
-  const p=document.getElementById('rg-p').value;
-  const err=document.getElementById('rg-err');
-  if(!n||!e||!ph||p.length<6){ err.style.display='block'; return; }
-  let u=DB.users;
-  if(u.find(x=>x.email===e)){ err.textContent='Email already in use.'; err.style.display='block'; return; }
-  err.style.display='none';
-  const nu={name:n,email:e,phone:ph,password:p,role:'user',plan:null,trips:0,spent:0,extra:0};
-  u.push(nu); DB.users=u; login(nu);
-  toast('🎉 Account created! Welcome aboard.','ok');
-}
-function login(u){
-  ME=u; sessionStorage.setItem('tf_me',JSON.stringify(u));
-  closeOv('auth-ov'); renderNav(); updateHomeStats();
-  toast(`👋 Welcome, ${u.name.split(' ')[0]}!`,'ok');
-}
-function signOut(){
-  ME=null; sessionStorage.removeItem('tf_me');
-  renderNav(); go('home'); toast('Signed out.','info');
-}
-function renderNav(){
-  const el=document.getElementById('nav-right');
-  if(ME){
-    const ini=ME.name.split(' ').map(n=>n[0]).join('').toUpperCase().slice(0,2);
-    el.innerHTML=`<div class="user-chip" onclick="signOut()"><div class="avatar">${ini}</div>${ME.name.split(' ')[0]}<span style="color:var(--muted);font-size:0.78rem;">· Sign out</span></div>`;
-  } else {
-    el.innerHTML=`<button class="btn-nav" onclick="openAuth()">Sign In</button>`;
-  }
+function save() {
+  localStorage.setItem('tf_users', JSON.stringify(STATE.users));
+  localStorage.setItem('tf_trips', JSON.stringify(STATE.trips));
+  localStorage.setItem('tf_payments', JSON.stringify(STATE.payments));
+  if(STATE.user) localStorage.setItem('tf_user', JSON.stringify(STATE.user));
 }
 
-// ══════════════════════════════════════════════════════════════
-//  PAYMENT FLOW — Real M-Pesa STK Push
-// ══════════════════════════════════════════════════════════════
-
-function initiatePayment(type, name, amount, trips=0){
-  if(!ME){ openAuth(); return; }
-  pending = { type, name, amount, trips, label: type==='subscription' ? `${name} Plan` : name };
-  // Pre-fill phone from user's registered phone
-  document.getElementById('m-phone').value = ME.phone || '';
-  // Reset modal to step 1
-  showMpesaStep('phone');
-  document.getElementById('m-amount').textContent = `KSh ${amount.toLocaleString()}`;
-  document.getElementById('m-for').textContent = pending.label;
-  document.getElementById('m-err').style.display='none';
-  document.getElementById('mpesa-ov').classList.add('open');
+// ══════════════════════════════════════════
+// NAVIGATION
+// ══════════════════════════════════════════
+function showPage(id, linkEl) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+  const pg = document.getElementById('page-' + id);
+  if (pg) pg.classList.add('active');
+  if (linkEl) linkEl.classList.add('active');
+  window.scrollTo(0,0);
+  if (id === 'dashboard') renderDashboard();
+  if (id === 'book') initBookDatetime();
 }
 
-function showMpesaStep(step){
-  document.getElementById('mp-phone').style.display   = step==='phone'   ? 'block' : 'none';
-  document.getElementById('mp-wait').style.display    = step==='wait'    ? 'block' : 'none';
-  document.getElementById('mp-success').style.display = step==='success' ? 'block' : 'none';
-  document.getElementById('mp-failed').style.display  = step==='failed'  ? 'block' : 'none';
+// ══════════════════════════════════════════
+// ROUTES DATA
+// ══════════════════════════════════════════
+const ROUTES = [
+  { id:'R-01', type:'bus', from:'CBD', to:'Westlands', km:7, min:20, fare:50, vehicles:3, status:'active' },
+  { id:'R-02', type:'bus', from:'Thika Road', to:'CBD', km:18, min:45, fare:80, vehicles:2, status:'active' },
+  { id:'R-03', type:'metro', from:'CBD', to:'JKIA Airport', km:22, min:30, fare:200, vehicles:2, status:'active' },
+  { id:'R-04', type:'bus', from:'Ngong Road', to:'CBD', km:12, min:35, fare:60, vehicles:4, status:'active' },
+  { id:'R-05', type:'express', from:'CBD', to:'Eastlands', km:9, min:18, fare:70, vehicles:2, status:'active' },
+  { id:'R-06', type:'bus', from:'Langata', to:'CBD', km:14, min:40, fare:65, vehicles:3, status:'active' },
+  { id:'R-07', type:'express', from:'CBD', to:'Karen', km:17, min:25, fare:120, vehicles:1, status:'active' },
+  { id:'R-08', type:'metro', from:'Westlands', to:'JKIA Airport', km:28, min:38, fare:220, vehicles:2, status:'active' },
+  { id:'R-09', type:'bus', from:'Eastlands', to:'Westlands', km:16, min:50, fare:75, vehicles:2, status:'offline' },
+  { id:'R-10', type:'bus', from:'Karen', to:'CBD', km:17, min:45, fare:65, vehicles:1, status:'limited' },
+  { id:'R-11', type:'express', from:'Thika Road', to:'Westlands', km:24, min:35, fare:130, vehicles:2, status:'active' },
+  { id:'R-12', type:'metro', from:'CBD', to:'Ngong Road', km:14, min:22, fare:160, vehicles:1, status:'active' },
+];
 
-  // Update step indicators
-  const steps = ['phone','wait','done'];
-  const stepIdx = {phone:0, wait:1, success:2, failed:2}[step];
-  ['phone','wait','done'].forEach((s,i)=>{
-    const item = document.getElementById('s-'+s);
-    const dot  = document.getElementById('sd-'+s);
-    item.classList.remove('active','done');
-    if(i < stepIdx){ item.classList.add('done'); dot.textContent='✓'; }
-    else if(i===stepIdx){ item.classList.add('active'); dot.textContent=i+1; }
-    else { dot.textContent=i+1; }
-  });
-  document.getElementById('sl-1').classList.toggle('done', stepIdx>0);
-  document.getElementById('sl-2').classList.toggle('done', stepIdx>1);
+function renderRoutes(filter='all') {
+  const grid = document.getElementById('routes-grid');
+  const filtered = filter === 'all' ? ROUTES : ROUTES.filter(r => r.type === filter);
+  grid.innerHTML = filtered.map(r => {
+    const typeBadge = r.type === 'bus' ? 'badge-bus' : r.type === 'metro' ? 'badge-metro' : 'badge-express';
+    const typeLabel = r.type === 'bus' ? '🚌 Bus' : r.type === 'metro' ? '🚇 Metro' : '🚀 Express';
+    const statusDot = r.status === 'active' ? 'dot-green' : r.status === 'limited' ? 'dot-yellow' : 'dot-red';
+    const statusLabel = r.status === 'active' ? 'Operational' : r.status === 'limited' ? 'Limited Service' : 'Offline';
+    return `
+    <div class="route-card">
+      <div class="route-header">
+        <span class="route-id">${r.id}</span>
+        <span class="route-badge ${typeBadge}">${typeLabel}</span>
+      </div>
+      <div class="route-path">
+        <span class="route-stop">${r.from}</span>
+        <span class="route-arrow">→</span>
+        <span class="route-stop">${r.to}</span>
+      </div>
+      <div class="route-meta">
+        <span><strong>${r.km}km</strong></span>
+        <span><strong>~${r.min}min</strong></span>
+        <span>From <strong>KSh ${r.fare}</strong></span>
+        <span><strong>${r.vehicles}</strong> vehicles</span>
+      </div>
+      <div class="route-status">
+        <div class="dot ${statusDot}"></div>
+        <span>${statusLabel}</span>
+      </div>
+    </div>`;
+  }).join('');
 }
 
-async function sendSTK(){
-  const rawPhone = document.getElementById('m-phone').value.trim().replace(/\s/g,'');
-  const errEl = document.getElementById('m-err');
-  
-  // Validate Safaricom number
-  if(!/^(07|01)\d{8}$/.test(rawPhone)){
-    errEl.style.display='block'; return;
-  }
-  errEl.style.display='none';
-
-  const btn = document.getElementById('btn-stk');
-  btn.disabled=true; btn.textContent='Sending request...';
-
-  try {
-    const res = await fetch(`${API}/api/stk-push`, {
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({
-        phone: rawPhone,
-        amount: pending.amount,
-        accountRef: 'TransitFlow',
-        description: pending.label,
-      })
-    });
-    const data = await res.json();
-
-    if(!data.success){
-      throw new Error(data.error || 'Failed to send STK push');
-    }
-
-    checkoutId = data.checkoutId;
-    const maskedPhone = rawPhone.slice(0,4)+'XXXX'+rawPhone.slice(-2);
-    document.getElementById('m-phone-display').textContent = maskedPhone;
-    document.getElementById('m-paid-phone').textContent = maskedPhone;
-
-    showMpesaStep('wait');
-    startPolling();
-
-  } catch(err){
-    btn.disabled=false; btn.textContent='Send M-Pesa Request →';
-    toast(`❌ ${err.message}`,'err');
-  }
+function filterRoutes(type, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderRoutes(type);
 }
 
-function startPolling(){
-  let attempts=0;
-  const MAX_ATTEMPTS=40; // 40 × 3s = 2 minutes timeout
+// ══════════════════════════════════════════
+// BOOKING
+// ══════════════════════════════════════════
+const FARE_DATA = {
+  'CBD (City Centre)': { 'Westlands':50, 'Ngong Road':60, 'Thika Road':80, 'Eastlands':55, 'Langata':65, 'Karen':70, 'JKIA Airport':200 },
+  'Westlands': { 'CBD (City Centre)':50, 'Ngong Road':70, 'Thika Road':100, 'Eastlands':90, 'Langata':85, 'Karen':95, 'JKIA Airport':220 },
+};
+const DIST_DATA = {
+  'CBD (City Centre)': { 'Westlands':'7km·15min', 'Ngong Road':'12km·30min', 'Thika Road':'18km·45min', 'Eastlands':'9km·22min', 'Langata':'14km·38min', 'Karen':'17km·42min', 'JKIA Airport':'22km·35min' },
+};
+const MODE_MULT = { bus:1, metro:1.4, express:1.2, brt:1.1 };
 
-  pollTimer = setInterval(async ()=>{
-    attempts++;
-    try {
-      const res  = await fetch(`${API}/api/payment-status/${checkoutId}`);
-      const data = await res.json();
+function calcFare() {
+  const from = document.getElementById('book-from').value;
+  const to = document.getElementById('book-to').value;
+  const mode = document.getElementById('book-mode').value;
+  const pax = parseInt(document.getElementById('book-pax').value);
+  document.getElementById('fare-from').textContent = '📍 ' + from;
+  document.getElementById('fare-to').textContent = '📍 ' + to;
 
-      if(data.status==='confirmed'){
-        clearInterval(pollTimer);
-        onPaymentConfirmed(data);
-      } else if(data.status==='failed'){
-        clearInterval(pollTimer);
-        onPaymentFailed(data.failReason || 'Transaction was cancelled or timed out.');
-      } else if(attempts >= MAX_ATTEMPTS){
-        clearInterval(pollTimer);
-        onPaymentFailed('Payment timed out. Please try again.');
-      } else {
-        // Update waiting message
-        const msgs=['Waiting for PIN entry...','Please enter your PIN on your phone...','Verifying with M-Pesa...','Almost there...'];
-        document.getElementById('m-wait-msg').textContent = msgs[attempts % msgs.length];
-      }
-    } catch(e){
-      // Network hiccup — keep polling
-    }
-  }, 3000);
-}
+  const baseFareObj = FARE_DATA[from];
+  let base = baseFareObj && baseFareObj[to] ? baseFareObj[to] : 60;
+  const mult = MODE_MULT[mode] || 1;
+  const distFare = Math.round(base * 0.3 * mult);
+  const discount = STATE.user && STATE.user.plan ? Math.round((base + distFare) * 0.15) : 0;
+  const total = Math.round(((base + distFare) * pax) - discount);
 
-function onPaymentConfirmed(data){
-  // Update UI
-  document.getElementById('m-txn-code').textContent   = data.mpesaCode || 'CONFIRMED';
-  document.getElementById('m-paid-amt').textContent   = `KSh ${(data.amount||pending.amount).toLocaleString()}`;
-  document.getElementById('m-paid-for').textContent   = pending.label;
-  document.getElementById('m-paid-date').textContent  = new Date(data.paidAt||Date.now()).toLocaleDateString('en-KE');
-  showMpesaStep('success');
+  document.getElementById('fare-base').textContent = 'KSh ' + Math.round(base * mult);
+  document.getElementById('fare-dist').textContent = 'KSh ' + distFare;
+  document.getElementById('fare-pax-display').textContent = '× ' + pax;
+  document.getElementById('fare-discount').textContent = '-KSh ' + discount;
+  document.getElementById('fare-total').textContent = 'KSh ' + total;
 
-  // Apply to user account
-  applyPayment(data.mpesaCode||'MPX'+Date.now());
-  toast(`✅ Payment confirmed! ${pending.label} activated.`,'ok');
-}
-
-function onPaymentFailed(reason){
-  document.getElementById('m-fail-reason').textContent = reason;
-  showMpesaStep('failed');
-  toast('❌ Payment failed. Please try again.','err');
-}
-
-function applyPayment(txnCode){
-  let users=DB.users;
-  const idx=users.findIndex(u=>u.email===ME.email);
-  if(idx===-1) return;
-  const u=users[idx];
-  if(pending.type==='subscription'){
-    u.plan=pending.name; u.planAmt=pending.amount;
-    u.planDate=new Date().toISOString(); u.planTxn=txnCode; u.trips=0;
-  } else {
-    u.extra=(u.extra||0)+pending.trips;
-  }
-  u.spent=(u.spent||0)+pending.amount;
-  users[idx]=u; DB.users=users;
-  ME=u; sessionStorage.setItem('tf_me',JSON.stringify(u));
-  updateHomeStats();
-}
-
-function retryPayment(){
-  clearInterval(pollTimer);
-  showMpesaStep('phone');
-  const btn=document.getElementById('btn-stk');
-  btn.disabled=false; btn.textContent='Send M-Pesa Request →';
-}
-
-function cancelPayment(){
-  clearInterval(pollTimer);
-  closeOv('mpesa-ov');
-}
-
-function afterPay(){ cancelPayment(); go('dashboard'); }
-
-// ══════════════════════════════════════════════════════════════
-//  BOOK TRIP
-// ══════════════════════════════════════════════════════════════
-const BASES={bus:50,metro:80,express:120,brt:60};
-const DISTS={bus:20,metro:35,express:50,brt:25};
-
-function initBook(){
-  const dt=document.getElementById('b-dt');
-  if(!dt.value){ const n=new Date(); n.setMinutes(n.getMinutes()+30); dt.value=n.toISOString().slice(0,16); }
-  calcFare(); renderRecent();
-}
-function calcFare(){
-  const mode=document.getElementById('b-mode')?.value||'bus';
-  const pax=parseInt(document.getElementById('b-pax')?.value||1);
-  const base=BASES[mode]; const dist=DISTS[mode];
-  const disc=ME?.plan?Math.floor((base+dist)*pax*0.2):0;
-  const total=(base+dist)*pax-disc;
-  document.getElementById('f-base').textContent=`KSh ${base}`;
-  document.getElementById('f-dist').textContent=`KSh ${dist}`;
-  document.getElementById('f-pax').textContent=`× ${pax}`;
-  document.getElementById('f-disc').textContent=`-KSh ${disc}`;
-  document.getElementById('f-total').textContent=`KSh ${total}`;
-  const from=document.getElementById('b-from')?.value||'CBD';
-  const to=document.getElementById('b-to')?.value||'Westlands';
-  const km=Math.floor(Math.random()*12+4);
-  document.getElementById('map-from').textContent=`📍 ${from}`;
-  document.getElementById('map-to').textContent=`📍 ${to}`;
-  document.getElementById('map-meta').textContent=`~${km} km · ~${km*2+Math.floor(Math.random()*8)} min`;
+  const distKey = DIST_DATA[from] && DIST_DATA[from][to] ? DIST_DATA[from][to] : '—';
+  document.getElementById('fare-meta').textContent = '~' + distKey;
   return total;
 }
-function bookTrip(){
-  if(!ME){ openAuth(); return; }
-  const mode=document.getElementById('b-mode').value;
-  const from=document.getElementById('b-from').value;
-  const to=document.getElementById('b-to').value;
-  const pax=parseInt(document.getElementById('b-pax').value);
-  const fare=calcFare();
-  const bk={id:Date.now(),user:ME.email,mode,from,to,pax,fare,status:'active',date:new Date().toISOString()};
-  let bks=DB.bookings; bks.unshift(bk); DB.bookings=bks;
-  let users=DB.users; const idx=users.findIndex(u=>u.email===ME.email);
-  if(idx>-1){ users[idx].trips=(users[idx].trips||0)+pax; DB.users=users; ME=users[idx]; sessionStorage.setItem('tf_me',JSON.stringify(ME)); }
-  renderRecent(); updateHomeStats();
-  toast(`🚌 Booked! ${from} → ${to} · KSh ${fare}`,'ok');
-}
-function renderRecent(){
-  const mine=DB.bookings.filter(b=>b.user===ME?.email).slice(0,5);
-  const el=document.getElementById('recent-list');
-  if(!mine.length){ el.innerHTML='<div style="color:var(--muted);font-size:0.85rem;">No bookings yet.</div>'; return; }
-  el.innerHTML=mine.map(b=>`<div class="recent-item">
-    <div><div class="ri-route">${b.from} → ${b.to}</div><div class="ri-info">${mi(b.mode)} ${b.mode} · ${b.pax} pax</div></div>
-    <div style="font-size:0.78rem;color:var(--muted)">${new Date(b.date).toLocaleDateString('en-KE')}</div>
-    <div style="font-family:'JetBrains Mono',monospace;font-size:0.82rem">KSh ${b.fare}</div>
-    <span class="badge badge-${b.status==='active'?'active':'done'}">${b.status}</span>
-  </div>`).join('');
-}
-function mi(m){return{bus:'🚌',metro:'🚇',express:'🚀',brt:'🚍'}[m]||'🚌';}
 
-// ══════════════════════════════════════════════════════════════
-//  DASHBOARD
-// ══════════════════════════════════════════════════════════════
-function renderDash(){
-  const gate=document.getElementById('d-gate'), cont=document.getElementById('d-content');
-  if(!ME){ gate.style.display='flex'; cont.style.display='none'; return; }
-  gate.style.display='none'; cont.style.display='block';
-  const u=ME;
-  document.getElementById('d-welcome').textContent=`WELCOME, ${u.name.split(' ')[0].toUpperCase()}`;
-  document.getElementById('d-plan-lbl').textContent=u.plan?`${u.plan} Plan — Active`:'No Plan Active';
-  document.getElementById('d-trips').textContent=u.trips||0;
-  const lim={Basic:30,'Pro Commuter':999,Enterprise:999}[u.plan]||0;
-  document.getElementById('d-left').textContent=u.plan?(lim===999?'∞':Math.max(0,lim-(u.trips||0))):(u.extra||0);
-  document.getElementById('d-spent').textContent=`KSh ${(u.spent||0).toLocaleString()}`;
-  document.getElementById('d-saved').textContent=`KSh ${Math.floor((u.spent||0)*0.2).toLocaleString()}`;
-  const used=u.trips||0, total=lim||30, pct=total===999?0:Math.min(100,Math.round(used/total*100));
-  document.getElementById('d-prog').style.width=pct+'%';
-  document.getElementById('d-prog-lbl').textContent=total===999?`${used} / ∞`:`${used} / ${total}`;
-  const si=document.getElementById('d-sub-info');
-  if(u.plan){
-    si.innerHTML=`<div>
-      <div class="sub-r"><span class="k">Plan</span><span>${u.plan}</span></div>
-      <div class="sub-r"><span class="k">Amount</span><span>KSh ${(u.planAmt||0).toLocaleString()}/mo</span></div>
-      <div class="sub-r"><span class="k">Since</span><span>${new Date(u.planDate||Date.now()).toLocaleDateString('en-KE')}</span></div>
-      <div class="sub-r"><span class="k">M-Pesa Ref</span><span style="font-family:'JetBrains Mono',monospace;font-size:0.78rem">${u.planTxn||'—'}</span></div>
-    </div>`;
-    document.getElementById('btn-cancel').disabled=false;
+function initBookDatetime() {
+  const now = new Date(); now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+  document.getElementById('book-datetime').value = now.toISOString().slice(0,16);
+  calcFare();
+}
+
+function bookTrip() {
+  if (!STATE.user) { openAuthModal(); return; }
+  const from = document.getElementById('book-from').value;
+  const to = document.getElementById('book-to').value;
+  const pax = document.getElementById('book-pax').value;
+  const fare = calcFare();
+  initPayment(fare, `${from} → ${to} (${pax} pax)`);
+}
+
+// ══════════════════════════════════════════
+// AUTH
+// ══════════════════════════════════════════
+function openAuthModal() { document.getElementById('auth-modal').classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+function switchTab(tab) {
+  document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('active', (tab==='signin'&&i===0)||(tab==='register'&&i===1)));
+  document.getElementById('tab-signin').classList.toggle('active', tab==='signin');
+  document.getElementById('tab-register').classList.toggle('active', tab==='register');
+}
+
+function signIn() {
+  const email = document.getElementById('si-email').value.trim();
+  const pass = document.getElementById('si-pass').value;
+  const user = STATE.users.find(u => u.email === email && u.password === pass);
+  if (!user) { document.getElementById('si-error').style.display='block'; return; }
+  document.getElementById('si-error').style.display='none';
+  STATE.user = user; save(); closeModal('auth-modal');
+  updateNavAuth(); renderDashboard(); toast('Signed in as ' + user.name, 'success');
+}
+
+function register() {
+  const name = document.getElementById('reg-name').value.trim();
+  const email = document.getElementById('reg-email').value.trim();
+  const phone = document.getElementById('reg-phone').value.trim();
+  const pass = document.getElementById('reg-pass').value;
+  if (!name||!email||!phone||pass.length<6) { document.getElementById('reg-error').style.display='block'; return; }
+  if (STATE.users.find(u => u.email===email)) { document.getElementById('reg-error').textContent='Email already registered.'; document.getElementById('reg-error').style.display='block'; return; }
+  const user = { id:'u'+(Date.now()), name, email, phone, password:pass, plan:null, tripsUsed:0, totalSpent:0, totalSaved:0 };
+  STATE.users.push(user); STATE.user = user; save();
+  closeModal('auth-modal'); updateNavAuth(); renderDashboard();
+  toast('Welcome to TransitFlow, ' + name + '!', 'success');
+}
+
+function logout() {
+  STATE.user = null; localStorage.removeItem('tf_user'); updateNavAuth(); renderDashboard();
+  toast('Signed out', 'success');
+}
+
+function updateNavAuth() {
+  document.getElementById('nav-login-btn').style.display = STATE.user ? 'none' : '';
+  document.getElementById('nav-logout-btn').style.display = STATE.user ? '' : 'none';
+  document.getElementById('nav-user-name').style.display = STATE.user ? '' : 'none';
+  if (STATE.user) document.getElementById('nav-user-name').textContent = STATE.user.name.split(' ')[0];
+}
+
+// ══════════════════════════════════════════
+// DASHBOARD
+// ══════════════════════════════════════════
+function renderDashboard() {
+  const gate = document.getElementById('dash-gate');
+  const content = document.getElementById('dash-content');
+  if (!STATE.user) { gate.style.display='block'; content.style.display='none'; return; }
+  gate.style.display='none'; content.style.display='block';
+  const u = STATE.user;
+  document.getElementById('dash-username').textContent = u.name.split(' ')[0];
+  document.getElementById('dash-avatar').textContent = u.name[0].toUpperCase();
+  document.getElementById('ds-trips').textContent = u.tripsUsed || 0;
+  document.getElementById('ds-spent').textContent = 'KSh ' + (u.totalSpent||0).toLocaleString();
+  document.getElementById('ds-saved').textContent = 'KSh ' + (u.totalSaved||0).toLocaleString();
+
+  // Trips left
+  const limit = u.plan==='Basic'?30:u.plan?null:0;
+  document.getElementById('ds-left').textContent = limit===null ? '∞' : limit ? Math.max(0,limit-(u.tripsUsed||0)) : '—';
+
+  // Subscription
+  const subDiv = document.getElementById('sub-display');
+  if (u.plan) {
+    const cost = u.plan==='Basic'?1200:u.plan==='Pro Commuter'?2800:5500;
+    subDiv.innerHTML = `
+      <div class="sub-name">${u.plan}</div>
+      <div class="sub-status"><div class="dot dot-green"></div> Active</div>
+      <div style="font-size:.85rem;color:var(--muted)">KSh ${cost.toLocaleString()}/month · Renews in ${Math.floor(Math.random()*28)+1} days</div>
+      <div class="sub-actions">
+        <button class="btn btn-ghost" onclick="showPage('plans')">Change Plan</button>
+        <button class="btn btn-danger" onclick="cancelSub()">Cancel</button>
+      </div>`;
+    document.getElementById('cancel-sub-btn').style.display='';
   } else {
-    si.innerHTML='<div style="color:var(--muted);font-size:0.85rem;">No active subscription.</div>';
-    document.getElementById('btn-cancel').disabled=true;
+    subDiv.innerHTML = `<div style="color:var(--muted);font-size:.9rem">No active subscription. <a href="#" style="color:var(--accent)" onclick="showPage('plans')">Upgrade →</a></div>`;
+    document.getElementById('cancel-sub-btn').style.display='none';
   }
-  const mine=DB.bookings.filter(b=>b.user===u.email).slice(0,10);
-  const hist=document.getElementById('d-history');
-  hist.innerHTML=mine.length ? mine.map(b=>`<div class="recent-item">
-    <div><div class="ri-route">${b.from} → ${b.to}</div><div class="ri-info">${mi(b.mode)} ${b.mode}</div></div>
-    <div style="font-size:0.78rem;color:var(--muted)">${new Date(b.date).toLocaleDateString('en-KE')}</div>
-    <div style="font-family:'JetBrains Mono',monospace;font-size:0.82rem">KSh ${b.fare}</div>
-    <span class="badge badge-${b.status==='active'?'active':'done'}">${b.status}</span>
-  </div>`).join('') : '<div style="color:var(--muted);font-size:0.85rem;">No trips yet.</div>';
-}
-function cancelSub(){
-  if(!ME||!ME.plan) return;
-  let u=DB.users, i=u.findIndex(x=>x.email===ME.email);
-  if(i>-1){ u[i].plan=null; u[i].planAmt=0; DB.users=u; ME=u[i]; sessionStorage.setItem('tf_me',JSON.stringify(ME)); }
-  renderDash(); toast('Subscription cancelled.','info');
+
+  // Progress bar
+  const used = u.tripsUsed||0; const total = limit||30;
+  const pct = Math.min(100, Math.round((used/total)*100));
+  document.getElementById('usage-bar').style.width = pct + '%';
+  document.getElementById('usage-label').textContent = `${used} / ${limit===null?'∞':total}`;
+
+  // Trip history
+  const trips = STATE.trips.filter(t => t.userId === STATE.user.id);
+  const histDiv = document.getElementById('dash-trip-history');
+  if (!trips.length) {
+    histDiv.innerHTML = '<div style="color:var(--muted);font-size:.85rem;text-align:center;padding:1rem">No trips yet.</div>';
+  } else {
+    histDiv.innerHTML = trips.slice().reverse().slice(0,5).map(t => `
+      <div class="trip-item">
+        <div><div class="trip-route">${t.from} → ${t.to}</div><div class="trip-meta">${t.date}</div></div>
+        <div class="trip-cost">KSh ${t.fare}</div>
+      </div>`).join('');
+  }
 }
 
-// ══════════════════════════════════════════════════════════════
-//  ADMIN
-// ══════════════════════════════════════════════════════════════
-function renderAdmin(){
-  const gate=document.getElementById('a-gate'), cont=document.getElementById('a-content');
-  if(!ME||ME.role!=='admin'){ gate.style.display='flex'; cont.style.display='none'; return; }
-  gate.style.display='none'; cont.style.display='block';
-  const nonAdmin=DB.users.filter(u=>u.role!=='admin');
-  const subs=DB.users.filter(u=>u.plan);
-  const rev=DB.users.reduce((s,u)=>s+(u.spent||0),0);
-  document.getElementById('a-users').textContent=nonAdmin.length;
-  document.getElementById('a-subs').textContent=subs.length;
-  document.getElementById('a-trips').textContent=DB.bookings.length;
-  document.getElementById('a-rev').textContent=`KSh ${rev.toLocaleString()}`;
-  const rB=DB.users.filter(u=>u.plan==='Basic').length*1200;
-  const rP=DB.users.filter(u=>u.plan==='Pro Commuter').length*2800;
-  const rE=DB.users.filter(u=>u.plan==='Enterprise').length*5500;
-  document.getElementById('a-r-basic').textContent=`KSh ${rB.toLocaleString()}`;
-  document.getElementById('a-r-pro').textContent=`KSh ${rP.toLocaleString()}`;
-  document.getElementById('a-r-ent').textContent=`KSh ${rE.toLocaleString()}`;
-  document.getElementById('a-r-total').textContent=`KSh ${(rB+rP+rE).toLocaleString()}`;
-  const tbody=document.getElementById('a-users-table');
-  tbody.innerHTML=nonAdmin.length ? nonAdmin.map(u=>`<tr>
-    <td>${u.name}</td><td style="color:var(--muted2);font-size:0.8rem">${u.email}</td>
-    <td>${u.plan||'<span style="color:var(--muted)">None</span>'}</td>
-    <td><span class="badge ${u.plan?'badge-active':'badge-done'}">${u.plan?'Active':'Free'}</span></td>
-  </tr>`).join('') : '<tr><td colspan="4" style="color:var(--muted)">No users yet</td></tr>';
+function cancelSub() {
+  if (!STATE.user) return;
+  const idx = STATE.users.findIndex(u=>u.id===STATE.user.id);
+  STATE.users[idx].plan = null; STATE.user.plan = null; save();
+  renderDashboard(); toast('Subscription cancelled.','success');
 }
 
-// ══════════════════════════════════════════════════════════════
-//  UTILS
-// ══════════════════════════════════════════════════════════════
-function updateHomeStats(){ document.getElementById('stat-riders').textContent=DB.users.filter(u=>u.role!=='admin').length; }
-function toast(msg,type=''){
-  const c=document.getElementById('toasts'), el=document.createElement('div');
-  el.className=`t ${type}`; el.textContent=msg; c.appendChild(el);
-  setTimeout(()=>{ el.style.opacity='0'; el.style.transition='opacity 0.3s'; setTimeout(()=>el.remove(),300); },3500);
+// ══════════════════════════════════════════
+// MPESA PAYMENT
+// ══════════════════════════════════════════
+function initPayment(amount, forWhat) {
+  if (!STATE.user) { openAuthModal(); return; }
+  STATE.currentPay = { amount, for: forWhat };
+  document.getElementById('pay-amount-display').textContent = 'KSh ' + amount.toLocaleString();
+  document.getElementById('pay-for-display').textContent = forWhat;
+  document.getElementById('mpesa-phone').value = STATE.user.phone || '';
+  document.getElementById('mpesa-error').style.display='none';
+  showMpesaStep(1);
+  document.getElementById('mpesa-modal').classList.add('open');
 }
 
+function showMpesaStep(n) {
+  [1,2,3].forEach(i => document.getElementById('mpesa-step'+i).style.display = i===n?'':'none');
+}
+
+function sendMpesaRequest() {
+  const phone = document.getElementById('mpesa-phone').value.trim();
+  if (!/^(07|01)\d{8}$/.test(phone)) { document.getElementById('mpesa-error').style.display='block'; return; }
+  document.getElementById('mpesa-error').style.display='none';
+  document.getElementById('mpesa-phone-display').textContent = phone;
+  showMpesaStep(2);
+  STATE.mpesaTimer = setTimeout(() => completePayment(phone), 4000);
+}
+
+function completePayment(phone) {
+  const txid = 'TX' + Math.random().toString(36).substr(2,8).toUpperCase();
+  const date = new Date().toLocaleString('en-KE', {timeZone:'Africa/Nairobi'});
+  document.getElementById('receipt-amount').textContent = 'KSh ' + STATE.currentPay.amount.toLocaleString();
+  document.getElementById('receipt-for').textContent = STATE.currentPay.for;
+  document.getElementById('receipt-txid').textContent = txid;
+  document.getElementById('receipt-date').textContent = date;
+  document.getElementById('receipt-phone').textContent = phone;
+  showMpesaStep(3);
+  // Record payment
+  STATE.payments.push({ txid, amount: STATE.currentPay.amount, for: STATE.currentPay.for, date, phone, userId: STATE.user.id });
+  // Update user
+  const idx = STATE.users.findIndex(u=>u.id===STATE.user.id);
+  STATE.users[idx].totalSpent = (STATE.users[idx].totalSpent||0) + STATE.currentPay.amount;
+  STATE.user.totalSpent = STATE.users[idx].totalSpent;
+  // If subscription plan
+  const plans = {'Basic Plan Monthly':'Basic','Pro Commuter Monthly':'Pro Commuter','Enterprise Monthly':'Enterprise'};
+  if (plans[STATE.currentPay.for]) {
+    STATE.users[idx].plan = plans[STATE.currentPay.for];
+    STATE.user.plan = STATE.users[idx].plan;
+    STATE.users[idx].totalSaved = (STATE.users[idx].totalSaved||0) + Math.round(STATE.currentPay.amount * 0.15);
+    STATE.user.totalSaved = STATE.users[idx].totalSaved;
+  } else {
+    // Trip booking
+    const tripParts = STATE.currentPay.for.match(/(.+) → (.+) \(/);
+    if (tripParts) {
+      STATE.trips.push({ userId:STATE.user.id, from:tripParts[1], to:tripParts[2], fare:STATE.currentPay.amount, date });
+      STATE.users[idx].tripsUsed = (STATE.users[idx].tripsUsed||0)+1;
+      STATE.user.tripsUsed = STATE.users[idx].tripsUsed;
+    }
+  }
+  save();
+}
+
+function cancelMpesa() { clearTimeout(STATE.mpesaTimer); closeModal('mpesa-modal'); }
+
+function postPayment() {
+  closeModal('mpesa-modal');
+  renderDashboard();
+  showPage('dashboard', document.querySelector('.nav-links a:nth-child(5)'));
+  toast('Payment successful! ✅','success');
+  // update recent bookings
+  renderRecentBookings();
+}
+
+function renderRecentBookings() {
+  const trips = STATE.trips.filter(t => STATE.user && t.userId===STATE.user.id);
+  const div = document.getElementById('recent-bookings');
+  if (!trips.length) { div.innerHTML = '<div style="color:var(--muted);font-size:.85rem;text-align:center;padding:1rem">No bookings yet.</div>'; return; }
+  div.innerHTML = trips.slice().reverse().slice(0,3).map(t=>`
+    <div class="trip-item"><div><div class="trip-route">${t.from} → ${t.to}</div><div class="trip-meta">${t.date}</div></div><div class="trip-cost">KSh ${t.fare}</div></div>`).join('');
+}
+
+// ══════════════════════════════════════════
+// TOAST
+// ══════════════════════════════════════════
+function toast(msg, type='success') {
+  const t = document.createElement('div');
+  t.className = 'toast ' + type;
+  t.innerHTML = (type==='success'?'✅':'❌') + ' ' + msg;
+  document.getElementById('toast-container').appendChild(t);
+  setTimeout(()=>t.remove(), 3500);
+}
+
+// ══════════════════════════════════════════
+// STAT COUNTER ANIMATION
+// ══════════════════════════════════════════
+function animateCounter(el, target, duration=1200) {
+  let start = 0; const step = target / (duration / 16);
+  const timer = setInterval(()=>{
+    start = Math.min(start+step, target);
+    el.textContent = Math.round(start).toLocaleString();
+    if (start >= target) clearInterval(timer);
+  }, 16);
+}
+
+// ══════════════════════════════════════════
 // INIT
-renderNav(); updateHomeStats(); initBook();
+// ══════════════════════════════════════════
+document.addEventListener('DOMContentLoaded', () => {
+  renderRoutes();
+  updateNavAuth();
+  calcFare();
+  animateCounter(document.getElementById('stat-riders'), STATE.users.length || 1247);
+  if (STATE.user) renderDashboard();
+  renderRecentBookings();
+});
+
+// Close modals on overlay click
+document.querySelectorAll('.modal-overlay').forEach(o => {
+  o.addEventListener('click', e => { if(e.target===o) o.classList.remove('open'); });
+});
 </script>
 </body>
 </html>
